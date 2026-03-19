@@ -4,5 +4,4 @@ import api from "@/config/http/axios";
 
 const datasource = new AuthDatasourceImpl(api);
 const repository = new AuthRepositoryImpl(datasource);
-
 export const authRepositoryProvider = new AuthProvider(repository);

@@ -4,3 +4,4 @@ export interface NotificationAdapter {
     warning(message: string): void;
     information(message: string): void;
 }
+
