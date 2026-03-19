@@ -1,6 +1,7 @@
-import type { Order } from "../domain";
+import type { Order, OrderTotals } from "../domain";
 
 export abstract class OrdersRepository {
     abstract createOrder(): Promise<string>;
     abstract getOrders(): Promise<Order[]>;
+    abstract getOrderDetails(id: string): Promise<OrderTotals>;
 }

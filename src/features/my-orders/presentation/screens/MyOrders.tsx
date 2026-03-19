@@ -1,5 +1,7 @@
 import { BiPlus } from "react-icons/bi";
+import { BsFillEyeFill } from "react-icons/bs";
 import { CustomFilledButton, Table, useNotification, type Column } from "@/features/shared/shared";
+import { Link } from "react-router-dom";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Order } from "@/features/my-orders/my-orders";
@@ -8,6 +10,15 @@ const columns: Column<Order>[] = [
   { header: 'id', accessor: 'id' },
   { header: 'Ordered By', accessor: 'user' },
   { header: 'Created At', accessor: 'createdAt' },
+  { header: 'Actions', accessor: 'createdAt' },
+  {
+    header: 'Actions',
+    render: (_, row) => (
+      <Link to={`/my-orders/addItems/${row.id}`}>
+        <BsFillEyeFill size={25} className="hover:text-gray-600" />
+      </Link>
+    ),
+  },
 
 ];
 

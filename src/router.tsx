@@ -1,10 +1,10 @@
+import { AddItemsToOrder, MyOrders } from "@/features/my-orders/my-orders";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { ProtectedLayout, PublicLayout } from "@/features/shared/shared";
-import { Login } from "@/features/login/login";
-import { Home } from "@/features/home/home";
-import { MyOrders } from "@/features/my-orders/my-orders";
-import { Profile } from "@/features/profile/profile";
 import { CreateProduct, Products, UpdateProduct } from "@/features/products/products";
+import { Home } from "@/features/home/home";
+import { Login } from "@/features/login/login";
+import { Profile } from "@/features/profile/profile";
+import { ProtectedLayout, PublicLayout } from "@/features/shared/shared";
 
 export default function AppRouter() {
     return (
@@ -18,6 +18,7 @@ export default function AppRouter() {
                 <Route element={<ProtectedLayout />}>
                     <Route path="/home" element={<Home />} />
                     <Route path="/my-orders" element={<MyOrders />} />
+                    <Route path="/my-orders/addItems/:id" element={<AddItemsToOrder />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/create" element={<CreateProduct />} />

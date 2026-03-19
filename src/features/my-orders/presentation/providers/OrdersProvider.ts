@@ -10,4 +10,8 @@ export class OrdersProvider {
     async getOrders(){
         return this.repository.getOrders();
     }
+
+    async getOrderTotals(id: string){
+        return this.repository.getOrderDetails(id);
+    }
 }
