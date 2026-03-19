@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom"
+import { BiPlus } from "react-icons/bi";
+import { CustomFilledButton } from '@/features/shared/shared';
+import { ModalAddItem } from "../components/ModalAddItem";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { OrderTotals } from "../components/OrderTotals";
-import { CustomFilledButton } from '@/features/shared/shared';
-import { BiPlus } from "react-icons/bi";
+import { useNavigate, useParams } from "react-router-dom"
+import { useQuery } from "@tanstack/react-query";
 
 export function AddItemsToOrder() {
   const params = useParams();
@@ -32,6 +33,8 @@ export function AddItemsToOrder() {
           onClick={() => navigate('?addItem=true')}
         />
       </div>
+
+      <ModalAddItem />
     </div>
   )
 }
