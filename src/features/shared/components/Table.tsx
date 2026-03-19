@@ -27,8 +27,7 @@ export function Table<T>({ columns, data }: Props<T>) {
                     {data.map((row, i) => (
                         <tr key={i} className="hover:bg-gray-50 transition-colors">
                             {columns.map((col) => {
-                                const value = row[col.accessor];
-                                
+                                const value = col.accessor ? row[col.accessor] : undefined;
                                 return (
                                     <td
                                         key={String(col.accessor)}

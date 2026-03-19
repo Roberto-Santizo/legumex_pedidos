@@ -1,5 +1,5 @@
-import { productsProvider, type CreateOrUpdateProductPayload } from "@/features/products/products";
-import { TextFormField, CustomFilledButton, useNotification } from '@/features/shared/shared';
+import { Form, productsProvider, type CreateOrUpdateProductPayload } from "@/features/products/products";
+import { CustomFilledButton, useNotification } from '@/features/shared/shared';
 import { useForm } from "react-hook-form"
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -31,55 +31,7 @@ export function CreateProduct() {
       <h1 className="main_title">Create Product</h1>
 
       <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <TextFormField<CreateOrUpdateProductPayload>
-          label="Name"
-          name="name"
-          placeholder="Product name"
-          register={register}
-          type="text"
-          validation={{ required: 'Product name is Required' }}
-          errorMessage={errors.name?.message}
-        />
-
-        <TextFormField<CreateOrUpdateProductPayload>
-          label="Local Code"
-          name="localCode"
-          placeholder="Product Local Code"
-          register={register}
-          type="text"
-          validation={{ required: 'Product Local Code is Required' }}
-          errorMessage={errors.localCode?.message}
-        />
-
-        <TextFormField<CreateOrUpdateProductPayload>
-          label="International Code"
-          name="internationalCode"
-          placeholder="Product International Code"
-          register={register}
-          type="text"
-          validation={{ required: 'Product International Code is Required' }}
-          errorMessage={errors.internationalCode?.message}
-        />
-
-        <TextFormField<CreateOrUpdateProductPayload>
-          label="Price"
-          name="price"
-          placeholder="Product Price"
-          register={register}
-          type="number"
-          validation={{ required: 'Product Price is Required' }}
-          errorMessage={errors.price?.message}
-        />
-
-        <TextFormField<CreateOrUpdateProductPayload>
-          label="Presentation"
-          name="presentation"
-          placeholder="Product Presentation"
-          register={register}
-          type="number"
-          validation={{ required: 'Product Presentation is Required' }}
-          errorMessage={errors.presentation?.message}
-        />
+        <Form register={register} errors={errors} />
 
         <CustomFilledButton
           label="Create"

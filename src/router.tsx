@@ -4,7 +4,7 @@ import { Login } from "@/features/login/login";
 import { Home } from "@/features/home/home";
 import { MyOrders } from "@/features/my-orders/my-orders";
 import { Profile } from "@/features/profile/profile";
-import { CreateProduct, Products } from "@/features/products/products";
+import { CreateProduct, Products, UpdateProduct } from "@/features/products/products";
 
 export default function AppRouter() {
     return (
@@ -21,6 +21,7 @@ export default function AppRouter() {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/create" element={<CreateProduct />} />
+                    <Route path="/products/update/:id" element={<UpdateProduct />} />
                 </Route>
             </Routes>
         </BrowserRouter>

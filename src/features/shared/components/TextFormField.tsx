@@ -1,4 +1,4 @@
-import type { Path, RegisterOptions, UseFormRegister } from "react-hook-form";
+import type { Path, PathValue, RegisterOptions, UseFormRegister } from "react-hook-form";
 
 type Props<T extends Record<string, any>> = {
     label: string;
@@ -8,10 +8,11 @@ type Props<T extends Record<string, any>> = {
     errorMessage?: string;
     register: UseFormRegister<T>;
     validation: RegisterOptions<T, Path<T>>;
+    value?: PathValue<T, Path<T>>
 }
 
 
-export function TextFormField<T extends Record<string, any>>({ label, name, placeholder, type, errorMessage, register, validation }: Props<T>) {
+export function TextFormField<T extends Record<string, any>>({ label, name, placeholder, type, errorMessage, register, validation, value }: Props<T>) {
     return (
         <div className="flex flex-col gap-2">
             <label
@@ -29,6 +30,7 @@ export function TextFormField<T extends Record<string, any>>({ label, name, plac
                 placeholder={placeholder}
                 autoComplete="off"
                 className={errorMessage ? 'text_form_field_error' : 'text_form_field'}
+                value={value}
             />
             <p className="text-red-400 text-xs">{errorMessage}</p>
         </div>
