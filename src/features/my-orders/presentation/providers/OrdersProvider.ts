@@ -1,0 +1,13 @@
+import type { OrdersRepository } from "../../my-orders";
+
+export class OrdersProvider {
+    constructor(private repository: OrdersRepository){}
+    
+    async createOrder(){
+        return this.repository.createOrder();
+    }
+
+    async getOrders(){
+        return this.repository.getOrders();
+    }
+}
