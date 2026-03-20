@@ -31,6 +31,7 @@ export function ModalAddItem() {
         onSuccess: (message) => {
             success(message);
             queryClient.invalidateQueries({ queryKey: ['getOrderTotals', id] });
+            queryClient.invalidateQueries({ queryKey: ['getOrderProducts', id] });
             handleCloseModal();
         }
     });

@@ -1,33 +1,17 @@
 import { BiPlus } from "react-icons/bi";
 import { CustomFilledButton } from '@/features/shared/shared';
 import { ModalAddItem, OrderProductsTable, OrderTotalsComponent } from "@/features/my-orders/my-orders";
-import { ordersProvider } from "../providers/ordersRepositoryProvider";
-import { useNavigate, useParams } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function AddItemsToOrder() {
   const params = useParams();
   const id = params.id!;
   const navigate = useNavigate();
 
-  const { data: totals, isLoading } = useQuery({
-    queryKey: ['getOrderTotals', id],
-    queryFn: () => ordersProvider.getOrderTotals(id),
-    enabled: !!id
-  });
-
-  const { data: items, isLoading: isLoadingItems } = useQuery({
-    queryKey: ['getOrderProducts', id],
-    queryFn: () => ordersProvider.getOrderProducts(id),
-    enabled: !!id
-  });
-  
-  if (isLoading || isLoadingItems) return <p>Loading...</p>
-
-  if (totals && items) return (
+  return (
     <div className="w-full space-y-5">
       <h1 className="main_title">Add Items To Order</h1>
-      <OrderTotalsComponent orderTotals={totals} />
+      <OrderTotalsComponent id={id} />
 
       <div className="flex w-full justify-end">
         <CustomFilledButton
@@ -38,9 +22,16 @@ export function AddItemsToOrder() {
         />
       </div>
 
-      <OrderProductsTable items={items} />
+      <OrderProductsTable id={id} />
 
       <ModalAddItem />
+
+      <CustomFilledButton
+        label="Confirm Order"
+        type="button"
+        onClick={() => { console.log('confirm') }}
+        fullWitdh={true}
+      />
     </div>
   )
 }

@@ -1,18 +1,14 @@
 import { BiTrash } from "react-icons/bi";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNotification } from "@/features/shared/shared";
-import { useParams } from "react-router-dom";
 import type { OrderItemDetails } from "../../my-orders";
 
 type Props = {
-    items: OrderItemDetails[];
+    id: string;
 };
 
-export function OrderProductsTable({ items }: Props) {
-    const params = useParams();
-    const id = params.id!!;
-
+export function OrderProductsTable({ id }: Props) {
     const { error, success } = useNotification();
     const queryClient = useQueryClient();
 
@@ -29,7 +25,13 @@ export function OrderProductsTable({ items }: Props) {
         }
     });
 
-    return (
+    const { data: items } = useQuery({
+        queryKey: ['getOrderProducts', id],
+        queryFn: () => ordersProvider.getOrderProducts(id),
+        enabled: !!id
+    });
+
+    if (items) return (
         <div className="w-full overflow-x-auto rounded-xl border border-gray-200">
             <table className="w-full text-sm text-left">
                 <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
@@ -39,6 +41,7 @@ export function OrderProductsTable({ items }: Props) {
                         <th className="px-4 py-3 text-right">Total Boxes</th>
                         <th className="px-4 py-3 text-right">Total Pounds</th>
                         <th className="px-4 py-3 text-right">Total Amount</th>
+                        <th className="px-4 py-3 text-right">Po</th>
                         <th className="px-4 py-3 text-right"></th>
                     </tr>
                 </thead>
@@ -65,6 +68,10 @@ export function OrderProductsTable({ items }: Props) {
 
                                 <td className="px-4 py-3 text-right font-semibold text-green-600">
                                     ${item.total_amount}
+                                </td>
+
+                                <td className="px-4 py-3 text-right font-semibold">
+                                    {item.po}
                                 </td>
 
                                 <td className="px-4 py-3 text-right font-semibold">
