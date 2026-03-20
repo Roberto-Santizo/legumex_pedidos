@@ -30,7 +30,7 @@ export function Table<T>({ columns, data }: Props<T>) {
                                 const value = col.accessor ? row[col.accessor] : undefined;
                                 return (
                                     <td
-                                        key={String(col.accessor)}
+                                        key={String(value)}
                                         className="px-6 py-4 text-sm text-gray-700"
                                     >
                                         {col.render ? col.render(value, row) : String(value)}

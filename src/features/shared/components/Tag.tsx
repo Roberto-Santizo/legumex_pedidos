@@ -8,11 +8,11 @@ const statusMap = {
       className: "bg-orange-200 text-orange-800",
     },
     2: {
-      label: "Enviado",
+      label: "Sent",
       className: "bg-blue-200 text-blue-800",
     },
     3: {
-      label: "Recibido",
+      label: "Recived",
       className: "bg-green-200 text-green-800",
     },
   } as const;

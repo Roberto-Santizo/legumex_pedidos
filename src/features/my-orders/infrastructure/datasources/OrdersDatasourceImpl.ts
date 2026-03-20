@@ -1,9 +1,29 @@
-import { NotFoundErrorError, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderItemDetails, type OrderTotals } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals } from '@/features/my-orders/my-orders';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
+
+    async getOrderById(id: string): Promise<OrderConfirmed> {
+        try {
+            const url = `/orders/${id}`;
+            const { data } = await this.api.get(url);
+            const response = OrderConfirmedResponseSchema.safeParse(data);
+            if (response.success) {
+                return response.data.data;
+            }
+
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
 
     async deleteOrderProduct(id: OrderItemDetails['id']): Promise<string> {
         try {

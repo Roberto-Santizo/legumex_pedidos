@@ -1,4 +1,4 @@
-import { AddItemsToOrder, MyOrders } from "@/features/my-orders/my-orders";
+import { AddItemsToOrder, MyOrder, MyOrders } from "@/features/my-orders/my-orders";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { CreateProduct, Products, UpdateProduct } from "@/features/products/products";
 import { Home } from "@/features/home/home";
@@ -19,6 +19,7 @@ export default function AppRouter() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/my-orders" element={<MyOrders />} />
                     <Route path="/my-orders/addItems/:id" element={<AddItemsToOrder />} />
+                    <Route path="/my-orders/:id" element={<MyOrder />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/create" element={<CreateProduct />} />

@@ -11,6 +11,10 @@ export class OrdersProvider {
         return this.repository.getOrders();
     }
 
+    async getOrderById(id: string) {
+        return this.repository.getOrderById(id);
+    }
+
     async getOrderTotals(id: string) {
         return this.repository.getOrderDetails(id);
     }
@@ -23,7 +27,7 @@ export class OrdersProvider {
         return this.repository.getOrderProducts(id);
     }
 
-    async deleteOrderProduct(id: OrderItemDetails['id']){
+    async deleteOrderProduct(id: OrderItemDetails['id']) {
         return this.repository.deleteOrderProduct(id);
     }
 }

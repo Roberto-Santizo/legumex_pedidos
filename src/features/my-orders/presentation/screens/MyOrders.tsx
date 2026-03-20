@@ -10,18 +10,20 @@ const columns: Column<Order>[] = [
   { header: 'id', accessor: 'id' },
   { header: 'Ordered By', accessor: 'user' },
   { header: 'Created At', accessor: 'createdAt' },
-  { header: 'status',
+  {
+    header: 'status',
     render: (_, row) => (
-      <Tag status={row.status}/>
+      <Tag status={row.status} />
     ),
   },
   {
     header: 'Actions',
-    render: (_, row) => (
-      <Link to={`/my-orders/addItems/${row.id}`}>
+    render: (_, row) => {
+      const url = row.status == 1 ? `/my-orders/addItems/${row.id}` : `/my-orders/${row.id}`;
+      return (<Link to={url}>
         <BsFillEyeFill size={25} className="hover:text-gray-600" />
-      </Link>
-    ),
+      </Link>);
+    },
   },
 
 ];
@@ -61,10 +63,13 @@ export function MyOrders() {
         />
       </div>
 
-      <Table
-        columns={columns}
-        data={orders}
-      />
+
+      {orders.length > 0 && (
+        <Table
+          columns={columns}
+          data={orders}
+        />
+      )}
     </div>
   )
 }

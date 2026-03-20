@@ -6,7 +6,18 @@ export const OrderSchema = z.object({
     createdAt: z.string(),
     user: z.string(),
     status: z.number()
-})
+});
+
+export const OrderConfirmedSchema = z.object({
+    id: z.number(),
+    status: z.number(),
+    customer: z.string(),
+    email: z.string()
+});
+
+export const OrderConfirmedResponseSchema = ApiResponseSchema.extend({
+    data: OrderConfirmedSchema
+});
 
 export const OrderItemDetailsSchema = z.object({
     id: z.number(),
