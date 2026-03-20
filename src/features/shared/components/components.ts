@@ -6,3 +6,5 @@ export * from "./PasswordFormField";
 export * from "./TextFormField";
 export * from "./Table";
 export * from "./Modal";
+export * from "./Tag";
+export * from "./SelectFormField";

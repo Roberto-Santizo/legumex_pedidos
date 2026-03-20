@@ -1,6 +1,6 @@
 import { BiPlus } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
-import { CustomFilledButton, Table, useNotification, type Column } from "@/features/shared/shared";
+import { CustomFilledButton, Table, Tag, useNotification, type Column } from "@/features/shared/shared";
 import { Link } from "react-router-dom";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -11,6 +11,11 @@ const columns: Column<Order>[] = [
   { header: 'Ordered By', accessor: 'user' },
   { header: 'Created At', accessor: 'createdAt' },
   { header: 'Actions', accessor: 'createdAt' },
+  { header: 'status',
+    render: (_, row) => (
+      <Tag status={row.status}/>
+    ),
+  },
   {
     header: 'Actions',
     render: (_, row) => (

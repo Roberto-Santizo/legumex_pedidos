@@ -50,7 +50,7 @@ export function Modal({
               <Dialog.Panel
                 className={`w-full ${width} transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all`}
               >
-                <div className="flex items-center justify-between border-b px-6 py-4">
+                <div className="flex items-center justify-between shadow-md px-6 py-4">
                   <Dialog.Title className="text-lg font-semibold text-gray-800">
                     {title}
                   </Dialog.Title>

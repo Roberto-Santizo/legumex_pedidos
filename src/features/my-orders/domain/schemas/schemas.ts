@@ -5,6 +5,7 @@ export const OrderSchema = z.object({
     id: z.number(),
     createdAt: z.string(),
     user: z.string(),
+    status: z.number()
 })
 
 export const OrderTotalsSchema = z.object({
