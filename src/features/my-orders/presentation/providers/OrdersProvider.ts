@@ -11,6 +11,10 @@ export class OrdersProvider {
         return this.repository.getOrders();
     }
 
+    async getPaginatedOrders(limit: number, offset: number) {
+        return this.repository.getPaginatedOrders(limit, offset);
+    }
+
     async getOrderById(id: string) {
         return this.repository.getOrderById(id);
     }

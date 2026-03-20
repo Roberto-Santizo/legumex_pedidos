@@ -17,7 +17,7 @@ export function CustomSideBar({ className }: Props) {
         <HiHome size={25} />
       </CustomNavLink>
 
-      <CustomNavLink to='/my-orders' label='My orders'>
+      <CustomNavLink to='/my-orders?page=1&rowsPerPage=10' label='My orders'>
         <BiPackage size={25} />
       </CustomNavLink>
 

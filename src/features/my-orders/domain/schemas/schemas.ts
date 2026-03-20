@@ -8,6 +8,15 @@ export const OrderSchema = z.object({
     status: z.number()
 });
 
+export const OrdersPaginatedSchema = ApiResponseSchema.extend({
+    data: z.object({
+        response: z.array(OrderSchema),
+        total: z.number(),
+        page: z.number(),
+        lastPage: z.number()
+    })
+});
+
 export const OrderConfirmedSchema = z.object({
     id: z.number(),
     status: z.number(),

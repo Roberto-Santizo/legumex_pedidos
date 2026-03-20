@@ -1,9 +1,29 @@
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
+
+    async getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders> {
+        try {
+            const url = `/orders/getPaginatedOrders?limit=${limit}&offset=${offset}`;
+            const { data } = await this.api.get(url);
+            const response = OrdersPaginatedSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data;
+            }
+
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
 
     async getOrderById(id: string): Promise<OrderConfirmed> {
         try {

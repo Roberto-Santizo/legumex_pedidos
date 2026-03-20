@@ -1,7 +1,11 @@
-import { OrdersDatasource, OrdersRepository, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals } from '@/features/my-orders/my-orders';
+import { OrdersDatasource, OrdersRepository, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
+
+    getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders> {
+        return this.datasource.getPaginatedOrders(limit, offset);
+    }
 
     getOrderById(id: string): Promise<OrderConfirmed> {
         return this.datasource.getOrderById(id);
