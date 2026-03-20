@@ -1,9 +1,46 @@
-import { NotFoundErrorError, OrdersDatasource, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderTotals } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderItemDetails, type OrderTotals } from '@/features/my-orders/my-orders';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
+
+    async deleteOrderProduct(id: OrderItemDetails['id']): Promise<string> {
+        try {
+            const url = `/orders/deleteItem/${id}`;
+            const { data } = await this.api.delete(url);
+
+            return data['message'];
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
+
+    async getOrderProducts(id: string): Promise<OrderItemDetails[]> {
+        try {
+            const url = `/orders/getOrderItems/${id}`;
+            const { data } = await this.api.get(url);
+            const response = OrderItemsDetailsResponseSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data.data;
+            }
+
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
 
     async addItemToOrder(id: string, payload: AddItemForm): Promise<string> {
         try {

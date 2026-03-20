@@ -10,7 +10,6 @@ const columns: Column<Order>[] = [
   { header: 'id', accessor: 'id' },
   { header: 'Ordered By', accessor: 'user' },
   { header: 'Created At', accessor: 'createdAt' },
-  { header: 'Actions', accessor: 'createdAt' },
   { header: 'status',
     render: (_, row) => (
       <Tag status={row.status}/>

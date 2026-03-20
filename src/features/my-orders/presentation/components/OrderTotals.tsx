@@ -4,7 +4,7 @@ type Props = {
     orderTotals: OrderTotals;
 }
 
-export function OrderTotals({ orderTotals }: Props) {
+export function OrderTotalsComponent({ orderTotals }: Props) {
     const { total_boxes, total_price } = orderTotals;
 
     const formattedPrice = new Intl.NumberFormat('es-GT', {
