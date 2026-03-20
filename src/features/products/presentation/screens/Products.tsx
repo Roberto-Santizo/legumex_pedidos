@@ -7,14 +7,15 @@ import { useQuery } from "@tanstack/react-query";
 import type { Product } from "@/features/products/domain/domain";
 
 const columns: Column<Product>[] = [
-  { header: 'id', accessor: 'id' },
-  { header: 'Name', accessor: 'name' },
-  { header: 'Local Code', accessor: 'localCode' },
-  { header: 'International Code', accessor: 'internationalCode' },
-  { header: 'Presentation', accessor: 'presentation' },
-  { header: 'Price', accessor: 'price' },
+  { header: 'id', accessor: 'id', id: 'id' },
+  { header: 'Name', accessor: 'name', id: 'name' },
+  { header: 'Local Code', accessor: 'localCode', id: 'localCode' },
+  { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode' },
+  { header: 'Presentation', accessor: 'presentation', id: 'presentation' },
+  { header: 'Price', accessor: 'price', id: 'price' },
   {
     header: 'Actions',
+    id: 'actions',
     render: (_, row) => (
       <Link to={`/products/update/${row.id}`}>
         <BiPencil size={25} className="hover:text-gray-600" />

@@ -12,9 +12,9 @@ export function Table<T>({ columns, data }: Props<T>) {
 
                 <thead className="bg-gray-50">
                     <tr>
-                        {columns.map((col) => (
+                        {columns.map((col, index) => (
                             <th
-                                key={String(col.accessor)}
+                                key={col.accessor ? String(col.accessor) : index}
                                 className="text-left px-6 py-3 text-sm font-semibold text-gray-600"
                             >
                                 {col.header}
@@ -30,7 +30,7 @@ export function Table<T>({ columns, data }: Props<T>) {
                                 const value = col.accessor ? row[col.accessor] : undefined;
                                 return (
                                     <td
-                                        key={String(value)}
+                                        key={String(col.id)}
                                         className="px-6 py-4 text-sm text-gray-700"
                                     >
                                         {col.render ? col.render(value, row) : String(value)}

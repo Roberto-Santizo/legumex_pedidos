@@ -7,17 +7,19 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import type { Order } from "@/features/my-orders/my-orders";
 
 const columns: Column<Order>[] = [
-  { header: 'id', accessor: 'id' },
-  { header: 'Ordered By', accessor: 'user' },
-  { header: 'Created At', accessor: 'createdAt' },
+  { header: 'id', accessor: 'id', id: 'id' },
+  { header: 'Ordered By', accessor: 'user', id: 'user' },
+  { header: 'Created At', accessor: 'createdAt', id: 'createdAt' },
   {
     header: 'status',
+    id: 'status',
     render: (_, row) => (
       <Tag status={row.status} />
     ),
   },
   {
     header: 'Actions',
+    id: 'actions',
     render: (_, row) => {
       const url = row.status == 1 ? `/my-orders/addItems/${row.id}` : `/my-orders/${row.id}`;
       return (<Link to={url}>
