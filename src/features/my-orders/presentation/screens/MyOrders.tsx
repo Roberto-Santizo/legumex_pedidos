@@ -1,10 +1,9 @@
 import { BiPlus } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
-import { CustomFilledButton, Table, Tag, useNotification, type Column } from "@/features/shared/shared";
+import { CustomFilledButton, Pagination, Table, Tag, useNotification, type Column } from "@/features/shared/shared";
 import { Link, useSearchParams } from "react-router-dom";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import type { Order } from "@/features/my-orders/my-orders";
 
 const columns: Column<Order>[] = [
@@ -35,18 +34,14 @@ const columns: Column<Order>[] = [
 
 export function MyOrders() {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const pageParam = Number(searchParams.get("page")) || 1;
-  const rowsParam = Number(searchParams.get("rows")) || 3;
-
-  const [page, setPage] = useState(pageParam);
-  const [rowsPerPage, setRowsPerPage] = useState(rowsParam);
+  const page = Number(searchParams.get("page")) || 0;
+  const rowsPerPage = Number(searchParams.get("limit")) || 10;
 
   const { error, success } = useNotification();
 
   const { data: orders, isLoading, refetch } = useQuery({
     queryKey: ['getMyOrders', rowsPerPage, page],
-    queryFn: () => ordersProvider.getPaginatedOrders(rowsPerPage, page)
+    queryFn: () => ordersProvider.getPaginatedOrders(rowsPerPage, page + 1)
   });
 
   const { mutate, isPending } = useMutation({
@@ -58,28 +53,24 @@ export function MyOrders() {
     }
   });
 
-  const handleChangePage = (newPage: number) => {
-    setPage(newPage);
-    setSearchParams({
-      page: newPage.toString(),
-      rows: rowsPerPage.toString()
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setSearchParams((params) => {
+      params.set('page', newPage.toString());
+      return params;
     });
   };
 
-  const handleRowsChange = (value: number) => {
-    setRowsPerPage(value);
-    setPage(1);
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newLimit = parseInt(event.target.value, 10);
 
-    setSearchParams({
-      page: "1",
-      rows: value.toString()
+    setSearchParams((params) => {
+      params.set('limit', newLimit.toString());
+      params.set('page', '0');
+      return params;
     });
   };
 
   if (isLoading) return <p>Loading...</p>;
-
-  const totalPages = orders?.data.lastPage ?? 1;
-
   if (orders) return (
     <div className="space-y-5">
       <h1 className="main_title">My Orders</h1>
@@ -100,6 +91,14 @@ export function MyOrders() {
           data={orders.data.response}
         />
       )}
+
+      <Pagination
+        count={orders.data.total}
+        handleOnRowsPerPageChange={handleChangeRowsPerPage}
+        handleOnPageChange={handleChangePage}
+        page={page}
+        rowsPerPage={rowsPerPage}
+      />
     </div>
   );
 }
