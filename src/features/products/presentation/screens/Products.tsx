@@ -11,6 +11,7 @@ const columns: Column<Product>[] = [
   { header: 'Name', accessor: 'name', id: 'name' },
   { header: 'Local Code', accessor: 'localCode', id: 'localCode' },
   { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode' },
+  { header: 'Client', accessor: 'client', id: 'client' },
   { header: 'Presentation', accessor: 'presentation', id: 'presentation' },
   { header: 'Price', accessor: 'price', id: 'price' },
   {

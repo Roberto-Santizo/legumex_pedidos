@@ -8,6 +8,9 @@ export const ProductSchema = z.object({
     internationalCode: z.string(),
     price: z.number(),
     presentation: z.number(),
+    units_per_box: z.number(),
+    client_id: z.number(),
+    client: z.string()
 });
 
 export const ProductsResponseSchema = ApiResponseSchema.extend({

@@ -22,7 +22,8 @@ export function CreateProduct() {
   const {
     handleSubmit,
     formState: { errors },
-    register
+    register,
+    control
   } = useForm<CreateOrUpdateProductPayload>();
 
   const onSubmit = (data: CreateOrUpdateProductPayload) => mutate(data);
@@ -31,7 +32,7 @@ export function CreateProduct() {
       <h1 className="main_title">Create Product</h1>
 
       <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)} noValidate>
-        <Form register={register} errors={errors} />
+        <Form register={register} errors={errors} control={control} />
 
         <CustomFilledButton
           label="Create"

@@ -33,7 +33,8 @@ export function UpdateProduct() {
         handleSubmit,
         formState: { errors },
         register,
-        setValue
+        setValue,
+        control
     } = useForm<CreateOrUpdateProductPayload>();
 
     useEffect(() => {
@@ -43,6 +44,8 @@ export function UpdateProduct() {
             setValue('internationalCode', product.internationalCode)
             setValue('price', product.price)
             setValue('presentation', product.presentation)
+            setValue('units_per_box', product.units_per_box)
+            setValue('client_id', product.client_id)
         }
     }, [product]);
 
@@ -54,7 +57,7 @@ export function UpdateProduct() {
         <div className="space-y-5">
             <h1 className="main_title">Update Product</h1>
             <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)} noValidate>
-                <Form register={register} errors={errors} />
+                <Form register={register} errors={errors} control={control} />
 
                 <CustomFilledButton
                     label="Update"
