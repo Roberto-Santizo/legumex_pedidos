@@ -45,8 +45,6 @@ export function ModalAddItem() {
 
     const onSubmit = (data: AddItemForm) => mutate({ id, payload: data });
 
-
-
     if (isLoading) return <p>Loading...</p>
 
     if (products) return (

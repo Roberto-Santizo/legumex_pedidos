@@ -1,9 +1,10 @@
 import { BiPlus } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
-import { CustomFilledButton, Pagination, Table, Tag, useNotification, type Column } from "@/features/shared/shared";
-import { Link, useSearchParams } from "react-router-dom";
+import { CustomFilledButton, Pagination, Table, Tag, type Column } from "@/features/shared/shared";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { ModalCreateOrder } from "../components/ModalCreateOrder";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { Order } from "@/features/my-orders/my-orders";
 
 const columns: Column<Order>[] = [
@@ -34,24 +35,24 @@ const columns: Column<Order>[] = [
 
 export function MyOrders() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const page = Number(searchParams.get("page")) || 0;
   const rowsPerPage = Number(searchParams.get("limit")) || 10;
 
-  const { error, success } = useNotification();
-
-  const { data: orders, isLoading, refetch } = useQuery({
+  const { data: orders, isLoading } = useQuery({
     queryKey: ['getMyOrders', rowsPerPage, page],
     queryFn: () => ordersProvider.getPaginatedOrders(rowsPerPage, page + 1)
   });
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: () => ordersProvider.createOrder(),
-    onError: (err) => error(err.message),
-    onSuccess: (message) => {
-      success(message);
-      refetch();
-    }
-  });
+  // const { mutate, isPending } = useMutation({
+  //   mutationFn: () => ordersProvider.createOrder(),
+  //   onError: (err) => error(err.message),
+  //   onSuccess: (message) => {
+  //     success(message);
+  //     refetch();
+  //   }
+  // });
 
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setSearchParams((params) => {
@@ -79,9 +80,8 @@ export function MyOrders() {
         <CustomFilledButton
           label="Create Order"
           type="button"
-          onClick={() => mutate()}
           icon={<BiPlus className="text-white" />}
-          disabled={isPending}
+          onClick={() => navigate('?createOrder=true')}
         />
       </div>
 
@@ -91,6 +91,8 @@ export function MyOrders() {
           data={orders.data.response}
         />
       )}
+      
+      <ModalCreateOrder />
 
       <Pagination
         count={orders.data.total}
@@ -99,6 +101,7 @@ export function MyOrders() {
         page={page}
         rowsPerPage={rowsPerPage}
       />
+
     </div>
   );
 }

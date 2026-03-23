@@ -4,8 +4,9 @@ import { CreateProduct, Products, UpdateProduct } from "@/features/products/prod
 import { Home } from "@/features/home/home";
 import { Login } from "@/features/login/login";
 import { Profile } from "@/features/profile/profile";
-import { ProtectedLayout, PublicLayout } from "@/features/shared/shared";
+import { ProtectedLayout, PublicLayout, RoleMiddleware } from "@/features/shared/shared";
 import { Clients, CreateClient, UpdateClient } from "@/features/clients/clients";
+import { CreateUser, UpdateUser, Users } from "@/features/users/users";
 
 export default function AppRouter() {
     return (
@@ -36,6 +37,13 @@ export default function AppRouter() {
                     <Route path="/clients" element={<Clients />} />
                     <Route path="/clients/create" element={<CreateClient />} />
                     <Route path="/clients/update/:id" element={<UpdateClient />} />
+
+                    //USERS
+                    <Route element={<RoleMiddleware allowedRoles={['admin']} />}>
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/users/create" element={<CreateUser />} />
+                        <Route path="/users/update/:id" element={<UpdateUser />} />
+                    </Route>
                 </Route>
             </Routes>
         </BrowserRouter>
