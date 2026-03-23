@@ -13,12 +13,17 @@ export class ProductsProvider {
         return products;
     }
 
+    async getPaginatedProducts({ limit, offset }: { limit: number, offset: number }) {
+        const products = await this.repository.getPaginatedProducts({ limit, offset });
+        return products;
+    }
+
     async getProductById(id: string): Promise<Product> {
         const product = await this.repository.getProductById(id);
         return product;
     }
 
-    async updateProductById({id, payload } : {id: string, payload: CreateOrUpdateProductPayload}): Promise<string> {
+    async updateProductById({ id, payload }: { id: string, payload: CreateOrUpdateProductPayload }): Promise<string> {
         const message = await this.repository.updateProductById(id, payload);
         return message;
     }

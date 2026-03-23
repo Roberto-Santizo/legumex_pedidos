@@ -1,8 +1,26 @@
-import { ProductsDatasource, type CreateOrUpdateProductPayload, type Product, ProductsResponseSchema, ProductSchema, NotFoundError, ConflictError } from '@/features/products/products';
+import { ProductsDatasource, type CreateOrUpdateProductPayload, type Product, ProductsResponseSchema, ProductSchema, NotFoundError, ConflictError, type PaginatedProducts, PaginatedProductsResponseSchema } from '@/features/products/products';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class ProductsDatasourceImpl implements ProductsDatasource {
     constructor(private api: AxiosInstance) { }
+
+    async getPaginatedProducts({ limit, offset }: { limit: number; offset: number; }): Promise<PaginatedProducts> {
+        try {
+            const url = `/products/getPaginatedProducts?limit=${limit}&offset=${offset}`;
+            const { data } = await this.api.get(url);
+            const response = PaginatedProductsResponseSchema.safeParse(data);
+            console.log(response);
+            if (response.success) {
+                return response.data;
+            }
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data['message']);
+            }
+            throw new Error("Error no controlado");
+        }
+    }
 
     async updateProductById(id: string, payload: CreateOrUpdateProductPayload): Promise<string> {
         try {

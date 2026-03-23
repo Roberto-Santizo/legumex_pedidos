@@ -16,3 +16,12 @@ export const ProductSchema = z.object({
 export const ProductsResponseSchema = ApiResponseSchema.extend({
     data: z.array(ProductSchema)
 });
+
+export const PaginatedProductsResponseSchema = ApiResponseSchema.extend({
+    data: z.object({
+        response: z.array(ProductSchema),
+        total: z.number(),
+        page: z.number(),
+        lastPage: z.number()
+    })
+});

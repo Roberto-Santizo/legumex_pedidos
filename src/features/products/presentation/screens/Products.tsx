@@ -1,6 +1,6 @@
 import { BiPencil, BiPlus } from "react-icons/bi";
-import { CustomFilledButton } from '@/features/shared/shared';
-import { Link, useNavigate } from "react-router-dom";
+import { CustomFilledButton, Pagination } from '@/features/shared/shared';
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { productsProvider } from "../presentation";
 import { Table, type Column } from "@/features/shared/shared";
 import { useQuery } from "@tanstack/react-query";
@@ -27,11 +27,33 @@ const columns: Column<Product>[] = [
 
 export function Products() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const page = Number(searchParams.get("page")) || 0;
+  const rowsPerPage = Number(searchParams.get("limit")) || 10;
+
 
   const { data: products, isLoading } = useQuery({
-    queryKey: ['getProducts'],
-    queryFn: () => productsProvider.getProducts()
+    queryKey: ['getProducts', rowsPerPage, page],
+    queryFn: () => productsProvider.getPaginatedProducts({ limit: rowsPerPage, offset: page + 1 })
   });
+
+  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+    setSearchParams((params) => {
+      params.set('page', newPage.toString());
+      return params;
+    });
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const newLimit = parseInt(event.target.value, 10);
+
+    setSearchParams((params) => {
+      params.set('limit', newLimit.toString());
+      params.set('page', '0');
+      return params;
+    });
+  };
 
   if (isLoading) {
     return <p>Loading...</p>
@@ -52,7 +74,15 @@ export function Products() {
 
       <Table<Product>
         columns={columns}
-        data={products}
+        data={products.data.response}
+      />
+
+      <Pagination
+        count={products.data.total}
+        handleOnPageChange={handleChangePage}
+        handleOnRowsPerPageChange={handleChangeRowsPerPage}
+        page={page}
+        rowsPerPage={rowsPerPage}
       />
     </div>
   )
