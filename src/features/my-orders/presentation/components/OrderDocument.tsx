@@ -19,9 +19,6 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
 
                 <View style={styles.headerText}>
                     <Text style={styles.title}>Order #{order.id}</Text>
-                    <Text style={styles.subtitle}>
-                        Generated • {new Date().toLocaleDateString()}
-                    </Text>
                 </View>
             </View>
 
@@ -73,8 +70,6 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
             </View>
 
             <View style={styles.footer} fixed>
-                <Text>Order System</Text>
-
                 <Text
                     render={({ pageNumber, totalPages }) =>
                         `Page ${pageNumber} of ${totalPages}`
