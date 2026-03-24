@@ -1,4 +1,4 @@
-import { BiBox, BiPackage, BiUser } from 'react-icons/bi';
+import { BiBox, BiFile, BiPackage, BiUser } from 'react-icons/bi';
 import { BsFilePerson } from 'react-icons/bs';
 import { CustomNavLink } from './CustomNavLink';
 import { HiHome } from 'react-icons/hi';
@@ -37,6 +37,10 @@ export function CustomSideBar({ className }: Props) {
 
           <CustomNavLink to='/clients' label='Clients'>
             <BsFilePerson size={25} />
+          </CustomNavLink>
+
+          <CustomNavLink to='/reports' label='Reports'>
+            <BiFile size={25} />
           </CustomNavLink>
         </>
       )}

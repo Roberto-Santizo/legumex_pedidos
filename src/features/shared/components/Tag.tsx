@@ -12,7 +12,7 @@ const statusMap = {
       className: "bg-blue-200 text-blue-800",
     },
     3: {
-      label: "Recived",
+      label: "Recevied",
       className: "bg-green-200 text-green-800",
     },
   } as const;

@@ -7,6 +7,7 @@ import { Profile } from "@/features/profile/profile";
 import { ProtectedLayout, PublicLayout, RoleMiddleware } from "@/features/shared/shared";
 import { Clients, CreateClient, UpdateClient } from "@/features/clients/clients";
 import { CreateUser, UpdateUser, Users } from "@/features/users/users";
+import { Reports } from "@/features/reports/reports";
 
 export default function AppRouter() {
     return (
@@ -43,6 +44,11 @@ export default function AppRouter() {
                         <Route path="/users" element={<Users />} />
                         <Route path="/users/create" element={<CreateUser />} />
                         <Route path="/users/update/:id" element={<UpdateUser />} />
+                    </Route>
+
+                    //REPORTS
+                    <Route element={<RoleMiddleware allowedRoles={['admin', 'administrative']} />}>
+                        <Route path="/reports" element={<Reports />} />
                     </Route>
                 </Route>
             </Routes>
