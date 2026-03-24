@@ -5,7 +5,16 @@ export const OrderSchema = z.object({
     id: z.number(),
     createdAt: z.string(),
     user: z.string(),
-    status: z.number()
+    status: z.number(),
+    total_lbs: z.number(),
+    total_pallets: z.number(),
+    total_price: z.number(),
+    total_boxes: z.number(),
+    client: z.string(),
+    transportType: z.string(),
+    requiredByDate: z.string(),
+    confirmedBy: z.string().nullable(),
+    dc: z.string()
 });
 
 export const OrdersPaginatedSchema = ApiResponseSchema.extend({
@@ -54,8 +63,9 @@ export const OrderItemsDetailsResponseSchema = ApiResponseSchema.extend({
 
 export const OrderTotalsSchema = z.object({
     total_boxes: z.number(),
-    total_price: z.string(),
-    total_lbs: z.string(),
+    total_price: z.number(),
+    total_lbs: z.number(),
+    total_pallets: z.number()
 });
 
 export const OrderTotalsResponseSchema = ApiResponseSchema.extend({

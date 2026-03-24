@@ -1,4 +1,5 @@
 import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import type { OrderFilters } from '@/features/shared/shared';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
@@ -151,9 +152,9 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async getOrders(): Promise<Order[]> {
+    async getOrders(filters: OrderFilters): Promise<Order[]> {
         try {
-            const url = '/orders';
+            const url = `/orders?client=${filters.client}&startDate=${filters.startDate}&endDate=${filters.endDate}`;
             const { data } = await this.api.get(url);
             const response = OrdersResponseSchema.safeParse(data);
 

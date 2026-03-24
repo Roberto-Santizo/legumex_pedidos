@@ -5,3 +5,9 @@ export interface NotificationAdapter {
     information(message: string): void;
 }
 
+
+export interface OrderFilters {
+    client: string;
+    startDate: string;
+    endDate: string;
+}

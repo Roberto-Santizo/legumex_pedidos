@@ -4,6 +4,7 @@ import { ModalAddItem, OrderProductsTable, OrderDetailsComponent } from "@/featu
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
+import { useEffect } from "react";
 
 export function AddItemsToOrder() {
   const params = useParams();
@@ -29,6 +30,12 @@ export function AddItemsToOrder() {
       queryClient.invalidateQueries({ queryKey: ['getMyOrders'] })
     }
   });
+
+  useEffect(() => {
+    if (order && order.status != 1) {
+      navigate('/my-orders');
+    }
+  }, [order]);
 
   if (order) return (
     <div className="w-full space-y-5">

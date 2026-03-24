@@ -1,3 +1,4 @@
+import type { OrderFilters } from "@/features/shared/shared";
 import type { AddItemForm, CreateOrderPayload, Order, OrderItemDetails, OrdersRepository } from "../../my-orders";
 
 export class OrdersProvider {
@@ -7,8 +8,8 @@ export class OrdersProvider {
         return this.repository.createOrder(payload);
     }
 
-    async getOrders() {
-        return this.repository.getOrders();
+    async getOrders(filters: OrderFilters) {
+        return this.repository.getOrders(filters);
     }
 
     async getPaginatedOrders(limit: number, offset: number) {

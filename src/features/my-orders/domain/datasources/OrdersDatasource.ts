@@ -1,8 +1,9 @@
+import type { OrderFilters } from "@/features/shared/shared";
 import type { AddItemForm, CreateOrderPayload, Order, OrderDetails, OrderItemDetails, OrderTotals, PaginatedOrders } from "../domain";
 
 export abstract class OrdersDatasource {
     abstract createOrder(payload: CreateOrderPayload): Promise<string>;
-    abstract getOrders(): Promise<Order[]>;
+    abstract getOrders(filters: OrderFilters): Promise<Order[]>;
     abstract getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders>;
     abstract getOrderById(id: string): Promise<OrderDetails>;
     abstract getOrderDetails(id: string): Promise<OrderTotals>;

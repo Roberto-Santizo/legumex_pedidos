@@ -30,7 +30,7 @@ export function OrderDetailsComponent({ order }: Props) {
                     Totals
                 </h3>
 
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-4 gap-4">
                     <div className="bg-gray-50 rounded-xl p-4 text-center">
                         <p className="text-sm text-gray-500">Boxes</p>
                         <p className="text-lg font-semibold text-gray-800">
@@ -42,6 +42,13 @@ export function OrderDetailsComponent({ order }: Props) {
                         <p className="text-sm text-gray-500">Pounds</p>
                         <p className="text-lg font-semibold text-gray-800">
                             {totals.total_lbs}
+                        </p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-4 text-center">
+                        <p className="text-sm text-gray-500">Pallets</p>
+                        <p className="text-lg font-semibold text-gray-800">
+                            {totals.total_pallets}
                         </p>
                     </div>
 
