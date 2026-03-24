@@ -35,10 +35,10 @@ export function SelectFormField<T extends FieldValues>({
                         options={options}
                         isSearchable
                         placeholder="Select an option"
-                        classNamePrefix="react-select"
+                        classNamePrefix="react-select "
                         value={options.find((opt) => opt.value === field.value) || null}
                         onChange={(selected) => field.onChange(selected?.value)}
-                        
+
                     />
                 )}
             />

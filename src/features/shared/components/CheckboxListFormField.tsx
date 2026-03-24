@@ -25,11 +25,10 @@ export function CheckboxListFormField<T extends Record<string, any>>({
                 {label}
             </span>
 
-            <div className={`flex flex-col gap-2 rounded-xl border p-3 transition
-        ${errorMessage
+            <div className={`flex flex-col gap-2 rounded-xl border p-3 transition ${errorMessage
                     ? 'border-red-400 bg-red-50'
                     : 'border-gray-200 bg-white hover:border-gray-300'}
-    `}>
+                    `}>
                 {options.map((option) => (
                     <label
                         key={option.value}

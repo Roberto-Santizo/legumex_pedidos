@@ -1,7 +1,10 @@
-import type { Control, FieldErrors, UseFormRegister } from "react-hook-form"
-import type { CreateOrUpdateUserPayload } from "../../users"
-import { PasswordFormField, SelectFormField, TextFormField } from "@/features/shared/shared";
 import { CheckboxListFormField } from "@/features/shared/components/CheckboxListFormField";
+import { clientOptions } from "@/features/clients/clients";
+import { clientsProvider } from "@/features/clients/presentation/providers/clientsRepositoryProvider";
+import { PasswordFormField, SelectFormField, TextFormField } from "@/features/shared/shared";
+import { useQuery } from "@tanstack/react-query";
+import type { Control, FieldErrors, UseFormRegister } from "react-hook-form"
+import type { CreateOrUpdateUserPayload } from "@/features/users/users"
 
 type Props = {
   register: UseFormRegister<CreateOrUpdateUserPayload>;
@@ -10,7 +13,13 @@ type Props = {
 }
 
 export function Form({ register, errors, control }: Props) {
-  return (
+  const { data: clients } = useQuery({
+    queryKey: ['getClients'],
+    queryFn: () => clientsProvider.getClients()
+  });
+
+
+  if (clients) return (
     <>
       <TextFormField<CreateOrUpdateUserPayload>
         label="Name"
@@ -67,12 +76,9 @@ export function Form({ register, errors, control }: Props) {
       <CheckboxListFormField<CreateOrUpdateUserPayload>
         label="Clients"
         name="clients"
-        options={[
-          { value: 'admin', label: 'Admin' },
-          { value: 'client', label: 'Client' },
-          { value: 'administrator', label: 'Administrator' },
-        ]}
+        options={clientOptions(clients)}
         register={register}
+        validation={{ required: 'You need to select at least one client' }}
         errorMessage={errors.clients?.message}
       />
     </>
