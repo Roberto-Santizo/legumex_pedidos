@@ -6,7 +6,11 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function ModalAddItem() {
+type Props = {
+    client: number;
+}
+
+export function ModalAddItem({ client }: Props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
@@ -37,8 +41,8 @@ export function ModalAddItem() {
     });
 
     const { data: products, isLoading } = useQuery({
-        queryKey: ['getProducts'],
-        queryFn: () => productsProvider.getProducts(),
+        queryKey: ['getProducts', client],
+        queryFn: () => productsProvider.getProducts(client),
     });
 
     const { handleSubmit, register, formState: { errors }, control, reset } = useForm<AddItemForm>();

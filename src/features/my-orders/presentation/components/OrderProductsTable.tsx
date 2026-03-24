@@ -14,7 +14,7 @@ export function OrderProductsTable({ id }: Props) {
 
 
     const { mutate, isPending } = useMutation({
-        mutationFn: (id: OrderItemDetails['id']) => ordersProvider.deleteOrderProduct(id),
+        mutationFn: (itemId: OrderItemDetails['id']) => ordersProvider.deleteOrderProduct(+id, itemId),
         onError: (err) => {
             error(err.message);
         },

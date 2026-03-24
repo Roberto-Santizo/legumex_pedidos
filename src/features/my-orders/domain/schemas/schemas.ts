@@ -17,15 +17,21 @@ export const OrdersPaginatedSchema = ApiResponseSchema.extend({
     })
 });
 
-export const OrderConfirmedSchema = z.object({
+export const OrderDetailsSchema = z.object({
     id: z.number(),
     status: z.number(),
     customer: z.string(),
-    email: z.string()
+    email: z.string(),
+    dc: z.string(),
+    client: z.string(),
+    client_id: z.number(),
+    transportType: z.string(),
+    date: z.string(),
+    confirmationDate: z.string().nullable()
 });
 
 export const OrderConfirmedResponseSchema = ApiResponseSchema.extend({
-    data: OrderConfirmedSchema
+    data: OrderDetailsSchema
 });
 
 export const OrderItemDetailsSchema = z.object({

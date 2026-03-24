@@ -1,4 +1,4 @@
-import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
@@ -7,12 +7,12 @@ export class OrdersRepositoryImpl implements OrdersRepository {
         return this.datasource.getPaginatedOrders(limit, offset);
     }
 
-    getOrderById(id: string): Promise<OrderConfirmed> {
+    getOrderById(id: string): Promise<OrderDetails> {
         return this.datasource.getOrderById(id);
     }
 
-    deleteOrderProduct(id: OrderItemDetails['id']): Promise<string> {
-        return this.datasource.deleteOrderProduct(id);
+    deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']): Promise<string> {
+        return this.datasource.deleteOrderProduct(orderId, id);
     }
 
     getOrderProducts(id: string): Promise<OrderItemDetails[]> {

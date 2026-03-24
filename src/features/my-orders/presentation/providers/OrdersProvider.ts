@@ -1,4 +1,4 @@
-import type { AddItemForm, CreateOrderPayload, OrderItemDetails, OrdersRepository } from "../../my-orders";
+import type { AddItemForm, CreateOrderPayload, Order, OrderItemDetails, OrdersRepository } from "../../my-orders";
 
 export class OrdersProvider {
     constructor(private repository: OrdersRepository) { }
@@ -31,7 +31,7 @@ export class OrdersProvider {
         return this.repository.getOrderProducts(id);
     }
 
-    async deleteOrderProduct(id: OrderItemDetails['id']) {
-        return this.repository.deleteOrderProduct(id);
+    async deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']) {
+        return this.repository.deleteOrderProduct(orderId, id);
     }
 }

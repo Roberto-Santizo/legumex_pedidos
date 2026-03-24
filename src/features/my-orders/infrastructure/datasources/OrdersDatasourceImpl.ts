@@ -1,4 +1,4 @@
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
@@ -25,7 +25,7 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async getOrderById(id: string): Promise<OrderConfirmed> {
+    async getOrderById(id: string): Promise<OrderDetails> {
         try {
             const url = `/orders/${id}`;
             const { data } = await this.api.get(url);
@@ -45,9 +45,9 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async deleteOrderProduct(id: OrderItemDetails['id']): Promise<string> {
+    async deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']): Promise<string> {
         try {
-            const url = `/orders/deleteItem/${id}`;
+            const url = `/orders/deleteItem/${orderId}/${id}`;
             const { data } = await this.api.delete(url);
 
             return data['message'];

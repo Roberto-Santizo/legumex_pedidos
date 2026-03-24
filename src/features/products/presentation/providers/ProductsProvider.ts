@@ -8,8 +8,8 @@ export class ProductsProvider {
         return message;
     }
 
-    async getProducts() {
-        const products = await this.repository.getProducts();
+    async getProducts(client?: number) {
+        const products = await this.repository.getProducts(client);
         return products;
     }
 
