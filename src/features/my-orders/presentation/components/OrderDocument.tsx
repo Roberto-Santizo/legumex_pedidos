@@ -41,7 +41,7 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
 
                 <View style={styles.card}>
                     <Text style={styles.label}>Status</Text>
-                    <Text style={styles.value}>Sent</Text>
+                    <Text style={styles.value}>{ order.status == 2 ? 'Sent' : 'Recevied' }</Text>
                 </View>
 
                 <View style={styles.card}>

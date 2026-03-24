@@ -38,4 +38,8 @@ export class OrdersProvider {
     async confirmOrder(orderId: Order['id']) {
         return this.repository.confirmOrder(orderId);
     }
+
+    async confirmReceivedOrder(orderId: Order['id']) {
+        return this.repository.confirmReceivedOrder(orderId);
+    }
 }

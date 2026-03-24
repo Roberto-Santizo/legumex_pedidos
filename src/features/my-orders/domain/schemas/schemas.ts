@@ -28,7 +28,9 @@ export const OrderDetailsSchema = z.object({
     transportType: z.string(),
     date: z.string(),
     confirmationDate: z.string().nullable(),
-    requiredDate: z.string()
+    requiredDate: z.string(),
+    receviedConfirmatioDate: z.string().nullable(),
+    confirmedBy: z.string().nullable()
 });
 
 export const OrderConfirmedResponseSchema = ApiResponseSchema.extend({

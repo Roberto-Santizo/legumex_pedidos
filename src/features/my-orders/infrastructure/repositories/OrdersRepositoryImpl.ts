@@ -3,6 +3,10 @@ import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderP
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
 
+    confirmReceivedOrder(orderId: Order['id']): Promise<string> {
+        return this.datasource.confirmReceivedOrder(orderId);
+    }
+
     confirmOrder(orderId: Order['id']): Promise<string> {
         return this.datasource.confirmOrder(orderId);
     }

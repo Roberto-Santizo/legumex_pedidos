@@ -10,4 +10,5 @@ export abstract class OrdersDatasource {
     abstract getOrderProducts(id: string): Promise<OrderItemDetails[]>;
     abstract deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']): Promise<string>;
     abstract confirmOrder(orderId: Order['id']): Promise<string>;
+    abstract confirmReceivedOrder(orderId: Order['id']): Promise<string>;
 }
