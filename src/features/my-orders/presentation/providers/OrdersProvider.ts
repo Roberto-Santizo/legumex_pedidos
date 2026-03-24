@@ -1,10 +1,10 @@
-import type { AddItemForm, OrderItemDetails, OrdersRepository } from "../../my-orders";
+import type { AddItemForm, CreateOrderPayload, OrderItemDetails, OrdersRepository } from "../../my-orders";
 
 export class OrdersProvider {
     constructor(private repository: OrdersRepository) { }
 
-    async createOrder() {
-        return this.repository.createOrder();
+    async createOrder(payload: CreateOrderPayload) {
+        return this.repository.createOrder(payload);
     }
 
     async getOrders() {

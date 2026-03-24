@@ -2,6 +2,10 @@ import { type Client, ClientDatasource, ClientRepository } from '../../domain/do
 
 export class ClientRepositoryImpl implements ClientRepository {
     constructor(private datasource: ClientDatasource) { }
+    
+    getUserClients(): Promise<Client[]> {
+        return this.datasource.getUserClients();
+    }
 
     createClient(name: string): Promise<string> {
         return this.datasource.createClient(name);

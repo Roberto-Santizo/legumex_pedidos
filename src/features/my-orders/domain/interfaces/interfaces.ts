@@ -3,3 +3,9 @@ export interface AddItemForm {
     total_boxes: number;
     po: string;
 }
+
+export interface CreateOrderPayload {
+    dc: string;
+    client_id: string;
+    transportType: string;
+}

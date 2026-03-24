@@ -11,6 +11,10 @@ export class ClientsProvider {
         return this.repository.getClients();
     }
 
+    async getUserClients() {
+        return this.repository.getUserClients();
+    }
+
     async getClientById(id: string) {
         return this.repository.getClientById(id);
     }

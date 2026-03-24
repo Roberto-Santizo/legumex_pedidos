@@ -1,4 +1,4 @@
-import { OrdersDatasource, OrdersRepository, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
@@ -31,8 +31,8 @@ export class OrdersRepositoryImpl implements OrdersRepository {
         return this.datasource.getOrders();
     }
 
-    createOrder(): Promise<string> {
-        return this.datasource.createOrder();
+    createOrder(payload: CreateOrderPayload): Promise<string> {
+        return this.datasource.createOrder(payload);
     }
 
 }

@@ -11,8 +11,8 @@ interface PaginationProps {
 export function Pagination({ page, rowsPerPage, count, handleOnPageChange, handleOnRowsPerPageChange }: PaginationProps) {
     return (
         <TablePagination
-            labelRowsPerPage="Registros Por Página"
-            labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) { return `${from}–${to} de ${count !== -1 ? count : `more than ${to}`}`; }}
+            labelRowsPerPage="Rows per page"
+            labelDisplayedRows={function defaultLabelDisplayedRows({ from, to, count }) { return `${from}–${to} of ${count !== -1 ? count : `more than ${to}`}`; }}
             component="div"
             count={count}
             page={page}

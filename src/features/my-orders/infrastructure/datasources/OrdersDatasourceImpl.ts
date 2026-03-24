@@ -1,4 +1,4 @@
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderConfirmed, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
@@ -139,10 +139,10 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async createOrder(): Promise<string> {
+    async createOrder(payload: CreateOrderPayload): Promise<string> {
         try {
             const url = '/orders';
-            const { data } = await this.api.post(url);
+            const { data } = await this.api.post(url, payload);
 
             return data['message'];
         } catch (error) {

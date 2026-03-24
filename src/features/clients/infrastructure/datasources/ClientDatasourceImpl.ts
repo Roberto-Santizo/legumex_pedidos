@@ -6,6 +6,26 @@ export class ClientDatasourceImpl implements ClientDatasource {
 
     constructor(private api: AxiosInstance) { }
 
+    async getUserClients(): Promise<Client[]> {
+        try {
+            const url = `/clients/getUserClients`;
+            const { data } = await this.api.get(url);
+            const response = ClientsResponseSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data.data;
+            }
+
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 409) throw new ConflictError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+            throw new Error("Error no controlado");
+        }
+    }
+
     async createClient(name: string): Promise<string> {
         try {
             const url = `/clients`;

@@ -1,7 +1,7 @@
-import type { AddItemForm, Order, OrderConfirmed, OrderItemDetails, OrderTotals, PaginatedOrders } from "../domain";
+import type { AddItemForm, CreateOrderPayload, Order, OrderConfirmed, OrderItemDetails, OrderTotals, PaginatedOrders } from "../domain";
 
 export abstract class OrdersDatasource {
-    abstract createOrder(): Promise<string>;
+    abstract createOrder(payload: CreateOrderPayload): Promise<string>;
     abstract getOrders(): Promise<Order[]>;
     abstract getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders>;
     abstract getOrderById(id: string): Promise<OrderConfirmed>;

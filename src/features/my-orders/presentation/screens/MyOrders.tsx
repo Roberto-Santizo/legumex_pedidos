@@ -45,15 +45,6 @@ export function MyOrders() {
     queryFn: () => ordersProvider.getPaginatedOrders(rowsPerPage, page + 1)
   });
 
-  // const { mutate, isPending } = useMutation({
-  //   mutationFn: () => ordersProvider.createOrder(),
-  //   onError: (err) => error(err.message),
-  //   onSuccess: (message) => {
-  //     success(message);
-  //     refetch();
-  //   }
-  // });
-
   const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setSearchParams((params) => {
       params.set('page', newPage.toString());
@@ -71,6 +62,17 @@ export function MyOrders() {
     });
   };
 
+  const handleOpenCreateOrderModal = () => {
+    const params = new URLSearchParams(location.search);
+
+    params.set("createOrder", "true");
+
+    navigate({
+      pathname: location.pathname,
+      search: params.toString(),
+    });
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (orders) return (
     <div className="space-y-5">
@@ -81,7 +83,7 @@ export function MyOrders() {
           label="Create Order"
           type="button"
           icon={<BiPlus className="text-white" />}
-          onClick={() => navigate('?createOrder=true')}
+          onClick={() => handleOpenCreateOrderModal()}
         />
       </div>
 
@@ -91,7 +93,7 @@ export function MyOrders() {
           data={orders.data.response}
         />
       )}
-      
+
       <ModalCreateOrder />
 
       <Pagination
