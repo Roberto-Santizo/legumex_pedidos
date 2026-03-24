@@ -9,4 +9,5 @@ export abstract class OrdersRepository {
     abstract addItemToOrder(id: string, payload: AddItemForm): Promise<string>;
     abstract getOrderProducts(id: string): Promise<OrderItemDetails[]>;
     abstract deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']): Promise<string>;
+    abstract confirmOrder(orderId: Order['id']): Promise<string>;
 }

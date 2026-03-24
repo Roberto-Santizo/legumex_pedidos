@@ -27,7 +27,8 @@ export const OrderDetailsSchema = z.object({
     client_id: z.number(),
     transportType: z.string(),
     date: z.string(),
-    confirmationDate: z.string().nullable()
+    confirmationDate: z.string().nullable(),
+    requiredDate: z.string()
 });
 
 export const OrderConfirmedResponseSchema = ApiResponseSchema.extend({
@@ -38,6 +39,7 @@ export const OrderItemDetailsSchema = z.object({
     id: z.number(),
     total_boxes: z.number(),
     total_lbs: z.number(),
+    total_pallets: z.number(),
     total_amount: z.number(),
     product: z.string(),
     internationalCode: z.string(),

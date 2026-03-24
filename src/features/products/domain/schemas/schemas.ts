@@ -9,6 +9,7 @@ export const ProductSchema = z.object({
     price: z.number(),
     presentation: z.number(),
     units_per_box: z.number(),
+    boxes_per_pallet: z.number(),
     client_id: z.number(),
     client: z.string()
 });

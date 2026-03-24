@@ -1,19 +1,33 @@
 import { BiPlus } from "react-icons/bi";
-import { CustomFilledButton } from '@/features/shared/shared';
+import { CustomFilledButton, useNotification } from '@/features/shared/shared';
 import { ModalAddItem, OrderProductsTable, OrderDetailsComponent } from "@/features/my-orders/my-orders";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 
 export function AddItemsToOrder() {
   const params = useParams();
   const id = params.id!;
   const navigate = useNavigate();
+  const notification = useNotification();
+  const queryClient = useQueryClient();
 
   const { data: order } = useQuery({
     queryKey: ["getOrderDetails", id],
     queryFn: () => ordersProvider.getOrderById(id),
     enabled: !!id,
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () => ordersProvider.confirmOrder(+id),
+    onError: (err) => {
+      notification.error(err.message);
+    },
+    onSuccess: (message) => {
+      notification.success(message);
+      navigate('/my-orders');
+      queryClient.invalidateQueries({ queryKey: ['getMyOrders'] })
+    }
   });
 
   if (order) return (
@@ -37,8 +51,9 @@ export function AddItemsToOrder() {
       <CustomFilledButton
         label="Confirm Order"
         type="button"
-        onClick={() => { console.log('confirm') }}
+        onClick={() => { mutate() }}
         fullWitdh={true}
+        disabled={isPending}
       />
     </div>
   )

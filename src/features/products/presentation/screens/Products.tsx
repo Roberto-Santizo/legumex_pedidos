@@ -13,6 +13,7 @@ const columns: Column<Product>[] = [
   { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode' },
   { header: 'Client', accessor: 'client', id: 'client' },
   { header: 'Presentation', accessor: 'presentation', id: 'presentation' },
+  { header: 'Boxes Per Pallet', accessor: 'boxes_per_pallet', id: 'boxesPerPallet' },
   { header: 'Price', accessor: 'price', id: 'price' },
   {
     header: 'Actions',

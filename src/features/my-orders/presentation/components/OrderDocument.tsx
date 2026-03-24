@@ -1,9 +1,9 @@
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import { styles } from "@/features/my-orders/presentation/styles/styles";
-import type { OrderConfirmed, OrderItemDetails, OrderTotals } from "../../my-orders";
+import type { OrderDetails, OrderItemDetails, OrderTotals } from "../../my-orders";
 
 type Props = {
-    order: OrderConfirmed;
+    order: OrderDetails;
     products: OrderItemDetails[];
     totals: OrderTotals
 }
@@ -16,16 +16,27 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
                     src="https://legumexappsapi-storage.s3.us-east-1.amazonaws.com/resources/LOGO_LX.png"
                     style={styles.logo}
                 />
-
-                <View style={styles.headerText}>
-                    <Text style={styles.title}>Order #{order.id}</Text>
-                </View>
             </View>
 
             <View style={styles.grid}>
                 <View style={styles.card}>
-                    <Text style={styles.label}>Customer</Text>
+                    <Text style={styles.label}>Order By</Text>
                     <Text style={styles.value}>{order.customer}</Text>
+                </View>
+                
+                <View style={styles.card}>
+                    <Text style={styles.label}>Customer</Text>
+                    <Text style={styles.value}>{order.client}</Text>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.label}>DC</Text>
+                    <Text style={styles.value}>{order.dc}</Text>
+                </View>
+
+                <View style={styles.card}>
+                    <Text style={styles.label}>Transport Type</Text>
+                    <Text style={styles.value}>{order.transportType}</Text>
                 </View>
 
                 <View style={styles.card}>

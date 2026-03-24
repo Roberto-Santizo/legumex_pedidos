@@ -5,6 +5,22 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
 
+    async confirmOrder(orderId: Order['id']): Promise<string> {
+        try {
+            const url = `/orders/confirmOrder/${orderId}`;
+            const { data } = await this.api.post(url);
+
+            return data['message'];
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
+
     async getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders> {
         try {
             const url = `/orders/getPaginatedOrders?limit=${limit}&offset=${offset}`;

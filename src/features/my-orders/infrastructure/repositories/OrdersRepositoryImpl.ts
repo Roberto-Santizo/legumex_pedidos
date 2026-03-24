@@ -3,6 +3,10 @@ import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderP
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
 
+    confirmOrder(orderId: Order['id']): Promise<string> {
+        return this.datasource.confirmOrder(orderId);
+    }
+
     getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders> {
         return this.datasource.getPaginatedOrders(limit, offset);
     }

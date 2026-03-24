@@ -1,3 +1,4 @@
+import { useParams } from "react-router-dom";
 import type { OrderDetails } from "../../my-orders";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useQuery } from "@tanstack/react-query";
@@ -7,9 +8,12 @@ type Props = {
 };
 
 export function OrderDetailsComponent({ order }: Props) {
+    const params = useParams();
+    const id = params.id!;
+
     const { data: totals } = useQuery({
-        queryKey: ["getOrderTotals", order.id],
-        queryFn: () => ordersProvider.getOrderTotals(`${order.id}`),
+        queryKey: ["getOrderTotals", id],
+        queryFn: () => ordersProvider.getOrderTotals(id),
         enabled: !!order.id,
     });
 
@@ -59,6 +63,7 @@ export function OrderDetailsComponent({ order }: Props) {
                     <Info label="DC" value={order.dc} />
                     <Info label="Transport" value={order.transportType} />
                     <Info label="Created At" value={order.date} />
+                    <Info label="Required By" value={order.requiredDate} />
                 </div>
             </div>
         </div>

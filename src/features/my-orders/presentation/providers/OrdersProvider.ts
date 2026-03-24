@@ -34,4 +34,8 @@ export class OrdersProvider {
     async deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']) {
         return this.repository.deleteOrderProduct(orderId, id);
     }
+
+    async confirmOrder(orderId: Order['id']) {
+        return this.repository.confirmOrder(orderId);
+    }
 }

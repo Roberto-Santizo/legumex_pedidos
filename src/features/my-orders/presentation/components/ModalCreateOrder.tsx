@@ -1,6 +1,6 @@
 import { clientOptions } from "@/features/clients/clients";
 import { clientsProvider } from "@/features/clients/presentation/providers/clientsRepositoryProvider";
-import { CustomFilledButton, Modal, SelectFormField, TextFormField, useNotification } from "@/features/shared/shared";
+import { CustomFilledButton, DateFormField, Modal, SelectFormField, TextFormField, useNotification } from "@/features/shared/shared";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { type CreateOrderPayload } from "@/features/my-orders/my-orders";
 import { useForm } from "react-hook-form";
@@ -98,6 +98,14 @@ export function ModalCreateOrder() {
                     ]}
                     validation={{ required: 'The trasport type is requierd' }}
                     errorMessage={errors.client_id?.message}
+                />
+
+                <DateFormField
+                    label="Required By"
+                    name="requiredByDate"
+                    register={register}
+                    errorMessage={errors.requiredByDate?.message}
+                    validation={{ required: 'Date is required' }}
                 />
 
                 <CustomFilledButton
