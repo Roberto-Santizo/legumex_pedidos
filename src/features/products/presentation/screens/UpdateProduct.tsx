@@ -45,6 +45,7 @@ export function UpdateProduct() {
             setValue('price', product.price)
             setValue('presentation', product.presentation)
             setValue('units_per_box', product.units_per_box)
+            setValue('boxes_per_pallet', product.boxes_per_pallet)
             setValue('client_id', product.client_id)
         }
     }, [product]);

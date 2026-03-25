@@ -79,6 +79,16 @@ export function Form({ register, errors, control }: Props) {
                 errorMessage={errors.units_per_box?.message}
             />
 
+            <TextFormField<CreateOrUpdateProductPayload>
+                label="Boxes per Pallets"
+                name="boxes_per_pallet"
+                placeholder="Boxes per Pallet"
+                register={register}
+                type="number"
+                validation={{ required: 'Boxes per pallet is Required' }}
+                errorMessage={errors.boxes_per_pallet?.message}
+            />
+
             <SelectFormField<CreateOrUpdateProductPayload>
                 label="Client"
                 name="client_id"
