@@ -74,11 +74,11 @@ export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, o
                             validation={{}}
                         />
 
-                        <div className='flex justify-between items-center'>
-
+                        <div className='grid grid-cols-6 items-center gap-5'>
                             <CustomFilledButton
                                 label='Filter data'
                                 type='submit'
+                                className=' col-span-5'
                             />
                             <BiTrash className='cursor-pointer hover:text-gray-500' onClick={() => clearFilters()} size={25} />
                         </div>
