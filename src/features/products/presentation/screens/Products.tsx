@@ -1,70 +1,45 @@
-import { BiPencil, BiPlus } from "react-icons/bi";
+import { BiMenu, BiPlus } from "react-icons/bi";
 import { CustomFilledButton, Pagination } from '@/features/shared/shared';
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { productsProvider } from "../presentation";
-import { Table, type Column } from "@/features/shared/shared";
+import { FiltersComponent, productsProvider, productsTableColumns } from "../presentation";
+import { Table } from "@/features/shared/shared";
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import type { Product } from "@/features/products/domain/domain";
-
-const columns: Column<Product>[] = [
-  { header: 'id', accessor: 'id', id: 'id' },
-  { header: 'Name', accessor: 'name', id: 'name' },
-  { header: 'Local Code', accessor: 'localCode', id: 'localCode' },
-  { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode' },
-  { header: 'Client', accessor: 'client', id: 'client' },
-  { header: 'Presentation', accessor: 'presentation', id: 'presentation' },
-  { header: 'Boxes Per Pallet', accessor: 'boxes_per_pallet', id: 'boxesPerPallet' },
-  { header: 'Price', accessor: 'price', id: 'price' },
-  {
-    header: 'Actions',
-    id: 'actions',
-    render: (_, row) => (
-      <Link to={`/products/update/${row.id}`}>
-        <BiPencil size={25} className="hover:text-gray-600" />
-      </Link>
-    ),
-  },
-];
+import { useState } from "react";
+import type { FiltersProducts, Product } from "@/features/products/products";
 
 export function Products() {
   const navigate = useNavigate();
+  const initialFilters = { client: '', localCode: '', internationalCode: '', name: '' };
   const [searchParams, setSearchParams] = useSearchParams();
+  const [open, setOpen] = useState<boolean>(false);
+  const [filters, setFilters] = useState<FiltersProducts>(initialFilters)
 
   const page = Number(searchParams.get("page")) || 0;
   const rowsPerPage = Number(searchParams.get("limit")) || 10;
 
-
-  const { data: products, isLoading } = useQuery({
-    queryKey: ['getProducts', rowsPerPage, page],
-    queryFn: () => productsProvider.getPaginatedProducts({ limit: rowsPerPage, offset: page + 1 })
+  const { data: products } = useQuery({
+    queryKey: ['getProducts', rowsPerPage, page, filters],
+    queryFn: () => productsProvider.getPaginatedProducts({ limit: rowsPerPage, offset: page + 1, filters })
   });
 
-  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setSearchParams((params) => {
-      params.set('page', newPage.toString());
-      return params;
-    });
-  };
+  const { handleSubmit, register, control, reset } = useForm<FiltersProducts>()
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const newLimit = parseInt(event.target.value, 10);
+  const onSubmit = (data: FiltersProducts) => {
+    setFilters(data);
+  }
 
-    setSearchParams((params) => {
-      params.set('limit', newLimit.toString());
-      params.set('page', '0');
-      return params;
-    });
-  };
-
-  if (isLoading) {
-    return <p>Loading...</p>
+  const clearFilters = () => {
+    setFilters(initialFilters);
+    reset();
   }
 
   if (products) return (
     <div className="space-y-5">
       <h1 className="main_title">Products</h1>
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full items-end flex-col gap-5">
+        <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
         <CustomFilledButton
           label="Create Code"
           type="button"
@@ -74,16 +49,25 @@ export function Products() {
       </div>
 
       <Table<Product>
-        columns={columns}
+        columns={productsTableColumns}
         data={products.data.response}
       />
 
       <Pagination
         count={products.data.total}
-        handleOnPageChange={handleChangePage}
-        handleOnRowsPerPageChange={handleChangeRowsPerPage}
+        setSearchParams={setSearchParams}
         page={page}
         rowsPerPage={rowsPerPage}
+      />
+
+      <FiltersComponent
+        isOpen={open}
+        toggleMenu={setOpen}
+        handleSubmit={handleSubmit}
+        register={register}
+        onSubmit={onSubmit}
+        control={control}
+        clearFilters={clearFilters}
       />
     </div>
   )

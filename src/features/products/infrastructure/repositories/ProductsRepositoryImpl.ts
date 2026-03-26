@@ -1,10 +1,10 @@
-import { ProductsDatasource, ProductsRepository, type CreateOrUpdateProductPayload, type PaginatedProducts, type Product } from '@/features/products/domain/domain';
+import { ProductsDatasource, ProductsRepository, type CreateOrUpdateProductPayload, type FiltersProducts, type PaginatedProducts, type Product } from '@/features/products/domain/domain';
 
 export class ProductsRepositoryImpl implements ProductsRepository {
     constructor(private datasource: ProductsDatasource) { }
 
-    getPaginatedProducts({ limit, offset }: { limit: number; offset: number; }): Promise<PaginatedProducts> {
-        return this.datasource.getPaginatedProducts({ limit, offset });
+    getPaginatedProducts({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersProducts }): Promise<PaginatedProducts> {
+        return this.datasource.getPaginatedProducts({ limit, offset, filters });
     }
 
     updateProductById(id: string, payload: CreateOrUpdateProductPayload): Promise<string> {

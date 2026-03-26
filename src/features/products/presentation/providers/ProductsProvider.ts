@@ -1,4 +1,4 @@
-import type { CreateOrUpdateProductPayload, Product, ProductsRepository } from "../../products";
+import type { CreateOrUpdateProductPayload, FiltersProducts, Product, ProductsRepository } from "../../products";
 
 export class ProductsProvider {
     constructor(private repository: ProductsRepository) { }
@@ -13,8 +13,8 @@ export class ProductsProvider {
         return products;
     }
 
-    async getPaginatedProducts({ limit, offset }: { limit: number, offset: number }) {
-        const products = await this.repository.getPaginatedProducts({ limit, offset });
+    async getPaginatedProducts({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersProducts }) {
+        const products = await this.repository.getPaginatedProducts({ limit, offset, filters });
         return products;
     }
 

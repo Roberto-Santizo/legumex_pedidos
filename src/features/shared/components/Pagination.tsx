@@ -1,14 +1,30 @@
 import { TablePagination } from "@mui/material";
+import type { SetURLSearchParams } from "react-router-dom";
 
 interface PaginationProps {
     page: number;
     rowsPerPage: number;
     count: number;
-    handleOnPageChange: (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | null, page: number) => void;
-    handleOnRowsPerPageChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    setSearchParams: SetURLSearchParams;
 }
 
-export function Pagination({ page, rowsPerPage, count, handleOnPageChange, handleOnRowsPerPageChange }: PaginationProps) {
+export function Pagination({ page, rowsPerPage, count, setSearchParams }: PaginationProps) {
+    const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+        setSearchParams((params) => {
+            params.set('page', newPage.toString());
+            return params;
+        });
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const newLimit = parseInt(event.target.value, 10);
+        setSearchParams((params) => {
+            params.set('limit', newLimit.toString());
+            params.set('page', '0');
+            return params;
+        });
+    };
+
     return (
         <TablePagination
             labelRowsPerPage="Rows per page"
@@ -16,9 +32,9 @@ export function Pagination({ page, rowsPerPage, count, handleOnPageChange, handl
             component="div"
             count={count}
             page={page}
-            onPageChange={handleOnPageChange}
+            onPageChange={handleChangePage}
             rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleOnRowsPerPageChange}
+            onRowsPerPageChange={handleChangeRowsPerPage}
             className="shadow mt-5"
         />
     )
