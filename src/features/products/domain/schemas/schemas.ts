@@ -1,6 +1,13 @@
 import { ApiResponseSchema } from "@/features/shared/shared";
 import z from "zod";
 
+export const ProductPriceDetail = z.object({
+    id: z.number(),
+    last_price: z.number(),
+    new_price: z.number(),
+    createdAt: z.string(),
+});
+
 export const ProductSchema = z.object({
     id: z.number(),
     name: z.string(),
@@ -11,7 +18,8 @@ export const ProductSchema = z.object({
     units_per_box: z.number(),
     boxes_per_pallet: z.number(),
     client_id: z.number(),
-    client: z.string()
+    client: z.string(),
+    prices: z.array(ProductPriceDetail).optional()
 });
 
 export const ProductsResponseSchema = ApiResponseSchema.extend({

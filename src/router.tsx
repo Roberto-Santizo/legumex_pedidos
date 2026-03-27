@@ -1,6 +1,6 @@
 import { AddItemsToOrder, MyOrder, MyOrders } from "@/features/my-orders/my-orders";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { CreateProduct, Products, UpdateProduct } from "@/features/products/products";
+import { CreateProduct, ProductDetails, Products, UpdateProduct } from "@/features/products/products";
 import { Home } from "@/features/home/home";
 import { Login } from "@/features/login/login";
 import { Profile } from "@/features/profile/profile";
@@ -33,6 +33,7 @@ export default function AppRouter() {
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/create" element={<CreateProduct />} />
                     <Route path="/products/update/:id" element={<UpdateProduct />} />
+                    <Route path="/products/:id" element={<ProductDetails />} />
 
                     //CLIENTS
                     <Route path="/clients" element={<Clients />} />
