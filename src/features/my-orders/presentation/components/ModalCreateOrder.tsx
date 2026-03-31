@@ -1,6 +1,6 @@
 import { clientOptions } from "@/features/clients/clients";
 import { clientsProvider } from "@/features/clients/presentation/providers/clientsRepositoryProvider";
-import { CustomFilledButton, DateFormField, Modal, SelectFormField, TextFormField, useNotification } from "@/features/shared/shared";
+import { CustomFilledButton, DateFormField, Modal, SelectFormField, TextFormField, useNotification, transportTypes } from "@/features/shared/shared";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { type CreateOrderPayload } from "@/features/my-orders/my-orders";
 import { useForm } from "react-hook-form";
@@ -86,16 +86,7 @@ export function ModalCreateOrder() {
                     control={control}
                     label="Transport Type"
                     name="transportType"
-                    options={[
-                        {
-                            value: 'CROSSDOCK',
-                            label: 'CROSSDOCK'
-                        },
-                        {
-                            value: 'PREPAID',
-                            label: 'PREPAID'
-                        }
-                    ]}
+                    options={transportTypes}
                     validation={{ required: 'The trasport type is requierd' }}
                     errorMessage={errors.client_id?.message}
                 />

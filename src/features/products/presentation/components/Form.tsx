@@ -1,9 +1,9 @@
 import { clientOptions } from "@/features/clients/clients";
 import { clientsProvider } from "@/features/clients/presentation/providers/clientsRepositoryProvider";
-import { SelectFormField, TextFormField } from "@/features/shared/shared";
+import { SelectFormField, TextFormField, transportTypes } from "@/features/shared/shared";
 import { useQuery } from "@tanstack/react-query";
-import type { CreateOrUpdateProductPayload } from "../../products";
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
+import type { CreateOrUpdateProductPayload } from "@/features/products/products";
 
 type Props = {
     register: UseFormRegister<CreateOrUpdateProductPayload>;
@@ -87,6 +87,25 @@ export function Form({ register, errors, control }: Props) {
                 type="number"
                 validation={{ required: 'Boxes per pallet is Required' }}
                 errorMessage={errors.boxes_per_pallet?.message}
+            />
+
+            <TextFormField<CreateOrUpdateProductPayload>
+                label="DC"
+                name="dc"
+                placeholder="DC"
+                register={register}
+                type="text"
+                validation={{ required: 'Dc is required' }}
+                errorMessage={errors.dc?.message}
+            />
+
+            <SelectFormField<CreateOrUpdateProductPayload>
+                control={control}
+                label="Transport Type"
+                name="transportType"
+                options={transportTypes}
+                validation={{ required: 'The trasport type is requierd' }}
+                errorMessage={errors.client_id?.message}
             />
 
             <SelectFormField<CreateOrUpdateProductPayload>

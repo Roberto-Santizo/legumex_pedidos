@@ -7,6 +7,8 @@ export interface CreateOrUpdateProductPayload {
     units_per_box: number;
     boxes_per_pallet: number;
     client_id: number;
+    dc: string;
+    transportType: string;
 }
 
 //FILTERS
@@ -15,4 +17,6 @@ export interface FiltersProducts {
     localCode: string;
     internationalCode: string;
     name: string;
+    transportType: string;
+    dc: string;
 }

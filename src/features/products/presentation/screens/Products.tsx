@@ -19,7 +19,7 @@ export function Products() {
   const rowsPerPage = Number(searchParams.get("limit")) || 10;
 
   const { data: products } = useQuery({
-    queryKey: ['getProducts', rowsPerPage, page, filters],
+    queryKey: ['getPaginatedProducts', rowsPerPage, page, filters],
     queryFn: () => productsProvider.getPaginatedProducts({ limit: rowsPerPage, offset: page + 1, filters })
   });
 

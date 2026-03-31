@@ -27,6 +27,7 @@ export function CreateProduct() {
   } = useForm<CreateOrUpdateProductPayload>();
 
   const onSubmit = (data: CreateOrUpdateProductPayload) => mutate(data);
+  
   return (
     <div className="space-y-5">
       <h1 className="main_title">Create Product</h1>

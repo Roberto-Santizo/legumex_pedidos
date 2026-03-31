@@ -5,14 +5,13 @@ import { type Column } from "@/features/shared/shared";
 import type { Product, ProductPrice } from "@/features/products/domain/domain";
 
 export const productsTableColumns: Column<Product>[] = [
-    { header: 'Id', accessor: 'id', id: 'id' },
     { header: 'Name', accessor: 'name', id: 'name' },
     { header: 'Local Code', accessor: 'localCode', id: 'localCode' },
     { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode' },
     { header: 'Client', accessor: 'client', id: 'client' },
-    { header: 'Presentation', accessor: 'presentation', id: 'presentation' },
-    { header: 'Boxes Per Pallet', accessor: 'boxes_per_pallet', id: 'boxesPerPallet' },
     { header: 'Price', accessor: 'price', id: 'price' },
+    { header: 'DC', accessor: 'dc', id: 'dc' },
+    { header: 'Transport Type', accessor: 'transportType', id: 'transportType' },
     {
         header: 'Edit',
         id: 'action_edit',

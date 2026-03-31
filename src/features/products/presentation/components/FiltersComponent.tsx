@@ -1,11 +1,11 @@
+import { BiTrash } from 'react-icons/bi';
 import { clientOptions } from '@/features/clients/clients';
 import { clientsProvider } from '@/features/clients/presentation/providers/clientsRepositoryProvider';
-import { CustomFilledButton, SelectFormField, TextFormField } from '@/features/shared/shared';
+import { CustomFilledButton, SelectFormField, TextFormField, transportTypes } from '@/features/shared/shared';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import type { Control, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 import type { FiltersProducts } from '@/features/products/products';
-import { BiTrash } from 'react-icons/bi';
 
 type Props = {
     isOpen: boolean;
@@ -66,13 +66,32 @@ export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, o
                             validation={{}}
                         />
 
-                        <SelectFormField
+                        <TextFormField<FiltersProducts>
+                            label='DC'
+                            name='dc'
+                            placeholder='DC of Product'
+                            register={register}
+                            type='text'
+                            validation={{}}
+                        />
+
+                        <SelectFormField<FiltersProducts>
+                            control={control}
+                            label="Transport Type"
+                            name="transportType"
+                            options={transportTypes}
+                            validation={{}}
+                        />
+
+                        <SelectFormField<FiltersProducts>
                             label='Client'
                             control={control}
                             name='client'
                             options={clientOptions(clients)}
                             validation={{}}
                         />
+
+
 
                         <div className='grid grid-cols-6 items-center gap-5'>
                             <CustomFilledButton

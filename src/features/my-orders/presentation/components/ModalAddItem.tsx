@@ -8,9 +8,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
     client: number;
+    transportType: string;
 }
 
-export function ModalAddItem({ client }: Props) {
+export function ModalAddItem({ client, transportType }: Props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
@@ -41,8 +42,8 @@ export function ModalAddItem({ client }: Props) {
     });
 
     const { data: products, isLoading } = useQuery({
-        queryKey: ['getProducts', client],
-        queryFn: () => productsProvider.getProducts(client),
+        queryKey: ['getProducts', client, transportType],
+        queryFn: () => productsProvider.getProducts(client, transportType),
     });
 
     const { handleSubmit, register, formState: { errors }, control, reset } = useForm<AddItemForm>();

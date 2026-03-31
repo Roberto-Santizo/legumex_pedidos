@@ -5,7 +5,7 @@ export const productsToOptions = (products: Product[]): Option[] => {
     const options: Option[] = products.map((product) => {
         return {
             value: product.id,
-            label: product.name
+            label: `${product.name} - ${product.transportType} - $${product.price}`
         }
     })
 

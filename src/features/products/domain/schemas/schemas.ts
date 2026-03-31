@@ -19,7 +19,9 @@ export const ProductSchema = z.object({
     boxes_per_pallet: z.number(),
     client_id: z.number(),
     client: z.string(),
-    prices: z.array(ProductPriceDetail).optional()
+    prices: z.array(ProductPriceDetail).optional(),
+    dc: z.string(),
+    transportType: z.string()
 });
 
 export const ProductsResponseSchema = ApiResponseSchema.extend({

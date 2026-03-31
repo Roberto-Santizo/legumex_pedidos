@@ -53,7 +53,7 @@ export function AddItemsToOrder() {
 
       <OrderProductsTable id={id} />
 
-      <ModalAddItem client={order.client_id} />
+      <ModalAddItem client={order.client_id} transportType={order.transportType}/>
 
       <CustomFilledButton
         label="Confirm Order"
