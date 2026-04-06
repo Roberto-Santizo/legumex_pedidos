@@ -1,10 +1,48 @@
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 import type { OrderFilters } from '@/features/shared/shared';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
+
+    async updateOrderItemById(orderId: string, itemId: string, payload: AddItemForm): Promise<string> {
+        try {
+            const url = `/orders/updateOrderItemById/${orderId}/${itemId}`;
+            const { data } = await this.api.patch(url, payload);
+
+
+            return data['message'];
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
+
+    async getOrderItemById(id: string): Promise<OrderDetailsToUpdate> {
+        try {
+            const url = `/orders/getOrderItemById/${id}`;
+            const { data } = await this.api.get(url);
+            const response = OrderDetailsToUpdateResponseSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data.data;
+            }
+
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
 
     async confirmReceivedOrder(orderId: Order['id']): Promise<string> {
         try {

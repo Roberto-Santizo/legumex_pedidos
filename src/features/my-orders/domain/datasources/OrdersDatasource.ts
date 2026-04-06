@@ -1,5 +1,5 @@
 import type { OrderFilters } from "@/features/shared/shared";
-import type { AddItemForm, CreateOrderPayload, Order, OrderDetails, OrderItemDetails, OrderTotals, PaginatedOrders } from "../domain";
+import type { AddItemForm, CreateOrderPayload, Order, OrderDetails, OrderDetailsToUpdate, OrderItemDetails, OrderTotals, PaginatedOrders } from "../domain";
 
 export abstract class OrdersDatasource {
     abstract createOrder(payload: CreateOrderPayload): Promise<string>;
@@ -9,6 +9,8 @@ export abstract class OrdersDatasource {
     abstract getOrderDetails(id: string): Promise<OrderTotals>;
     abstract addItemToOrder(id: string, payload: AddItemForm): Promise<string>;
     abstract getOrderProducts(id: string): Promise<OrderItemDetails[]>;
+    abstract getOrderItemById(id: string): Promise<OrderDetailsToUpdate>;
+    abstract updateOrderItemById(orderId: string, itemId: string, payload: AddItemForm): Promise<string>;
     abstract deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']): Promise<string>;
     abstract confirmOrder(orderId: Order['id']): Promise<string>;
     abstract confirmReceivedOrder(orderId: Order['id']): Promise<string>;

@@ -43,4 +43,12 @@ export class OrdersProvider {
     async confirmReceivedOrder(orderId: Order['id']) {
         return this.repository.confirmReceivedOrder(orderId);
     }
+
+    async getOrderItemById(id: string) {
+        return this.repository.getOrderItemById(id);
+    }
+
+    async updateOrderItemById(orderId: string, itemId: string, payload: AddItemForm) {
+        return this.repository.updateOrderItemById(orderId, itemId, payload);
+    }
 }

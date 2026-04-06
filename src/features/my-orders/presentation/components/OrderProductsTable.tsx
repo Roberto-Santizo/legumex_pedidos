@@ -1,8 +1,9 @@
-import { BiTrash } from "react-icons/bi";
+import { BiPencil, BiTrash } from "react-icons/bi";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { useNotification } from "@/features/shared/shared";
-import type { OrderItemDetails } from "../../my-orders";
+import type { OrderItemDetails } from "@/features/my-orders/my-orders";
 
 type Props = {
     id: string;
@@ -10,6 +11,7 @@ type Props = {
 
 export function OrderProductsTable({ id }: Props) {
     const { error, success } = useNotification();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
 
 
@@ -43,6 +45,7 @@ export function OrderProductsTable({ id }: Props) {
                         <th className="px-4 py-3 text-right">Total Amount</th>
                         <th className="px-4 py-3 text-right">Total Pallets</th>
                         <th className="px-4 py-3 text-right">Po</th>
+                        <th className="px-4 py-3 text-right"></th>
                         <th className="px-4 py-3 text-right"></th>
                     </tr>
                 </thead>
@@ -82,6 +85,11 @@ export function OrderProductsTable({ id }: Props) {
                                 <td className="px-4 py-3 text-right font-semibold">
                                     <button disabled={isPending} type="button" className="hover:text-red-700 hover:cursor-pointer" onClick={() => mutate(item.id)}>
                                         <BiTrash size={20} />
+                                    </button>
+                                </td>
+                                <td className="px-4 py-3 text-right font-semibold">
+                                    <button disabled={isPending} type="button" className="hover:text-indigo-700 hover:cursor-pointer" onClick={() => navigate(`?editItem=${item.id}`)}>
+                                        <BiPencil size={20} />
                                     </button>
                                 </td>
                             </tr>

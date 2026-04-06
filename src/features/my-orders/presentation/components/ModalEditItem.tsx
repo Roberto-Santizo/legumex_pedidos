@@ -3,14 +3,15 @@ import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { ItemForm, type AddItemForm } from "@/features/my-orders/my-orders";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 type Props = {
     client: number;
     transportType: string;
 }
 
-export function ModalAddItem({ client, transportType }: Props) {
+export function ModalEditItem({ client, transportType }: Props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
@@ -19,8 +20,8 @@ export function ModalAddItem({ client, transportType }: Props) {
     const queryClient = useQueryClient();
 
     const queryParams = new URLSearchParams(location.search);
-    const modal = queryParams.get('addItem')!;
-    const show = modal ? true : false;
+    const itemId = queryParams.get('editItem')!;
+    const show = itemId ? true : false;
 
     const handleCloseModal = () => {
         navigate(location.pathname);
@@ -28,7 +29,7 @@ export function ModalAddItem({ client, transportType }: Props) {
     }
 
     const { mutate, isPending } = useMutation({
-        mutationFn: (data: { id: string, payload: AddItemForm }) => ordersProvider.addItemToOrder(data),
+        mutationFn: (data: AddItemForm) => ordersProvider.updateOrderItemById(id, itemId, data),
         onError: (err) => {
             error(err.message);
         },
@@ -40,21 +41,35 @@ export function ModalAddItem({ client, transportType }: Props) {
         }
     });
 
-    const { handleSubmit, register, formState: { errors }, control, reset } = useForm<AddItemForm>();
+    const { data: item } = useQuery({
+        queryKey: ['getOrderItemById', itemId],
+        queryFn: () => ordersProvider.getOrderItemById(itemId),
+        enabled: !!itemId
+    });
 
-    const onSubmit = (data: AddItemForm) => mutate({ id, payload: data });
+    const { handleSubmit, register, formState: { errors }, control, reset, setValue } = useForm<AddItemForm>();
 
-    return (
+    const onSubmit = (data: AddItemForm) => mutate(data);
+
+    useEffect(() => {
+        if (item) {
+            setValue('po', item.po);
+            setValue('product_id', item.product_id.toString());
+            setValue('total_boxes', item.total_boxes);
+        }
+    }, [item]);
+
+    if (item) return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Add Item">
             <div className="p-10">
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                    <ItemForm register={register} control={control} errors={errors} client={client} transportType={transportType} />
+                    <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} />
 
                     <CustomFilledButton
-                        label="Add Item"
+                        label="Update Item"
                         type="submit"
                         disabled={isPending}
-                        key={'addItem'}
+                        key={'updateItem'}
                     />
                 </form>
             </div>

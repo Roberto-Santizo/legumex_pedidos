@@ -15,7 +15,7 @@ export function CustomFilledButton({ label, type, onClick, icon, disabled = fals
     return (
         <button disabled={disabled} type={type} className={classNameComponent} onClick={onClick ? () => onClick() : () => { }}>
             {icon ? (icon) : (<></>)}
-            <p className="text-white font-semibold">{label}</p>
+            {disabled ? <p className="text-white font-semibold">Loading...</p> : (<p className="text-white font-semibold">{label}</p>)}
         </button>
     )
 }

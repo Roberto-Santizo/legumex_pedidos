@@ -1,6 +1,6 @@
 import { BiPlus } from "react-icons/bi";
 import { CustomFilledButton, useNotification } from '@/features/shared/shared';
-import { ModalAddItem, OrderProductsTable, OrderDetailsComponent } from "@/features/my-orders/my-orders";
+import { ModalAddItem, OrderProductsTable, OrderDetailsComponent, ModalEditItem } from "@/features/my-orders/my-orders";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
@@ -53,7 +53,8 @@ export function AddItemsToOrder() {
 
       <OrderProductsTable id={id} />
 
-      <ModalAddItem client={order.client_id} transportType={order.transportType}/>
+      <ModalAddItem client={order.client_id} transportType={order.transportType} />
+      <ModalEditItem client={order.client_id} transportType={order.transportType} />
 
       <CustomFilledButton
         label="Confirm Order"

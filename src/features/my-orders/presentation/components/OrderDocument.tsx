@@ -64,6 +64,7 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
                 <View style={styles.tableHeader}>
                     <Text style={[styles.th, styles.colProduct]}>Product</Text>
                     <Text style={[styles.th, styles.col]}>Code</Text>
+                    <Text style={[styles.th, styles.col]}>DC</Text>
                     <Text style={[styles.th, styles.col]}>Boxes</Text>
                     <Text style={[styles.th, styles.col]}>Lbs</Text>
                     <Text style={[styles.th, styles.col]}>PO</Text>
@@ -73,6 +74,7 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
                     <View key={i} style={styles.tableRow}>
                         <Text style={[styles.td, styles.colProduct]}>{p.product}</Text>
                         <Text style={[styles.td, styles.col]}>{p.internationalCode}</Text>
+                        <Text style={[styles.td, styles.col]}>{p.dc}</Text>
                         <Text style={[styles.td, styles.col]}>{p.total_boxes}</Text>
                         <Text style={[styles.td, styles.col]}>{p.total_lbs}</Text>
                         <Text style={[styles.td, styles.col]}>{p.po}</Text>

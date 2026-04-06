@@ -1,8 +1,16 @@
-import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
+import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 import type { OrderFilters } from '@/features/shared/shared';
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
+
+    updateOrderItemById(orderId: string, itemId: string, payload: AddItemForm): Promise<string> {
+        return this.datasource.updateOrderItemById(orderId, itemId, payload);
+    }
+
+    getOrderItemById(id: string): Promise<OrderDetailsToUpdate> {
+        return this.datasource.getOrderItemById(id);
+    }
 
     confirmReceivedOrder(orderId: Order['id']): Promise<string> {
         return this.datasource.confirmReceivedOrder(orderId);

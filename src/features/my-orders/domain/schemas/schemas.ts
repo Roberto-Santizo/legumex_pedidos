@@ -54,7 +54,8 @@ export const OrderItemDetailsSchema = z.object({
     total_amount: z.number(),
     product: z.string(),
     internationalCode: z.string(),
-    po: z.string()
+    po: z.string(),
+    dc: z.string()
 });
 
 export const OrderItemsDetailsResponseSchema = ApiResponseSchema.extend({
@@ -75,3 +76,14 @@ export const OrderTotalsResponseSchema = ApiResponseSchema.extend({
 export const OrdersResponseSchema = ApiResponseSchema.extend({
     data: z.array(OrderSchema)
 });
+
+export const OrderDetailsToUpdateSchema = z.object({
+    id: z.number(),
+    total_boxes: z.number(),
+    po: z.string(),
+    product_id: z.number()
+});
+
+export const OrderDetailsToUpdateResponseSchema = ApiResponseSchema.extend({
+    data: OrderDetailsToUpdateSchema
+}); 
