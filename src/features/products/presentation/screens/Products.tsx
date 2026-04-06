@@ -10,7 +10,7 @@ import type { FiltersProducts, Product } from "@/features/products/products";
 
 export function Products() {
   const navigate = useNavigate();
-  const initialFilters = { client: '', localCode: '', internationalCode: '', name: '' };
+  const initialFilters: FiltersProducts = { client: '', localCode: '', internationalCode: '', name: '', transportType: '', dc: '' };
   const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState<boolean>(false);
   const [filters, setFilters] = useState<FiltersProducts>(initialFilters)

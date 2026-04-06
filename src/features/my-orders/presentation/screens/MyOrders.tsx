@@ -46,23 +46,6 @@ export function MyOrders() {
     queryFn: () => ordersProvider.getPaginatedOrders(rowsPerPage, page + 1)
   });
 
-  const handleChangePage = (_: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-    setSearchParams((params) => {
-      params.set('page', newPage.toString());
-      return params;
-    });
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const newLimit = parseInt(event.target.value, 10);
-
-    setSearchParams((params) => {
-      params.set('limit', newLimit.toString());
-      params.set('page', '0');
-      return params;
-    });
-  };
-
   const handleOpenCreateOrderModal = () => {
     const params = new URLSearchParams(location.search);
 
@@ -99,12 +82,10 @@ export function MyOrders() {
 
       <Pagination
         count={orders.data.total}
-        handleOnRowsPerPageChange={handleChangeRowsPerPage}
-        handleOnPageChange={handleChangePage}
         page={page}
         rowsPerPage={rowsPerPage}
+        setSearchParams={setSearchParams}
       />
-
     </div>
   );
 }
