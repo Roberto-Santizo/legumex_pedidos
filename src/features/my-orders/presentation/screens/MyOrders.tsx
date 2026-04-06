@@ -12,6 +12,7 @@ const columns: Column<Order>[] = [
   { header: 'Ordered By', accessor: 'user', id: 'user' },
   { header: 'Created At', accessor: 'createdAt', id: 'createdAt' },
   { header: 'Client', accessor: 'client', id: 'client' },
+  { header: 'Transaport Type', accessor: 'transportType', id: 'transportType' },
   {
     header: 'status',
     id: 'status',

@@ -41,7 +41,7 @@ export function Products() {
       <div className="flex w-full items-end flex-col gap-5">
         <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
         <CustomFilledButton
-          label="Create Code"
+          label="Create Product"
           type="button"
           onClick={() => navigate('/products/create')}
           icon={<BiPlus className="text-white" />}

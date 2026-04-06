@@ -1,6 +1,6 @@
 import { clientOptions } from "@/features/clients/clients";
 import { clientsProvider } from "@/features/clients/presentation/providers/clientsRepositoryProvider";
-import { CustomFilledButton, DateFormField, Modal, SelectFormField, TextFormField, useNotification, transportTypes } from "@/features/shared/shared";
+import { CustomFilledButton, DateFormField, Modal, SelectFormField, useNotification, transportTypes, dcs } from "@/features/shared/shared";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { type CreateOrderPayload } from "@/features/my-orders/my-orders";
 import { useForm } from "react-hook-form";
@@ -63,14 +63,14 @@ export function ModalCreateOrder() {
     if (clients) return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Create Order">
             <form className="form mx-auto" onSubmit={handleSubmit(onSubmit)}>
-                <TextFormField
+
+                <SelectFormField
+                    control={control}
                     label="DC"
                     name="dc"
-                    placeholder="Order dc"
-                    register={register}
-                    type="text"
-                    validation={{ required: 'The DC is required' }}
-                    errorMessage={errors.dc?.message}
+                    options={dcs}
+                    validation={{ required: 'The client is requierd' }}
+                    errorMessage={errors.client_id?.message}
                 />
 
                 <SelectFormField

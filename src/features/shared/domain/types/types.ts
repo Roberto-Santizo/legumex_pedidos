@@ -10,3 +10,8 @@ export type Option = {
     label: string;
     value: string | number;
 };
+
+export type DC = {
+    value: string;
+    label: string;
+}
