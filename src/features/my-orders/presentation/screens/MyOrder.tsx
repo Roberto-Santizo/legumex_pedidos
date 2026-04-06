@@ -80,7 +80,7 @@ export function MyOrder() {
         </div>
       )}
 
-      {((user.role == 'administrative' || user.role == 'admin') && order.status == 2) && (
+      {(user.role == 'admin') && (
         <div className="col-span-12 space-y-5">
           <p className="main_title">Items</p>
           <div className="h-full bg-white/90 backdrop-blur rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition hover:shadow-xl">
