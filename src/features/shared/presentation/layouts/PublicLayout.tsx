@@ -10,7 +10,7 @@ export function PublicLayout() {
   }
 
   return (
-    <main className="print:p-0 print:text-black h-screen bg-[linear-gradient(to_bottom,rgba(0,0,0,0.6),rgba(0,0,0,0.4)),url('./src/assets/imgs/public_background.jpg')] bg-cover bg-center">
+    <main className="print:p-0 print:text-black h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
       <Outlet />
     </main>
   );
