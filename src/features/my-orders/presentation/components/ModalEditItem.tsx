@@ -9,9 +9,10 @@ import { useEffect } from "react";
 type Props = {
     client: number;
     transportType: string;
+    dc: string;
 }
 
-export function ModalEditItem({ client, transportType }: Props) {
+export function ModalEditItem({ client, transportType, dc }: Props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
@@ -63,7 +64,7 @@ export function ModalEditItem({ client, transportType }: Props) {
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Add Item">
             <div className="p-10">
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                    <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} />
+                    <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} dc={dc}/>
 
                     <CustomFilledButton
                         label="Update Item"

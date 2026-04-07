@@ -8,9 +8,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 type Props = {
     client: number;
     transportType: string;
+    dc: string;
 }
 
-export function ModalAddItem({ client, transportType }: Props) {
+export function ModalAddItem({ client, transportType, dc }: Props) {
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
@@ -48,8 +49,7 @@ export function ModalAddItem({ client, transportType }: Props) {
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Add Item">
             <div className="p-10">
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                    <ItemForm register={register} control={control} errors={errors} client={client} transportType={transportType} />
-
+                    <ItemForm register={register} control={control} errors={errors} client={client} transportType={transportType} dc={dc}/>
                     <CustomFilledButton
                         label="Add Item"
                         type="submit"

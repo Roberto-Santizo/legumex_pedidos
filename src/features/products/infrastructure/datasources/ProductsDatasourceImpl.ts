@@ -57,9 +57,9 @@ export class ProductsDatasourceImpl implements ProductsDatasource {
         }
     }
 
-    async getProducts(client?: number, transportType?: string): Promise<Product[]> {
+    async getProducts(client?: number, transportType?: string, dc?: string): Promise<Product[]> {
         try {
-            const url = `/products?client=${client}&transportType=${transportType}`;
+            const url = `/products?client=${client}&transportType=${transportType}&dc=${dc}`;
             const { data } = await this.api.get(url);
             const response = ProductsResponseSchema.safeParse(data);
             if (response.success) {

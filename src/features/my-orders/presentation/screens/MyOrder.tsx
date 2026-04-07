@@ -1,4 +1,5 @@
 import { CustomFilledButton, useNotification } from "@/features/shared/shared";
+import { ModalEditItem, OrderProductsTable } from "../presentation";
 import { OrderDocument } from "../components/OrderDocument";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { PDFViewer } from "@react-pdf/renderer";
@@ -6,7 +7,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/config/config";
-import { ModalEditItem, OrderProductsTable } from "../presentation";
 
 export function MyOrder() {
   const params = useParams();
@@ -105,7 +105,7 @@ export function MyOrder() {
         </div>
       )}
 
-      <ModalEditItem client={order.client_id} transportType={order.transportType} />
+      <ModalEditItem client={order.client_id} transportType={order.transportType} dc={order.dc}/>
     </div>
   );
 }

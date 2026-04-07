@@ -15,8 +15,8 @@ export class ProductsRepositoryImpl implements ProductsRepository {
         return this.datasource.getProductById(id);
     }
 
-    getProducts(client?: number, transportType?: string): Promise<Product[]> {
-        return this.datasource.getProducts(client, transportType);
+    getProducts(client?: number, transportType?: string, dc?: string): Promise<Product[]> {
+        return this.datasource.getProducts(client, transportType, dc);
     }
 
     createProduct(payload: CreateOrUpdateProductPayload): Promise<string> {

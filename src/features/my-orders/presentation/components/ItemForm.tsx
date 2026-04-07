@@ -10,13 +10,14 @@ type Props = {
     control: Control<AddItemForm, any, AddItemForm>;
     client: number;
     transportType: string;
+    dc: string;
 }
 
-export function ItemForm({ register, errors, control, client, transportType }: Props) {
+export function ItemForm({ register, errors, control, client, transportType, dc }: Props) {
 
     const { data: products } = useQuery({
-        queryKey: ['getProducts', client, transportType],
-        queryFn: () => productsProvider.getProducts(client, transportType),
+        queryKey: ['getProducts', client, transportType, dc],
+        queryFn: () => productsProvider.getProducts(client, transportType, dc),
     });
 
 
