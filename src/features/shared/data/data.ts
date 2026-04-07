@@ -8,6 +8,10 @@ export const transportTypes = [
     {
         value: 'PREPAID',
         label: 'PREPAID'
+    },
+    {
+        value: 'COLLECT',
+        label: 'COLLECT'
     }
 ];
 
