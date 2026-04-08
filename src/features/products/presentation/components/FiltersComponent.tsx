@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import type { Control, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
 import type { FiltersProducts } from '@/features/products/products';
+import { dcOptions, dcsProvider } from '@/features/dc/dc';
 
 type Props = {
     isOpen: boolean;
@@ -23,7 +24,12 @@ export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, o
         queryFn: () => clientsProvider.getClients()
     });
 
-    if (clients) return (
+    const { data: dcs } = useQuery({
+        queryKey: ['getDcs'],
+        queryFn: () => dcsProvider.getDcs('')
+    });
+
+    if (clients && dcs) return (
         <>
             {isOpen && (
                 <div className="fixed inset-0 z-40 " onClick={() => toggleMenu(!isOpen)} aria-hidden="true" />
@@ -66,12 +72,11 @@ export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, o
                             validation={{}}
                         />
 
-                        <TextFormField<FiltersProducts>
-                            label='DC'
-                            name='dc'
-                            placeholder='DC of Product'
-                            register={register}
-                            type='text'
+                        <SelectFormField<FiltersProducts>
+                            control={control}
+                            label="DC"
+                            name="dc"
+                            options={dcOptions(dcs)}
                             validation={{}}
                         />
 

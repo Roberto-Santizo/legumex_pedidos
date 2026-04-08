@@ -71,8 +71,7 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
                     <Text style={[styles.th, styles.col]}>Code</Text>
                     <Text style={[styles.th, styles.col]}>DC</Text>
                     <Text style={[styles.th, styles.col]}>Boxes</Text>
-                    <Text style={[styles.th, styles.col]}>Lbs</Text>
-                    <Text style={[styles.th, styles.col]}>PO</Text>
+                    <Text style={[styles.th, styles.col]}>Pounds</Text>
                 </View>
 
                 {products.map((p, i) => (

@@ -4,6 +4,7 @@ import { SelectFormField, TextFormField, transportTypes } from "@/features/share
 import { useQuery } from "@tanstack/react-query";
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import type { CreateOrUpdateProductPayload } from "@/features/products/products";
+import { dcOptions, dcsProvider } from "@/features/dc/dc";
 
 type Props = {
     register: UseFormRegister<CreateOrUpdateProductPayload>;
@@ -17,7 +18,12 @@ export function Form({ register, errors, control }: Props) {
         queryFn: () => clientsProvider.getClients()
     });
 
-    if (clients) return (
+    const { data: dcs } = useQuery({
+        queryKey: ['getDcs'],
+        queryFn: () => dcsProvider.getDcs('')
+    });
+
+    if (clients && dcs) return (
         <>
             <TextFormField<CreateOrUpdateProductPayload>
                 label="Name"
@@ -89,13 +95,12 @@ export function Form({ register, errors, control }: Props) {
                 errorMessage={errors.boxes_per_pallet?.message}
             />
 
-            <TextFormField<CreateOrUpdateProductPayload>
+            <SelectFormField<CreateOrUpdateProductPayload>
+                control={control}
                 label="DC"
                 name="dc"
-                placeholder="DC"
-                register={register}
-                type="text"
-                validation={{ required: 'Dc is required' }}
+                options={dcOptions(dcs)}
+                validation={{ required: 'The dc type is requierd' }}
                 errorMessage={errors.dc?.message}
             />
 

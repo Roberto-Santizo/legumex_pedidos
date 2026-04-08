@@ -7,7 +7,6 @@ import { type Order, ModalCreateOrder  } from "@/features/my-orders/my-orders";
 import { useQuery } from "@tanstack/react-query";
 
 const columns: Column<Order>[] = [
-  { header: 'id', accessor: 'id', id: 'id' },
   { header: 'Ordered By', accessor: 'user', id: 'user' },
   { header: 'Created At', accessor: 'createdAt', id: 'createdAt' },
   { header: 'Client', accessor: 'client', id: 'client' },
