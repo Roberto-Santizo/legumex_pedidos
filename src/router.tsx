@@ -1,12 +1,13 @@
 import { AddItemsToOrder, MyOrder, MyOrders } from "@/features/my-orders/my-orders";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Clients, CreateClient, UpdateClient } from "@/features/clients/clients";
 import { CreateProduct, ProductDetails, Products, UpdateProduct } from "@/features/products/products";
+import { CreateUser, UpdateUser, Users } from "@/features/users/users";
+import { CreateDcs, Dcs } from "@/features/dc/dc";
 import { Home } from "@/features/home/home";
 import { Login } from "@/features/login/login";
 import { Profile } from "@/features/profile/profile";
 import { ProtectedLayout, PublicLayout, RoleMiddleware } from "@/features/shared/shared";
-import { Clients, CreateClient, UpdateClient } from "@/features/clients/clients";
-import { CreateUser, UpdateUser, Users } from "@/features/users/users";
 import { Reports } from "@/features/reports/reports";
 
 export default function AppRouter() {
@@ -29,27 +30,31 @@ export default function AppRouter() {
                     //PROFILE
                     <Route path="/profile" element={<Profile />} />
 
-                    //PRODUCTS
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/products/create" element={<CreateProduct />} />
-                    <Route path="/products/update/:id" element={<UpdateProduct />} />
-                    <Route path="/products/:id" element={<ProductDetails />} />
+                    <Route element={<RoleMiddleware allowedRoles={['admin', 'administrative']} />}>
+                        //PRODUCTS
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/products/create" element={<CreateProduct />} />
+                        <Route path="/products/update/:id" element={<UpdateProduct />} />
+                        <Route path="/products/:id" element={<ProductDetails />} />
 
-                    //CLIENTS
-                    <Route path="/clients" element={<Clients />} />
-                    <Route path="/clients/create" element={<CreateClient />} />
-                    <Route path="/clients/update/:id" element={<UpdateClient />} />
+                        //CLIENTS
+                        <Route path="/clients" element={<Clients />} />
+                        <Route path="/clients/create" element={<CreateClient />} />
+                        <Route path="/clients/update/:id" element={<UpdateClient />} />
+
+                        //DCS
+                        <Route path="/dcs" element={<Dcs />} />
+                        <Route path="/dcs/create" element={<CreateDcs />} />
+
+                        //REPORTS
+                        <Route path="/reports" element={<Reports />} />
+                    </Route>
 
                     //USERS
                     <Route element={<RoleMiddleware allowedRoles={['admin']} />}>
                         <Route path="/users" element={<Users />} />
                         <Route path="/users/create" element={<CreateUser />} />
                         <Route path="/users/update/:id" element={<UpdateUser />} />
-                    </Route>
-
-                    //REPORTS
-                    <Route element={<RoleMiddleware allowedRoles={['admin', 'administrative']} />}>
-                        <Route path="/reports" element={<Reports />} />
                     </Route>
                 </Route>
             </Routes>

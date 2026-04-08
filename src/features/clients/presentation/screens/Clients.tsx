@@ -8,7 +8,8 @@ import type { Client } from "@/features/clients/clients";
 const columns: Column<Client>[] = [
     { header: 'id', accessor: 'id', id: 'id' },
     { header: 'Name', accessor: 'name', id: 'name' },
-    { header: 'Actions',
+    {
+        header: 'Actions',
         id: 'actions',
         render: (_, row) => (
             <Link to={`/clients/update/${row.id}`}>

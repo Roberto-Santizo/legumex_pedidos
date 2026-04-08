@@ -3,7 +3,8 @@ import z from "zod";
 
 export const DcSchema = z.object({
     id: z.number(),
-    name: z.string()
+    name: z.string(),
+    client: z.string(),
 });
 
 export const DcResponseSchema = ApiResponseSchema.extend({
