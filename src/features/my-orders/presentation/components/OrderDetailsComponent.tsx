@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import type { OrderDetails } from "../../my-orders";
+import type { OrderDetails } from "@/features/my-orders/my-orders";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useQuery } from "@tanstack/react-query";
 
@@ -71,6 +71,7 @@ export function OrderDetailsComponent({ order }: Props) {
                     <Info label="Transport" value={order.transportType} />
                     <Info label="Created At" value={order.date} />
                     <Info label="Required By" value={order.requiredDate} />
+                    <Info label="PO" value={order.po} />
                 </div>
             </div>
         </div>

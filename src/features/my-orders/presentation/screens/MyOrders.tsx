@@ -2,10 +2,9 @@ import { BiPlus } from "react-icons/bi";
 import { BsFillEyeFill } from "react-icons/bs";
 import { CustomFilledButton, Pagination, Table, Tag, type Column } from "@/features/shared/shared";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ModalCreateOrder } from "../components/ModalCreateOrder";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
+import { type Order, ModalCreateOrder  } from "@/features/my-orders/my-orders";
 import { useQuery } from "@tanstack/react-query";
-import type { Order } from "@/features/my-orders/my-orders";
 
 const columns: Column<Order>[] = [
   { header: 'id', accessor: 'id', id: 'id' },

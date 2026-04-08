@@ -3,3 +3,4 @@ export * from './ModalAddItem';
 export * from './OrderProductsTable';
 export * from './ModalEditItem';
 export * from './ItemForm';
+export * from './ModalCreateOrder';

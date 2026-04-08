@@ -40,6 +40,11 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
                 </View>
 
                 <View style={styles.card}>
+                    <Text style={styles.label}>PO</Text>
+                    <Text style={styles.value}>{order.po}</Text>
+                </View>
+
+                <View style={styles.card}>
                     <Text style={styles.label}>Status</Text>
                     <Text style={styles.value}>{ order.status == 2 ? 'Sent' : 'Recevied' }</Text>
                 </View>
@@ -77,7 +82,6 @@ export const OrderDocument = ({ order, products, totals }: Props) => (
                         <Text style={[styles.td, styles.col]}>{p.dc}</Text>
                         <Text style={[styles.td, styles.col]}>{p.total_boxes}</Text>
                         <Text style={[styles.td, styles.col]}>{p.total_lbs}</Text>
-                        <Text style={[styles.td, styles.col]}>{p.po}</Text>
                     </View>
                 ))}
             </View>

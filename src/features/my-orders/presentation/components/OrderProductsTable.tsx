@@ -44,7 +44,6 @@ export function OrderProductsTable({ id }: Props) {
                         <th className="px-4 py-3 text-right">Total Pounds</th>
                         <th className="px-4 py-3 text-right">Total Amount</th>
                         <th className="px-4 py-3 text-right">Total Pallets</th>
-                        <th className="px-4 py-3 text-right">Po</th>
                         <th className="px-4 py-3 text-right"></th>
                         <th className="px-4 py-3 text-right"></th>
                     </tr>
@@ -76,10 +75,6 @@ export function OrderProductsTable({ id }: Props) {
 
                                 <td className="px-4 py-3 text-right">
                                     {item.total_pallets}
-                                </td>
-
-                                <td className="px-4 py-3 text-right font-semibold">
-                                    {item.po}
                                 </td>
 
                                 <td className="px-4 py-3 text-right font-semibold">

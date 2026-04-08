@@ -54,7 +54,6 @@ export function ModalEditItem({ client, transportType, dc }: Props) {
 
     useEffect(() => {
         if (item) {
-            setValue('po', item.po);
             setValue('product_id', item.product_id.toString());
             setValue('total_boxes', item.total_boxes);
         }
@@ -64,7 +63,7 @@ export function ModalEditItem({ client, transportType, dc }: Props) {
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Add Item">
             <div className="p-10">
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
-                    <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} dc={dc}/>
+                    <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} dc={dc} />
 
                     <CustomFilledButton
                         label="Update Item"
