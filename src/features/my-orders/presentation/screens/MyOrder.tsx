@@ -9,17 +9,17 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/config/config";
 
 export function MyOrder() {
-  const params = useParams();
-  const id = params.id!!;
+  const { id = '' } = useParams();
   const user = useSelector((state: RootState) => state.auth.user);
   const notification = useNotification();
   const queryClient = useQueryClient();
 
+  const isAdmin = user?.role === 'admin';
+  const canConfirm = ['admin', 'administrative'].includes(user?.role ?? '');
+
   const { mutate, isPending } = useMutation({
     mutationFn: () => ordersProvider.confirmReceivedOrder(+id),
-    onError: (err) => {
-      notification.error(err.message);
-    },
+    onError: (err) => notification.error(err.message),
     onSuccess: (message) => {
       notification.success(message);
       queryClient.invalidateQueries({ queryKey: ['getOrderById', id] });
@@ -28,84 +28,87 @@ export function MyOrder() {
 
   const { data: order, isLoading } = useQuery({
     queryKey: ['getOrderById', id],
-    queryFn: () => ordersProvider.getOrderById(id!)
+    queryFn: () => ordersProvider.getOrderById(id)
   });
 
   const { data: products } = useQuery({
     queryKey: ['getOrderProducts', id],
-    queryFn: () => ordersProvider.getOrderProducts(id!)
+    queryFn: () => ordersProvider.getOrderProducts(id)
   });
 
   const { data: totals } = useQuery({
     queryKey: ['getOrderTotals', id],
-    queryFn: () => ordersProvider.getOrderTotals(id!)
+    queryFn: () => ordersProvider.getOrderTotals(id)
   });
 
-  if (isLoading) return <p>Loading...</p>
-  if (order && products && totals && user) return (
-    <div className="h-screen grid grid-cols-12 gap-4 p-4 from-gray-100 to-gray-200">
+  if (isLoading) return <p>Loading...</p>;
+  if (!order || !products || !totals || !user) return null;
 
-      <div className="col-span-9 bg-white/90 backdrop-blur rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition hover:shadow-xl">
-        <PDFViewer width="100%" height="100%">
-          <OrderDocument
-            order={order}
-            products={products}
-            totals={totals}
-          />
-        </PDFViewer>
-      </div>
+  const showActions = canConfirm && order.status === 2;
+  const showInfo = order.status === 3;
+  const showSidebar = showActions || showInfo;
 
-      {((user.role == 'administrative' || user.role == 'admin') && order.status == 2) && (
-        <div className="col-span-3 bg-white/90 backdrop-blur rounded-2xl shadow-lg border border-gray-200 p-5 flex flex-col gap-6 transition hover:shadow-xl">
-
-          <h2 className="text-lg font-semibold text-gray-800 tracking-tight">
-            Order Actions
-          </h2>
-
-          <div className="flex flex-col gap-3">
-            <CustomFilledButton
-              label="Confirm Received Order"
-              type="button"
-              disabled={isPending}
-              onClick={() => mutate()}
-            />
-          </div>
-
-          <div className="border-t border-gray-200 pt-4 text-sm text-gray-600 space-y-1">
-            <p><span className="font-medium text-gray-700">Client:</span> {order.client}</p>
-            <p><span className="font-medium text-gray-700">DC:</span> {order.dc}</p>
-            <p><span className="font-medium text-gray-700">Creation Date:</span> {order.date}</p>
-          </div>
-
+  return (
+    <div className="h-screen flex gap-4 p-4 from-gray-100 to-gray-200">
+      <div className={`flex flex-col gap-4 ${showSidebar ? 'w-3/4' : 'w-full'}`}>
+        <div className="flex-1 bg-white/90 backdrop-blur rounded-2xl shadow-lg border overflow-hidden">
+          <PDFViewer width="100%" height="100%">
+            <OrderDocument order={order} products={products} totals={totals} />
+          </PDFViewer>
         </div>
-      )}
 
-      {(user.role == 'admin') && (
-        <div className="col-span-12 space-y-5">
-          <p className="main_title">Items</p>
-          <div className="h-full bg-white/90 backdrop-blur rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition hover:shadow-xl">
+        {isAdmin && (
+          <div className="bg-white/90 backdrop-blur rounded-2xl shadow-lg border p-4">
+            <p className="main_title mb-3">Items</p>
             <OrderProductsTable id={id} />
           </div>
+        )}
+      </div>
+
+      {showSidebar && (
+        <div className="w-1/4 flex flex-col gap-4">
+          {showActions && (
+            <div className="bg-white/90 backdrop-blur rounded-2xl shadow-lg border p-5 flex flex-col gap-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Order Actions
+              </h2>
+
+              <CustomFilledButton
+                label="Confirm Received Order"
+                type="button"
+                disabled={isPending}
+                onClick={() => mutate()}
+              />
+
+              <div className="border-t pt-4 text-sm text-gray-600 space-y-1">
+                <p><b>Client:</b> {order.client}</p>
+                <p><b>DC:</b> {order.dc}</p>
+                <p><b>Date:</b> {order.date}</p>
+              </div>
+            </div>
+          )}
+
+          {showInfo && (
+            <div className="bg-white/90 backdrop-blur rounded-2xl shadow-lg border p-5 flex flex-col gap-4">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Order Information
+              </h2>
+
+              <div className="border-t pt-4 text-sm text-gray-600 space-y-1">
+                <p><b>Confirmed By:</b> {order.confirmedBy}</p>
+                <p><b>Date:</b> {order.confirmationDate}</p>
+              </div>
+            </div>
+          )}
+
         </div>
       )}
 
-
-      {order.status == 3 && (
-        <div className="col-span-3 bg-white/90 backdrop-blur rounded-2xl shadow-lg border border-gray-200 p-5 flex flex-col gap-6 transition hover:shadow-xl">
-
-          <h2 className="text-lg font-semibold text-gray-800 tracking-tight">
-            Order Information
-          </h2>
-
-          <div className="border-t border-gray-200 pt-4 text-sm text-gray-600 space-y-1">
-            <p><span className="font-medium text-gray-700">Confirmed By:</span> {order.confirmedBy}</p>
-            <p><span className="font-medium text-gray-700">Confirmation Date:</span> {order.confirmationDate}</p>
-          </div>
-
-        </div>
-      )}
-
-      <ModalEditItem client={order.client_id} transportType={order.transportType} dc={order.dc}/>
+      <ModalEditItem
+        client={order.client_id}
+        transportType={order.transportType}
+        dc={order.dc}
+      />
     </div>
   );
 }
