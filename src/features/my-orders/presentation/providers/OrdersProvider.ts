@@ -51,4 +51,8 @@ export class OrdersProvider {
     async updateOrderItemById(orderId: string, itemId: string, payload: AddItemForm) {
         return this.repository.updateOrderItemById(orderId, itemId, payload);
     }
+
+    async uploadFile(file: File) {
+        return this.repository.uploadFile(file);
+    }
 }

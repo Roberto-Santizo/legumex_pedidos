@@ -10,3 +10,4 @@ export * from "./Tag";
 export * from "./SelectFormField";
 export * from "./Pagination";
 export * from "./DateFormField";
+export * from "./FileFormField";

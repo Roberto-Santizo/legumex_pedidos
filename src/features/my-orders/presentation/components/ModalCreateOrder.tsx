@@ -57,8 +57,6 @@ export function ModalCreateOrder() {
 
     const currentValues = watch();
 
-    console.log(currentValues);
-
     const { data: clients } = useQuery({
         queryKey: ['getUserClients'],
         queryFn: () => clientsProvider.getUserClients()

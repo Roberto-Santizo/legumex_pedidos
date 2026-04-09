@@ -1,37 +1,9 @@
-import { BiPlus } from "react-icons/bi";
-import { BsFillEyeFill } from "react-icons/bs";
-import { CustomFilledButton, Pagination, Table, Tag, type Column } from "@/features/shared/shared";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { BiFile, BiPlus } from "react-icons/bi";
+import { CustomFilledButton, Pagination, Table } from "@/features/shared/shared";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
-import { type Order, ModalCreateOrder  } from "@/features/my-orders/my-orders";
+import { ModalCreateOrder, ModalUploadFile, ordersColumns } from "@/features/my-orders/my-orders";
 import { useQuery } from "@tanstack/react-query";
-
-const columns: Column<Order>[] = [
-  { header: 'Ordered By', accessor: 'user', id: 'user' },
-  { header: 'Created At', accessor: 'createdAt', id: 'createdAt' },
-  { header: 'Client', accessor: 'client', id: 'client' },
-  { header: 'Transaport Type', accessor: 'transportType', id: 'transportType' },
-  {
-    header: 'status',
-    id: 'status',
-    render: (_, row) => <Tag status={row.status} />,
-  },
-  {
-    header: 'Actions',
-    id: 'actions',
-    render: (_, row) => {
-      const url = row.status == 1
-        ? `/my-orders/addItems/${row.id}`
-        : `/my-orders/${row.id}`;
-
-      return (
-        <Link to={url}>
-          <BsFillEyeFill size={25} className="hover:text-gray-600" />
-        </Link>
-      );
-    },
-  },
-];
 
 export function MyOrders() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -56,28 +28,47 @@ export function MyOrders() {
     });
   };
 
+  const handleOpenUploadFile = () => {
+    const params = new URLSearchParams(location.search);
+
+    params.set("uploadFile", "true");
+
+    navigate({
+      pathname: location.pathname,
+      search: params.toString(),
+    });
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (orders) return (
     <div className="space-y-5">
       <h1 className="main_title">My Orders</h1>
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end gap-5">
         <CustomFilledButton
           label="Create Order"
           type="button"
           icon={<BiPlus className="text-white" />}
           onClick={() => handleOpenCreateOrderModal()}
         />
+
+        <CustomFilledButton
+          label="Upload File"
+          type="button"
+          icon={<BiFile className="text-white" />}
+          onClick={() => handleOpenUploadFile()}
+        />
       </div>
 
       {orders.data.response.length > 0 && (
         <Table
-          columns={columns}
+          columns={ordersColumns}
           data={orders.data.response}
         />
       )}
 
       <ModalCreateOrder />
+      <ModalUploadFile />
 
       <Pagination
         count={orders.data.total}

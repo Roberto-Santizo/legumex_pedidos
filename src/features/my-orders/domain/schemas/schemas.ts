@@ -85,4 +85,18 @@ export const OrderDetailsToUpdateSchema = z.object({
 
 export const OrderDetailsToUpdateResponseSchema = ApiResponseSchema.extend({
     data: OrderDetailsToUpdateSchema
-}); 
+});
+
+
+//!REFACTORIZAR
+export const UploadFileResponseSchema = z.object({
+    data: z.array(z.object({
+        product: z.string(),
+        internationalCode: z.string(),
+        localCode: z.string(),
+        total_boxes: z.number(),
+        total_pounds: z.number(),
+        total_amount: z.number(),
+        pallets: z.number()
+    }))
+});
