@@ -1,24 +1,19 @@
 import { isAxiosError, type AxiosInstance } from 'axios';
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, UploadFileResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders } from '@/features/my-orders/my-orders';
 import type { OrderFilters } from '@/features/shared/shared';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
 
-    async uploadFile(file: File): Promise<UploadFileResponse> {
+    async uploadFile(file: File): Promise<string> {
         try {
             const url = '/orders/uploadFile';
             const formData = new FormData();
             formData.append('file', file);
             const { data } = await this.api.post(url, formData);
-            const result = UploadFileResponseSchema.safeParse(data);
 
-            if (result.success) {
-                return result.data;
-            }
-
-            throw new Error('Información no válida');
+            return data['message'];
         } catch (error) {
             if (isAxiosError(error)) {
                 throw new Error(error.response?.data['message']);

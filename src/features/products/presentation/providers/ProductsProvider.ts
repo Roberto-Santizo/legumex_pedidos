@@ -8,6 +8,10 @@ export class ProductsProvider {
         return message;
     }
 
+    async uploadProducts(file: File): Promise<string> {
+        return this.repository.uploadProducts(file);
+    }
+
     async getProducts(client?: number, transportType?: string, dc?: string) {
         const products = await this.repository.getProducts(client, transportType, dc);
         return products;

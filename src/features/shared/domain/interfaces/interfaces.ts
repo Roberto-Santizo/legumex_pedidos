@@ -11,3 +11,7 @@ export interface OrderFilters {
     startDate: string;
     endDate: string;
 }
+
+export interface UploadFileForm {
+    file: File | null
+}

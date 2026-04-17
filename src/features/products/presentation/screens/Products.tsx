@@ -1,4 +1,4 @@
-import { BiMenu, BiPlus } from "react-icons/bi";
+import { BiFile, BiMenu, BiPlus } from "react-icons/bi";
 import { CustomFilledButton, Pagination } from '@/features/shared/shared';
 import { FiltersComponent, productsProvider, productsTableColumns } from "../presentation";
 import { Table } from "@/features/shared/shared";
@@ -6,11 +6,12 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import type { FiltersProducts, Product } from "@/features/products/products";
+import { type FiltersProducts, type Product, ModalUpload } from "@/features/products/products";
+
+const initialFilters: FiltersProducts = { client: '', localCode: '', internationalCode: '', name: '', transportType: '', dc: '' };
 
 export function Products() {
   const navigate = useNavigate();
-  const initialFilters: FiltersProducts = { client: '', localCode: '', internationalCode: '', name: '', transportType: '', dc: '' };
   const [searchParams, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState<boolean>(false);
   const [filters, setFilters] = useState<FiltersProducts>(initialFilters)
@@ -40,12 +41,22 @@ export function Products() {
 
       <div className="flex w-full items-end flex-col gap-5">
         <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
-        <CustomFilledButton
-          label="Create Product"
-          type="button"
-          onClick={() => navigate('/products/create')}
-          icon={<BiPlus className="text-white" />}
-        />
+
+        <div className="flex gap-5">
+          <CustomFilledButton
+            label="Create Product"
+            type="button"
+            onClick={() => navigate('/products/create')}
+            icon={<BiPlus className="text-white" />}
+          />
+
+          <CustomFilledButton
+            label="Upload Files"
+            type="button"
+            onClick={() => navigate('?upload=true')}
+            icon={<BiFile className="text-white" />}
+          />
+        </div>
       </div>
 
       <Table<Product>
@@ -69,6 +80,8 @@ export function Products() {
         control={control}
         clearFilters={clearFilters}
       />
+
+      <ModalUpload />
     </div>
   )
 }

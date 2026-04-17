@@ -4,6 +4,23 @@ import { isAxiosError, type AxiosInstance } from 'axios';
 export class ProductsDatasourceImpl implements ProductsDatasource {
     constructor(private api: AxiosInstance) { }
 
+    async uploadProducts(file: File): Promise<string> {
+        try {
+            const url = '/products/uploadProducts';
+            const formData = new FormData();
+            formData.append('file', file);
+            const { data } = await this.api.post(url, formData);
+
+            return data['message'];
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if(error.response?.data['statusCode'] == 404) throw new NotFoundError(error.response.data['message']);
+                if(error.response?.data['statusCode'] == 400) throw new ConflictError(error.response.data['message']);
+            }
+            throw new Error("Error no controlado");
+        }
+    }
+
     async getPaginatedProducts({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersProducts }): Promise<PaginatedProducts> {
         try {
             const params = new URLSearchParams({ limit: String(limit), offset: String(offset), ...filters });
