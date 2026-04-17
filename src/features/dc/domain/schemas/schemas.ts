@@ -5,6 +5,7 @@ export const DcSchema = z.object({
     id: z.number(),
     name: z.string(),
     client: z.string(),
+    code: z.string(),
 });
 
 export const DcResponseSchema = ApiResponseSchema.extend({

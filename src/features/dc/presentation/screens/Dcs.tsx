@@ -8,6 +8,7 @@ const columns: Column<Dc>[] = [
   { header: 'id', accessor: 'id', id: 'id' },
   { header: 'Name', accessor: 'name', id: 'name' },
   { header: 'Client', accessor: 'client', id: 'client' },
+  { header: 'Code', accessor: 'code', id: 'code' },
 ];
 
 export function Dcs() {
