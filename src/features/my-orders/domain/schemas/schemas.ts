@@ -31,6 +31,7 @@ export const OrderDetailsSchema = z.object({
     status: z.number(),
     customer: z.string(),
     email: z.string(),
+    dc_id: z.number(),
     dc: z.string(),
     po: z.string(),
     client: z.string(),
@@ -55,7 +56,6 @@ export const OrderItemDetailsSchema = z.object({
     total_amount: z.number(),
     product: z.string(),
     internationalCode: z.string(),
-    dc: z.string()
 });
 
 export const OrderItemsDetailsResponseSchema = ApiResponseSchema.extend({
@@ -89,14 +89,16 @@ export const OrderDetailsToUpdateResponseSchema = ApiResponseSchema.extend({
 
 
 //!REFACTORIZAR
-export const UploadFileResponseSchema = z.object({
-    data: z.array(z.object({
-        product: z.string(),
-        internationalCode: z.string(),
-        localCode: z.string(),
-        total_boxes: z.number(),
-        total_pounds: z.number(),
-        total_amount: z.number(),
-        pallets: z.number()
-    }))
+export const CreationOrderResultSchema = z.object({
+    success: z.boolean(),
+    message: z.string()
+})
+
+export const UploadFileResponseSchema = ApiResponseSchema.extend({
+    data: z.object({
+        total: z.number(),
+        success: z.number(),
+        failed: z.number(),
+        results: z.array(CreationOrderResultSchema)
+    })
 });

@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { type FiltersProducts, type Product, ModalUpload } from "@/features/products/products";
 
-const initialFilters: FiltersProducts = { client: '', localCode: '', internationalCode: '', name: '', transportType: '', dc: '' };
+const initialFilters: FiltersProducts = { client: '', localCode: '', internationalCode: '', name: '', transportType: '', dc: ''};
 
 export function Products() {
   const navigate = useNavigate();

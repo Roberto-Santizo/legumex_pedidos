@@ -107,7 +107,7 @@ export function MyOrder() {
       <ModalEditItem
         client={order.client_id}
         transportType={order.transportType}
-        dc={order.dc}
+        dc={order.dc_id}
       />
     </div>
   );

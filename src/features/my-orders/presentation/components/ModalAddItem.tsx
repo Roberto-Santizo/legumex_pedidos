@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 type Props = {
     client: number;
     transportType: string;
-    dc: string;
+    dc: number;
 }
 
 export function ModalAddItem({ client, transportType, dc }: Props) {

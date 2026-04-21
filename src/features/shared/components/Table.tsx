@@ -9,7 +9,6 @@ export function Table<T>({ columns, data }: Props<T>) {
     return (
         <div className="overflow-x-auto">
             <table className="min-w-full border border-gray-200 rounded-lg overflow-hidden">
-
                 <thead className="bg-gray-50">
                     <tr>
                         {columns.map((col, index) => (
@@ -40,7 +39,6 @@ export function Table<T>({ columns, data }: Props<T>) {
                         </tr>
                     ))}
                 </tbody>
-
             </table>
         </div>
     );

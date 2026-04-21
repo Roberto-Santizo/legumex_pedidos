@@ -84,7 +84,7 @@ export function Reports() {
       <div>
         <div className="flex justify-end p-3">
           <CustomFilledButton
-            label="Dowload Xlsx"
+            label="Download Xlsx"
             type="button"
             onClick={() => handleExportExcel(orders ?? [])}
           />

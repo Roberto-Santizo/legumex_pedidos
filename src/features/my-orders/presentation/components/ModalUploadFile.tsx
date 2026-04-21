@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { ResultsTable } from "./ResultsTable";
 
 export function ModalUploadFile() {
     const navigate = useNavigate();
@@ -26,20 +27,20 @@ export function ModalUploadFile() {
         watch,
         setError,
         clearErrors,
-        formState: { errors }
+        formState: { errors },
+        reset
     } = useForm<UploadFileForm>();
 
     const file = watch("file");
 
-    const { mutate, isPending } = useMutation({
+    const { mutate, isPending, data } = useMutation({
         mutationFn: (file: File) => ordersProvider.uploadFile(file),
         onError: (err: any) => {
             notification.error(err?.message || "Error uploading file");
         },
-        onSuccess: (message) => {
-            notification.success(message);
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['getMyOrders', rowsPerPage, page + 1] });
-            handleCloseModal();
+            reset();
         }
     });
 
@@ -82,10 +83,10 @@ export function ModalUploadFile() {
                     <div
                         {...getRootProps()}
                         className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-200
-                ${isDragActive ? "border-blue-500 bg-blue-50 scale-[1.02]" : "border-gray-300"}
-                ${errors.file ? "border-red-400 bg-red-50" : ""}
-                ${isPending ? "opacity-50 pointer-events-none" : ""}
-                `}
+                            ${isDragActive ? "border-blue-500 bg-blue-50 scale-[1.02]" : "border-gray-300"}
+                            ${errors.file ? "border-red-400 bg-red-50" : ""}
+                            ${isPending ? "opacity-50 pointer-events-none" : ""}
+                        `}
                     >
                         <input {...getInputProps()} />
 
@@ -140,6 +141,10 @@ export function ModalUploadFile() {
                         </button>
                     )}
                 </form>
+
+                {data && (
+                    <ResultsTable data={data} />
+                )}
             </div>
         </Modal>
     );

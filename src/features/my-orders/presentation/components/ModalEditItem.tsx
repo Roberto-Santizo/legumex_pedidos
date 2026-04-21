@@ -9,7 +9,7 @@ import { useEffect } from "react";
 type Props = {
     client: number;
     transportType: string;
-    dc: string;
+    dc: number;
 }
 
 export function ModalEditItem({ client, transportType, dc }: Props) {
