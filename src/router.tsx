@@ -9,6 +9,9 @@ import { Login } from "@/features/login/login";
 import { Profile } from "@/features/profile/profile";
 import { ProtectedLayout, PublicLayout, RoleMiddleware } from "@/features/shared/shared";
 import { Reports } from "@/features/reports/reports";
+// Containers module — Created by Luis
+import { Containers } from "@/features/containers/containers";
+import { TransportationCost } from "@/features/carriers/carriers";
 
 export default function AppRouter() {
     return (
@@ -55,6 +58,12 @@ export default function AppRouter() {
                         <Route path="/users" element={<Users />} />
                         <Route path="/users/create" element={<CreateUser />} />
                         <Route path="/users/update/:id" element={<UpdateUser />} />
+                    </Route>
+
+                    //CONTAINERS — Created by Luis
+                    <Route element={<RoleMiddleware allowedRoles={['admin', 'administrator']} />}>
+                        <Route path="/containers" element={<Containers />} />
+                        <Route path="/transportation-cost" element={<TransportationCost />} />
                     </Route>
                 </Route>
             </Routes>

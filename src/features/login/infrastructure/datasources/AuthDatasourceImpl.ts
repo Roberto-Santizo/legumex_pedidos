@@ -13,9 +13,9 @@ export class AuthDatasourceImpl implements AuthDatasource {
             if (response.success) {
                 return response.data;
             }
-            throw new Error("Información no válida");
+            throw new Error("Invalid data");
         } catch (error) {
-            throw new Error("Error no controlado");
+            throw new Error("Unhandled error");
         }
     }
 
@@ -27,13 +27,17 @@ export class AuthDatasourceImpl implements AuthDatasource {
             if (response.success) {
                 return response.data;
             }
-            throw new Error("Información no válida");
+            throw new Error("Invalid data");
         } catch (error) {
             if (isAxiosError(error)) {
-                if (error.response?.data['statusCode'] == 409) throw new Error(error.response.data['message']);
-                if (error.response?.data['statusCode'] == 404) throw new Error(error.response.data['message']);
+                const status = error.response?.status;
+                const body = error.response?.data;
+                if (status === 400 && body?.errors) throw new Error(body.errors.join(', '));
+                if (body?.statusCode === 401) throw new Error(body.message);
+                if (body?.statusCode === 404) throw new Error(body.message);
+                if (body?.statusCode === 409) throw new Error(body.message);
             }
-            throw new Error("Error no controlado");
+            throw new Error("Unhandled error");
         }
     }
 

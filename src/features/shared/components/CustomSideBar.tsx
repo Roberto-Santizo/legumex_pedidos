@@ -1,5 +1,6 @@
+
 import { BiBox, BiFile, BiMap, BiPackage, BiUser } from 'react-icons/bi';
-import { BsFilePerson } from 'react-icons/bs';
+import { BsCurrencyDollar, BsFilePerson, BsTruck } from 'react-icons/bs';
 import { CustomNavLink } from './CustomNavLink';
 import { HiHome } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
@@ -45,6 +46,15 @@ export function CustomSideBar({ className }: Props) {
 
           <CustomNavLink to='/reports' label='Reports'>
             <BiFile size={25} />
+          </CustomNavLink>
+
+          {/* Containers module — Created by Luis */}
+          <CustomNavLink to='/containers' label='Containers'>
+            <BsTruck size={25} />
+          </CustomNavLink>
+
+          <CustomNavLink to='/transportation-cost' label='Transportation Cost'>
+            <BsCurrencyDollar size={25} />
           </CustomNavLink>
         </>
       )}

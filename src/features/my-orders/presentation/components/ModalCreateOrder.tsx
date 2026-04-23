@@ -13,7 +13,7 @@ export function ModalCreateOrder() {
     const location = useLocation();
     const notification = useNotification();
     const queryClient = useQueryClient();
-    const [searchParams, _] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || 0;
     const rowsPerPage = Number(searchParams.get("limit")) || 10;
@@ -30,7 +30,6 @@ export function ModalCreateOrder() {
             pathname: location.pathname,
             search: params.toString(),
         });
-
         reset();
     }
 
@@ -71,14 +70,14 @@ export function ModalCreateOrder() {
 
     const onSubmit = (data: CreateOrderPayload) => mutate(data);
 
-    if (clients) return (
+    return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Create Order">
             <form className="form mx-auto" onSubmit={handleSubmit(onSubmit)}>
                 <SelectFormField<CreateOrderPayload>
                     control={control}
                     label="Client"
                     name="client_id"
-                    options={clientOptions(clients)}
+                    options={clientOptions(clients ?? [])}
                     validation={{ required: 'The client is requierd' }}
                     errorMessage={errors.client_id?.message}
                 />
