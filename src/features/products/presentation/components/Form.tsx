@@ -98,10 +98,10 @@ export function Form({ register, errors, control }: Props) {
             <SelectFormField<CreateOrUpdateProductPayload>
                 control={control}
                 label="DC"
-                name="dc"
+                name="dc_id"
                 options={dcOptions(dcs)}
                 validation={{ required: 'The dc type is requierd' }}
-                errorMessage={errors.dc?.message}
+                errorMessage={errors.dc_id?.message}
             />
 
             <SelectFormField<CreateOrUpdateProductPayload>

@@ -4,7 +4,7 @@ export interface AddItemForm {
 }
 
 export interface CreateOrderPayload {
-    dc: string;
+    dc_id: string;
     client_id: string;
     transportType: string;
     requiredByDate: string;

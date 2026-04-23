@@ -21,6 +21,7 @@ export const ProductSchema = z.object({
     client: z.string(),
     prices: z.array(ProductPriceDetail).optional(),
     dc: z.string(),
+    dc_id: z.number(),
     transportType: z.string()
 });
 

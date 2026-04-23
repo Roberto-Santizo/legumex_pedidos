@@ -86,10 +86,10 @@ export function ModalCreateOrder() {
                 <SelectFormField<CreateOrderPayload>
                     control={control}
                     label="DC"
-                    name="dc"
+                    name="dc_id"
                     options={dcOptions(dcs ?? [])}
                     validation={{ required: 'Dc is requierd' }}
-                    errorMessage={errors.client_id?.message}
+                    errorMessage={errors.dc_id?.message}
                 />
 
                 <TextFormField<CreateOrderPayload>

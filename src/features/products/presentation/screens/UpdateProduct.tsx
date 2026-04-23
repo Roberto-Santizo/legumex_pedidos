@@ -47,7 +47,7 @@ export function UpdateProduct() {
             setValue('units_per_box', product.units_per_box)
             setValue('boxes_per_pallet', product.boxes_per_pallet)
             setValue('client_id', product.client_id)
-            setValue('dc', product.dc)
+            setValue('dc_id', product.dc_id)
             setValue('transportType', product.transportType)
         }
     }, [product]);
