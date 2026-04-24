@@ -4,6 +4,14 @@ import type { OrderFilters } from '@/features/shared/shared';
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
 
+    downloadItemsReport(startDate: string, endDate: string): Promise<Blob> {
+        return this.datasource.downloadItemsReport(startDate, endDate);
+    }
+
+    downloadHeadersReport(startDate: string, endDate: string): Promise<Blob> {
+        return this.datasource.downloadHeadersReport(startDate, endDate);
+    }
+
     uploadFile(file: File): Promise<UploadFileResponse> {
         return this.datasource.uploadFile(file);
     }

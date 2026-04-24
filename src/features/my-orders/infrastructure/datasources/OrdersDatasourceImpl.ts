@@ -6,6 +6,36 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
 
+    async downloadItemsReport(startDate: string, endDate: string): Promise<Blob> {
+        try {
+            const url = '/orders/ordersItemsReport';
+            const { data } = await this.api.post(url, { startDate, endDate }, { responseType: 'blob' });
+
+            return data;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
+
+    async downloadHeadersReport(startDate: string, endDate: string): Promise<Blob> {
+        try {
+            const url = '/orders/ordersHeadersReport';
+            const { data } = await this.api.post(url, { startDate, endDate }, { responseType: 'blob' });
+
+            return data;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
+
     async uploadFile(file: File): Promise<UploadFileResponse> {
         try {
             const url = '/orders/uploadFile';
@@ -215,7 +245,7 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
 
     async getOrders(filters: OrderFilters): Promise<Order[]> {
         try {
-            const url = `/orders?client=${filters.client}&startDate=${filters.startDate}&endDate=${filters.endDate}`;
+            const url = `/orders?client=&startDate=${filters.startDate}&endDate=${filters.endDate}`;
             const { data } = await this.api.get(url);
             const response = OrdersResponseSchema.safeParse(data);
 

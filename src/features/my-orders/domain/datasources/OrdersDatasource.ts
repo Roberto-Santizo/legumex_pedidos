@@ -15,4 +15,6 @@ export abstract class OrdersDatasource {
     abstract deleteOrderProduct(orderId: Order['id'], id: OrderItemDetails['id']): Promise<string>;
     abstract confirmOrder(orderId: Order['id']): Promise<string>;
     abstract confirmReceivedOrder(orderId: Order['id']): Promise<string>;
+    abstract downloadHeadersReport(startDate: string, endDate: string): Promise<Blob>;
+    abstract downloadItemsReport(startDate: string, endDate: string): Promise<Blob>;
 }

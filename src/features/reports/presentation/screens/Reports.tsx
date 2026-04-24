@@ -1,98 +1,148 @@
-import { clientOptions } from "@/features/clients/clients";
-import { clientsProvider } from "@/features/clients/presentation/providers/clientsRepositoryProvider";
-import { CustomFilledButton, DateFormField, SelectFormField, Table, type Column, type OrderFilters } from "@/features/shared/shared";
-import { handleExportExcel } from "@/features/reports/reports";
+import { CustomFilledButton, useNotification, type OrderFilters } from "@/features/shared/shared";
+import { dowloadExcelFile } from "@/features/reports/reports";
+import { isPending } from "@reduxjs/toolkit";
 import { ordersProvider } from "@/features/my-orders/presentation/providers/ordersRepositoryProvider";
-import { useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import type { Order } from "@/features/my-orders/my-orders";
-
-const columns: Column<Order>[] = [
-  { header: 'id', accessor: 'id', id: 'id' },
-  { header: 'Client', accessor: 'client', id: 'client' },
-  { header: 'Dc', accessor: 'dc', id: 'dc' },
-  { header: 'Total Lbs', accessor: 'total_lbs', id: 'total_lbs' },
-  { header: 'Total Pallets', accessor: 'total_pallets', id: 'total_pallets' },
-  { header: 'Total Price', accessor: 'total_price', id: 'total_price' },
-  { header: 'Total Boxes', accessor: 'total_boxes', id: 'total_boxes' },
-  { header: 'Transport Type', accessor: 'transportType', id: 'transportType' },
-  { header: 'Required By Date', accessor: 'requiredByDate', id: 'requiredByDate' },
-  { header: 'Confirmed By', accessor: 'confirmedBy', id: 'confirmedBy' },
-];
-
 
 export function Reports() {
-  const { register, handleSubmit, formState: { errors }, control } = useForm<OrderFilters>();
-  const [enabledQuery, setEnabledQuery] = useState<boolean>(false);
-  const [filters, setFilters] = useState<OrderFilters>({ client: '', startDate: '', endDate: '' });
+  const notification = useNotification();
 
-  const { data: clients } = useQuery({
-    queryKey: ['getClients'],
-    queryFn: () => clientsProvider.getClients()
+  const [filters, setFilters] = useState<OrderFilters>({ startDate: '', endDate: '' });
+
+
+  const { mutate: downloadHeadersReport } = useMutation({
+    mutationKey: ['downloadHeadersReport', filters],
+    mutationFn: () => ordersProvider.downloadHeadersReport(filters.startDate, filters.endDate),
+    onError: (error) => {
+      notification.error(error.message);
+    },
+    onSuccess: (data) => {
+      dowloadExcelFile(data, 'headers_report');
+    }
   });
 
-  const { data: orders } = useQuery({
-    queryKey: ['getOrders', filters],
-    queryFn: () => ordersProvider.getOrders(filters),
-    enabled: enabledQuery
+  const { mutate: dowloadItemsReport } = useMutation({
+    mutationKey: ['downloadItemsReport', filters],
+    mutationFn: () => ordersProvider.downloadItemsReport(filters.startDate, filters.endDate),
+    onError: (error) => {
+      notification.error(error.message);
+    },
+    onSuccess: (data) => {
+      dowloadExcelFile(data, 'items_report');
+    }
   });
 
-  const onSubmit = (data: OrderFilters) => {
-    setFilters(data);
-    setEnabledQuery(true);
-  };
+  const handleDownloadHeadersReport = (flag: string) => {
+    if (filters.startDate == '' || filters.endDate == '') {
+      notification.error("Please fill in both start and end dates");
+      return;
+    }
+    if (flag === '1') {
+      downloadHeadersReport();
+    } else {
+      dowloadItemsReport();
+    }
+  }
 
-  if (clients) return (
-    <div className="p-6 space-y-6">
-      <h1 className="main_title">Reports</h1>
+  const handleOnInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  }
+
+  return (
+    <div className="p-8 space-y-8 bg-gray-50 min-h-screen">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold text-gray-800">Reports</h1>
+      </div>
 
       <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-white rounded-xl shadow p-4 grid grid-cols-4 gap-4 items-end"
+        className="bg-white rounded-2xl shadow-sm border p-6 grid grid-cols-1 gap-6"
       >
-        <SelectFormField
-          control={control}
-          label="Client"
-          name="client"
-          options={clientOptions(clients)}
-          validation={{}}
-        />
+        <div className="flex flex-col gap-2 w-full">
+          <label
+            className="text-sm font-medium text-gray-700"
+            htmlFor={"startDate"}
+          >
+            Start Date
+          </label>
 
-        <DateFormField
-          label="Start Date"
-          name="startDate"
-          register={register}
-          validation={{ required: "Start date required" }}
-          errorMessage={errors.startDate?.message}
-        />
-
-        <DateFormField
-          label="End Date"
-          name="endDate"
-          register={register}
-          validation={{ required: "End date required" }}
-          errorMessage={errors.endDate?.message}
-        />
-
-        <CustomFilledButton
-          label="Find"
-          type="submit"
-        />
-      </form>
-
-      <div>
-        <div className="flex justify-end p-3">
-          <CustomFilledButton
-            label="Download Xlsx"
-            type="button"
-            onClick={() => handleExportExcel(orders ?? [])}
+          <input
+            type="date"
+            id="startDate"
+            name="startDate"
+            className={`text_form_field`}
+            onChange={handleOnInputChange}
           />
         </div>
-        <Table
-          columns={columns}
-          data={orders ?? []}
-        />
+
+
+        <div className="flex flex-col gap-2 w-full">
+          <label
+            className="text-sm font-medium text-gray-700"
+            htmlFor={"endDate"}
+          >
+            End Date
+          </label>
+
+          <input
+            type="date"
+            id="endDate"
+            name="endDate"
+            className={`text_form_field`}
+            onChange={handleOnInputChange}
+          />
+        </div>
+
+      </form>
+
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold text-gray-700">Available Reports</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          <div className="bg-white border rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <h3 className="font-semibold text-gray-800">
+                Orders Items
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Orders Items details
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <CustomFilledButton
+                disabled={!isPending}
+                label="Download"
+                type="button"
+                className={"w-full"}
+                onClick={() => handleDownloadHeadersReport('2')}
+              />
+            </div>
+          </div>
+
+          <div className="bg-white border rounded-2xl p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <h3 className="font-semibold text-gray-800">
+                Headers
+              </h3>
+              <p className="text-sm text-gray-500 mt-1">
+                Orders Headers
+              </p>
+            </div>
+
+            <div className="mt-4">
+              <CustomFilledButton
+                disabled={!isPending}
+                label="Download"
+                type="button"
+                className="w-full"
+                onClick={() => handleDownloadHeadersReport('1')}
+              />
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
   );

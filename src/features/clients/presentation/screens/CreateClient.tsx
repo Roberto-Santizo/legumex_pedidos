@@ -12,7 +12,7 @@ export function CreateClient() {
     const queryClient = useQueryClient();
 
     const { mutate, isPending } = useMutation({
-        mutationFn: (name: string) => clientsProvider.createClient(name),
+        mutationFn: (data: { code: string, name: string }) => clientsProvider.createClient(data.name, data.code),
         onError: (err) => {
             notification.error(err.message);
         },
@@ -29,7 +29,7 @@ export function CreateClient() {
         formState: { errors }
     } = useForm<CreateOrUpdateClient>();
 
-    const onSubmit = (data: CreateOrUpdateClient) => mutate(data.name);
+    const onSubmit = (data: CreateOrUpdateClient) => mutate({ name: data.name, code: data.code });
 
     return (
         <div className="space-y-5">

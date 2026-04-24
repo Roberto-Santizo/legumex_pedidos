@@ -31,3 +31,19 @@ export const handleExportExcel = (orders: Order[]) => {
 
     saveAs(fileData, 'REPORT.xlsx');
 };
+
+export const dowloadExcelFile = (data: Blob, fileName: string) => {
+    const blob = new Blob([data]);
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = url;
+    link.setAttribute('download', `${fileName}.xlsx`);
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.URL.revokeObjectURL(url);
+}

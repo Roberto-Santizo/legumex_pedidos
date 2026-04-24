@@ -20,6 +20,16 @@ export function Form({ register, errors }: Props) {
         validation={{ required: 'Client name is Required' }}
         errorMessage={errors.name?.message}
       />
+
+      <TextFormField<CreateOrUpdateClient>
+        label="Code"
+        name="code"
+        placeholder="Client code"
+        register={register}
+        type="text"
+        validation={{ required: 'Client code is Required' }}
+        errorMessage={errors.code?.message}
+      />
     </>
   )
 }

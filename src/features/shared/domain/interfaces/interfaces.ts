@@ -7,7 +7,6 @@ export interface NotificationAdapter {
 
 
 export interface OrderFilters {
-    client: string;
     startDate: string;
     endDate: string;
 }

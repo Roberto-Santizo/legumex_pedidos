@@ -2,7 +2,8 @@ import z from "zod";
 
 export const ClientSchema = z.object({
     id: z.number(),
-    name: z.string()
+    name: z.string(),
+    code: z.string(),
 });
 
 export const ClientsResponseSchema = z.object({

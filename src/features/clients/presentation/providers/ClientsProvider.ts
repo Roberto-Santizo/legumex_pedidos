@@ -3,8 +3,8 @@ import type { ClientRepository } from "../../clients";
 export class ClientsProvider {
     constructor(private repository: ClientRepository) { }
 
-    async createClient(name: string) {
-        return this.repository.createClient(name);
+    async createClient(name: string, code: string) {
+        return this.repository.createClient(name, code);
     }
 
     async getClients() {

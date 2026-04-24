@@ -8,6 +8,7 @@ import type { Client } from "@/features/clients/clients";
 const columns: Column<Client>[] = [
     { header: 'id', accessor: 'id', id: 'id' },
     { header: 'Name', accessor: 'name', id: 'name' },
+    { header: 'Code', accessor: 'code', id: 'code' },
     {
         header: 'Actions',
         id: 'actions',

@@ -26,10 +26,10 @@ export class ClientDatasourceImpl implements ClientDatasource {
         }
     }
 
-    async createClient(name: string): Promise<string> {
+    async createClient(name: string, code: string): Promise<string> {
         try {
             const url = `/clients`;
-            const { data } = await this.api.post(url, { name });
+            const { data } = await this.api.post(url, { name, code });
 
             return data['message'];
         } catch (error) {

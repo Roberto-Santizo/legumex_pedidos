@@ -55,4 +55,12 @@ export class OrdersProvider {
     async uploadFile(file: File) {
         return this.repository.uploadFile(file);
     }
+
+    async downloadHeadersReport(startDate: string, endDate: string) {
+        return this.repository.downloadHeadersReport(startDate, endDate);
+    }
+
+    async downloadItemsReport(startDate: string, endDate: string) {
+        return this.repository.downloadItemsReport(startDate, endDate);
+    }
 }
