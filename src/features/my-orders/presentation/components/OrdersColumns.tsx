@@ -9,6 +9,7 @@ export const ordersColumns: Column<Order>[] = [
   { header: 'Transaport Type', accessor: 'transportType', id: 'transportType' },
   { header: 'DC', accessor: 'dc', id: 'dc' },
   { header: 'PO', accessor: 'po', id: 'po' },
+  { header: 'Required By', accessor: 'requiredByDate', id: 'requiredByDate' },
   {
     header: 'status',
     id: 'status',
