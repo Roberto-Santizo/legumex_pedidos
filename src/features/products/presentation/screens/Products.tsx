@@ -24,7 +24,7 @@ export function Products() {
     queryFn: () => productsProvider.getPaginatedProducts({ limit: rowsPerPage, offset: page + 1, filters })
   });
 
-  const { handleSubmit, register, control, reset } = useForm<FiltersProducts>({ defaultValues: { client: '' } })
+  const { handleSubmit, register, control, reset } = useForm<FiltersProducts>({ defaultValues: { client: '', dc: '', transportType: '' } })
 
   const onSubmit = (data: FiltersProducts) => {
     setFilters(data);

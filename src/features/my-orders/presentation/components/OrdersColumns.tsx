@@ -4,10 +4,11 @@ import { Tag, type Column } from "@/features/shared/shared";
 import type { Order } from "@/features/my-orders/my-orders";
 
 export const ordersColumns: Column<Order>[] = [
-  { header: 'Ordered By', accessor: 'user', id: 'user' },
-  { header: 'Created At', accessor: 'createdAt', id: 'createdAt' },
+  { header: 'Created By', accessor: 'user', id: 'user' },
   { header: 'Client', accessor: 'client', id: 'client' },
   { header: 'Transaport Type', accessor: 'transportType', id: 'transportType' },
+  { header: 'DC', accessor: 'dc', id: 'dc' },
+  { header: 'PO', accessor: 'po', id: 'po' },
   {
     header: 'status',
     id: 'status',

@@ -14,7 +14,8 @@ export const OrderSchema = z.object({
     transportType: z.string(),
     requiredByDate: z.string(),
     confirmedBy: z.string().nullable(),
-    dc: z.string()
+    dc: z.string(),
+    po: z.string(),
 });
 
 export const OrdersPaginatedSchema = ApiResponseSchema.extend({
