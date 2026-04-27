@@ -12,6 +12,8 @@ export class ClientDatasourceImpl implements ClientDatasource {
             const { data } = await this.api.get(url);
             const response = ClientsResponseSchema.safeParse(data);
 
+            console.log(response);
+
             if (response.success) {
                 return response.data.data;
             }

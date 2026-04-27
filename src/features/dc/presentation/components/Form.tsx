@@ -40,6 +40,16 @@ export function Form({ register, errors, control }: Props) {
         errorMessage={errors.code?.message}
       />
 
+      <TextFormField<CreateOrUpdateDc>
+        label="Warehouse"
+        name="warehouse"
+        placeholder="DC warehouse"
+        register={register}
+        type="text"
+        validation={{ required: 'The DC warehouse is Required' }}
+        errorMessage={errors.warehouse?.message}
+      />
+
       <SelectFormField<CreateOrUpdateDc>
         control={control}
         label="Client"
