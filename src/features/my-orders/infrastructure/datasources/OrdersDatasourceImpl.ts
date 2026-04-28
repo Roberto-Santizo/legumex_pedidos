@@ -1,6 +1,6 @@
 import { isAxiosError, type AxiosInstance } from 'axios';
 import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, UploadFileResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
-import type { OrderFilters } from '@/features/shared/shared';
+import type { OrderFilters, UploadFileForm } from '@/features/shared/shared';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
@@ -36,11 +36,13 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async uploadFile(file: File): Promise<UploadFileResponse> {
+    async uploadFile(payload: UploadFileForm): Promise<UploadFileResponse> {
         try {
             const url = '/orders/uploadFile';
             const formData = new FormData();
-            formData.append('file', file);
+            formData.append('file', payload.file!);
+            formData.append('year', payload.year.toString());
+            formData.append('week', payload.week.toString());
             const { data } = await this.api.post(url, formData);
 
             const response = UploadFileResponseSchema.safeParse(data);

@@ -1,4 +1,4 @@
-import { Modal, useNotification, type UploadFileForm } from "@/features/shared/shared";
+import { Modal, TextFormField, useNotification, type UploadFileForm } from "@/features/shared/shared";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
@@ -28,13 +28,14 @@ export function ModalUploadFile() {
         setError,
         clearErrors,
         formState: { errors },
-        reset
+        reset,
+        register
     } = useForm<UploadFileForm>();
 
     const file = watch("file");
 
     const { mutate, isPending, data } = useMutation({
-        mutationFn: (file: File) => ordersProvider.uploadFile(file),
+        mutationFn: (payload: UploadFileForm) => ordersProvider.uploadFile(payload),
         onError: (err: any) => {
             notification.error(err?.message || "Error uploading file");
         },
@@ -73,13 +74,34 @@ export function ModalUploadFile() {
             return;
         }
 
-        mutate(form.file);
+        mutate(form);
     };
 
     return (
         <Modal modal={show} closeModal={handleCloseModal} title="Upload File">
             <div className="p-8 space-y-6">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+                    <TextFormField<UploadFileForm>
+                        label="Year"
+                        name="year"
+                        placeholder="Year of orders"
+                        register={register}
+                        type="number"
+                        validation={{ required: 'The year is Required' }}
+                        errorMessage={errors.year?.message}
+                    />
+
+                    <TextFormField<UploadFileForm>
+                        label="Week"
+                        name="week"
+                        placeholder="Week of orders"
+                        register={register}
+                        type="number"
+                        validation={{ required: 'The week is Required' }}
+                        errorMessage={errors.week?.message}
+                    />
+
                     <div
                         {...getRootProps()}
                         className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all duration-200

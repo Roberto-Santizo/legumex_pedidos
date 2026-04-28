@@ -102,6 +102,26 @@ export function ModalCreateOrder() {
                     errorMessage={errors.po?.message}
                 />
 
+                <TextFormField<CreateOrderPayload>
+                    label="Year"
+                    name="year"
+                    placeholder="Year"
+                    register={register}
+                    type="number"
+                    validation={{ required: 'The year is requierd' }}
+                    errorMessage={errors.year?.message}
+                />
+
+                <TextFormField<CreateOrderPayload>
+                    label="Week"
+                    name="week"
+                    placeholder="Week"
+                    register={register}
+                    type="number"
+                    validation={{ required: 'The week is requierd' }}
+                    errorMessage={errors.week?.message}
+                />
+
                 <SelectFormField<CreateOrderPayload>
                     control={control}
                     label="Transport Type"

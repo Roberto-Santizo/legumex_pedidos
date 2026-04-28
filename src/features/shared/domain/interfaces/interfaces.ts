@@ -12,5 +12,7 @@ export interface OrderFilters {
 }
 
 export interface UploadFileForm {
-    file: File | null
+    file: File | null;
+    year: number;
+    week: number;
 }

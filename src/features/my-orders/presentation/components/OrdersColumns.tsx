@@ -10,6 +10,8 @@ export const ordersColumns: Column<Order>[] = [
   { header: 'DC', accessor: 'dc', id: 'dc' },
   { header: 'PO', accessor: 'po', id: 'po' },
   { header: 'Required By', accessor: 'requiredByDate', id: 'requiredByDate' },
+  { header: 'Year', accessor: 'year', id: 'year' },
+  { header: 'Week', accessor: 'week', id: 'week' },
   {
     header: 'status',
     id: 'status',

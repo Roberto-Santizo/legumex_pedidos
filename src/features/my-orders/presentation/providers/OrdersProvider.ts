@@ -1,4 +1,4 @@
-import type { OrderFilters } from "@/features/shared/shared";
+import type { OrderFilters, UploadFileForm } from "@/features/shared/shared";
 import type { AddItemForm, CreateOrderPayload, Order, OrderItemDetails, OrdersRepository } from "../../my-orders";
 
 export class OrdersProvider {
@@ -52,8 +52,8 @@ export class OrdersProvider {
         return this.repository.updateOrderItemById(orderId, itemId, payload);
     }
 
-    async uploadFile(file: File) {
-        return this.repository.uploadFile(file);
+    async uploadFile(payload: UploadFileForm) {
+        return this.repository.uploadFile(payload);
     }
 
     async downloadHeadersReport(startDate: string, endDate: string) {

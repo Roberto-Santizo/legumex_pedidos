@@ -9,4 +9,6 @@ export interface CreateOrderPayload {
     transportType: string;
     requiredByDate: string;
     po: string;
+    year: number;
+    week: number;
 }

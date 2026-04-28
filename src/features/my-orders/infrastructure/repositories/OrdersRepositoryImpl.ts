@@ -1,5 +1,5 @@
 import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
-import type { OrderFilters } from '@/features/shared/shared';
+import type { OrderFilters, UploadFileForm } from '@/features/shared/shared';
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
@@ -12,8 +12,8 @@ export class OrdersRepositoryImpl implements OrdersRepository {
         return this.datasource.downloadHeadersReport(startDate, endDate);
     }
 
-    uploadFile(file: File): Promise<UploadFileResponse> {
-        return this.datasource.uploadFile(file);
+    uploadFile(payload: UploadFileForm): Promise<UploadFileResponse> {
+        return this.datasource.uploadFile(payload);
     }
 
     updateOrderItemById(orderId: string, itemId: string, payload: AddItemForm): Promise<string> {

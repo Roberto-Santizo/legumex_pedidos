@@ -16,6 +16,8 @@ export const OrderSchema = z.object({
     confirmedBy: z.string().nullable(),
     dc: z.string(),
     po: z.string(),
+    week: z.number(),
+    year: z.number()
 });
 
 export const OrdersPaginatedSchema = ApiResponseSchema.extend({
