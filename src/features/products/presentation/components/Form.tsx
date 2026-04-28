@@ -56,6 +56,17 @@ export function Form({ register, errors, control }: Props) {
             />
 
             <TextFormField<CreateOrUpdateProductPayload>
+                label="Auxiliar Code"
+                name="auxCode"
+                placeholder="Product Aux Code"
+                register={register}
+                type="text"
+                validation={{ required: 'Product Aux Code is Required' }}
+                errorMessage={errors.auxCode?.message}
+            />
+
+
+            <TextFormField<CreateOrUpdateProductPayload>
                 label="Price"
                 name="price"
                 placeholder="Product Price"

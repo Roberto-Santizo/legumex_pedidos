@@ -9,6 +9,7 @@ export interface CreateOrUpdateProductPayload {
     client_id: number;
     dc_id: number;
     transportType: string;
+    auxCode: string;
 }
 
 //FILTERS
