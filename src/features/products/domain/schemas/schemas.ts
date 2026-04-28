@@ -13,6 +13,7 @@ export const ProductSchema = z.object({
     name: z.string(),
     localCode: z.string(),
     internationalCode: z.string(),
+    auxCode: z.string(),
     price: z.number(),
     presentation: z.number(),
     units_per_box: z.number(),

@@ -42,6 +42,7 @@ export function UpdateProduct() {
             setValue('name', product.name)
             setValue('localCode', product.localCode)
             setValue('internationalCode', product.internationalCode)
+            setValue('auxCode', product.auxCode)
             setValue('price', product.price)
             setValue('presentation', product.presentation)
             setValue('units_per_box', product.units_per_box)
