@@ -1,6 +1,6 @@
 import { isAxiosError, type AxiosInstance } from 'axios';
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, UploadFileResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
-import type { OrderFilters, UploadFileForm } from '@/features/shared/shared';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, UploadFileResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderFilters, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
+import type { OrderFiltersReports, UploadFileForm } from '@/features/shared/shared';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
@@ -131,9 +131,10 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders> {
+    async getPaginatedOrders({ limit, offset, filters }: { limit: number, offset: number, filters: OrderFilters }): Promise<PaginatedOrders> {
         try {
-            const url = `/orders/getPaginatedOrders?limit=${limit}&offset=${offset}`;
+            const params = new URLSearchParams({ limit: String(limit), offset: String(offset), ...filters });
+            const url = `/orders/getPaginatedOrders?${params}`;
             const { data } = await this.api.get(url);
             const response = OrdersPaginatedSchema.safeParse(data);
 
@@ -245,7 +246,7 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async getOrders(filters: OrderFilters): Promise<Order[]> {
+    async getOrders(filters: OrderFiltersReports): Promise<Order[]> {
         try {
             const url = `/orders?client=&startDate=${filters.startDate}&endDate=${filters.endDate}`;
             const { data } = await this.api.get(url);

@@ -12,3 +12,13 @@ export interface CreateOrderPayload {
     year: number;
     week: number;
 }
+
+//FILTERS
+export interface OrderFilters {
+    year: string;
+    week: string;
+    po: string;
+    client: string;
+    dc: string;
+    transportType: string;
+}

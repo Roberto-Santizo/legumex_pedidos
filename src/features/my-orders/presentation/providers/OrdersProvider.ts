@@ -1,5 +1,5 @@
-import type { OrderFilters, UploadFileForm } from "@/features/shared/shared";
-import type { AddItemForm, CreateOrderPayload, Order, OrderItemDetails, OrdersRepository } from "../../my-orders";
+import type { OrderFiltersReports, UploadFileForm } from "@/features/shared/shared";
+import type { AddItemForm, CreateOrderPayload, Order, OrderFilters, OrderItemDetails, OrdersRepository } from "../../my-orders";
 
 export class OrdersProvider {
     constructor(private repository: OrdersRepository) { }
@@ -8,12 +8,12 @@ export class OrdersProvider {
         return this.repository.createOrder(payload);
     }
 
-    async getOrders(filters: OrderFilters) {
+    async getOrders(filters: OrderFiltersReports) {
         return this.repository.getOrders(filters);
     }
 
-    async getPaginatedOrders(limit: number, offset: number) {
-        return this.repository.getPaginatedOrders(limit, offset);
+    async getPaginatedOrders({ limit, offset, filters }: { limit: number, offset: number, filters: OrderFilters }) {
+        return this.repository.getPaginatedOrders({ limit, offset, filters });
     }
 
     async getOrderById(id: string) {

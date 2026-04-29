@@ -6,7 +6,7 @@ export interface NotificationAdapter {
 }
 
 
-export interface OrderFilters {
+export interface OrderFiltersReports {
     startDate: string;
     endDate: string;
 }

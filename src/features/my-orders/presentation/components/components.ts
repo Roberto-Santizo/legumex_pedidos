@@ -7,3 +7,4 @@ export * from './ModalCreateOrder';
 export * from './ModalUploadFile';
 export * from './OrdersColumns';
 export * from './ResultsTable';
+export * from './FiltersComponent';

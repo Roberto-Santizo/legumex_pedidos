@@ -1,33 +1,34 @@
 import { BiTrash } from 'react-icons/bi';
 import { clientOptions } from '@/features/clients/clients';
 import { clientsProvider } from '@/features/clients/presentation/providers/clientsRepositoryProvider';
-import { CustomFilledButton, SelectFormField, TextFormField, transportTypes } from '@/features/shared/shared';
+import { CustomFilledButton, SelectFormField, TextFormField } from '@/features/shared/shared';
 import { dcOptions, dcsProvider } from '@/features/dc/dc';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import type { Control, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form';
-import type { FiltersProducts } from '@/features/products/products';
+import type { OrderFilters } from '../../my-orders';
 
 type Props = {
     isOpen: boolean;
     toggleMenu: React.Dispatch<React.SetStateAction<boolean>>;
-    register: UseFormRegister<FiltersProducts>;
-    handleSubmit: UseFormHandleSubmit<FiltersProducts, FiltersProducts>;
-    onSubmit: (data: FiltersProducts) => void;
-    control: Control<FiltersProducts, any, FiltersProducts>;
+    register: UseFormRegister<OrderFilters>;
+    handleSubmit: UseFormHandleSubmit<OrderFilters, OrderFilters>;
+    onSubmit: (data: OrderFilters) => void;
+    control: Control<OrderFilters, any, OrderFilters>;
     clearFilters: () => void;
 }
 
-export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, onSubmit, control, clearFilters }: Props) {
+export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, onSubmit, clearFilters, control }: Props) {
     const { data: clients } = useQuery({
         queryKey: ['getClients'],
         queryFn: () => clientsProvider.getClients()
     });
 
     const { data: dcs } = useQuery({
-        queryKey: ['getDcs'],
+        queryKey: ['dcs'],
         queryFn: () => dcsProvider.getDcs('')
     });
+
 
     if (clients && dcs) return (
         <>
@@ -45,58 +46,56 @@ export function FiltersComponent({ isOpen, toggleMenu, register, handleSubmit, o
 
                 <div className="space-y-4">
                     <form className='form' onSubmit={handleSubmit(onSubmit)}>
-                        <TextFormField<FiltersProducts>
-                            label='Name'
-                            name='name'
-                            placeholder='Product name'
-                            register={register}
-                            type='text'
-                            validation={{}}
-                        />
-
-                        <TextFormField<FiltersProducts>
-                            label='Local Code'
-                            name='localCode'
-                            placeholder='Local Code of Product'
-                            register={register}
-                            type='text'
-                            validation={{}}
-                        />
-
-                        <TextFormField<FiltersProducts>
-                            label='International Code'
-                            name='internationalCode'
-                            placeholder='International Code of Product'
-                            register={register}
-                            type='text'
-                            validation={{}}
-                        />
-
-                        <SelectFormField<FiltersProducts>
+                        <SelectFormField<OrderFilters>
                             control={control}
-                            label="DC"
+                            label="Client"
+                            name="client"
+                            options={clientOptions(clients)}
+                            validation={{}}
+                        />
+
+                        <SelectFormField<OrderFilters>
+                            control={control}
+                            label="Dc"
                             name="dc"
                             options={dcOptions(dcs)}
                             validation={{}}
                         />
 
-                        <SelectFormField<FiltersProducts>
+                        {/* <SelectFormField<OrderFilters>
                             control={control}
                             label="Transport Type"
                             name="transportType"
                             options={transportTypes}
                             validation={{}}
-                        />
+                        /> */}
 
-                        <SelectFormField<FiltersProducts>
-                            label='Client'
-                            control={control}
-                            name='client'
-                            options={clientOptions(clients)}
+                        <TextFormField<OrderFilters>
+                            label='Po'
+                            name='po'
+                            placeholder='PO'
+                            register={register}
+                            type='text'
                             validation={{}}
                         />
 
+                        <TextFormField<OrderFilters>
+                            label='Week'
+                            name='week'
+                            placeholder='Week of order'
+                            register={register}
+                            type='number'
+                            validation={{}}
+                        />
 
+                        <TextFormField<OrderFilters>
+                            label='Year'
+                            name='year'
+                            placeholder='Year of order'
+                            register={register}
+                            type='number'
+                            validation={{}}
+                        />
 
                         <div className='grid grid-cols-6 items-center gap-5'>
                             <CustomFilledButton

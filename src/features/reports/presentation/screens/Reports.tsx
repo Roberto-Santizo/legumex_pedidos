@@ -1,4 +1,4 @@
-import { CustomFilledButton, useNotification, type OrderFilters } from "@/features/shared/shared";
+import { CustomFilledButton, useNotification, type OrderFiltersReports } from "@/features/shared/shared";
 import { dowloadExcelFile } from "@/features/reports/reports";
 import { isPending } from "@reduxjs/toolkit";
 import { ordersProvider } from "@/features/my-orders/presentation/providers/ordersRepositoryProvider";
@@ -8,7 +8,7 @@ import { useState } from "react";
 export function Reports() {
   const notification = useNotification();
 
-  const [filters, setFilters] = useState<OrderFilters>({ startDate: '', endDate: '' });
+  const [filters, setFilters] = useState<OrderFiltersReports>({ startDate: '', endDate: '' });
 
 
   const { mutate: downloadHeadersReport } = useMutation({

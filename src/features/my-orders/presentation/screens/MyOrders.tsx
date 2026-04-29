@@ -1,9 +1,14 @@
-import { BiFile, BiPlus } from "react-icons/bi";
+import { BiFile, BiMenu, BiPlus } from "react-icons/bi";
 import { CustomFilledButton, Pagination, Table } from "@/features/shared/shared";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { FiltersComponent } from "@/features/my-orders/my-orders";
+import { ModalCreateOrder, ModalUploadFile, ordersColumns, type OrderFilters } from "@/features/my-orders/my-orders";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
-import { ModalCreateOrder, ModalUploadFile, ordersColumns } from "@/features/my-orders/my-orders";
+import { useForm } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+
+const initialFilters: OrderFilters = { year: '', week: '', po: '', client: '', dc: '', transportType: '' };
 
 export function MyOrders() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -11,11 +16,6 @@ export function MyOrders() {
 
   const page = Number(searchParams.get("page")) || 0;
   const rowsPerPage = Number(searchParams.get("limit")) || 10;
-
-  const { data: orders, isLoading } = useQuery({
-    queryKey: ['getMyOrders', rowsPerPage, page],
-    queryFn: () => ordersProvider.getPaginatedOrders(rowsPerPage, page + 1)
-  });
 
   const handleOpenCreateOrderModal = () => {
     const params = new URLSearchParams(location.search);
@@ -33,11 +33,28 @@ export function MyOrders() {
 
     params.set("uploadFile", "true");
 
-    navigate({
-      pathname: location.pathname,
-      search: params.toString(),
-    });
+    navigate({ pathname: location.pathname, search: params.toString() });
   };
+
+  const [open, setOpen] = useState<boolean>(false);
+  const [filters, setFilters] = useState<OrderFilters>(initialFilters);
+
+
+  const { data: orders, isLoading } = useQuery({
+    queryKey: ['getMyOrders', rowsPerPage, page, filters],
+    queryFn: () => ordersProvider.getPaginatedOrders({ limit: rowsPerPage, offset: page + 1, filters })
+  });
+
+  const { handleSubmit, register, control, reset } = useForm<OrderFilters>({ defaultValues: initialFilters })
+
+  const onSubmit = (data: OrderFilters) => {
+    setFilters(data);
+  }
+
+  const clearFilters = () => {
+    setFilters(initialFilters);
+    reset();
+  }
 
   if (isLoading) return <p>Loading...</p>;
   if (orders) return (
@@ -58,6 +75,7 @@ export function MyOrders() {
           icon={<BiFile className="text-white" />}
           onClick={() => handleOpenUploadFile()}
         />
+        <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
       </div>
 
       {orders.data.response.length > 0 && (
@@ -75,6 +93,16 @@ export function MyOrders() {
         page={page}
         rowsPerPage={rowsPerPage}
         setSearchParams={setSearchParams}
+      />
+
+      <FiltersComponent
+        control={control}
+        clearFilters={clearFilters}
+        handleSubmit={handleSubmit}
+        isOpen={open}
+        onSubmit={onSubmit}
+        register={register}
+        toggleMenu={setOpen}
       />
     </div>
   );

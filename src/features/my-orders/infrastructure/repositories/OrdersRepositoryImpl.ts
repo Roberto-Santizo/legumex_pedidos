@@ -1,5 +1,5 @@
-import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
-import type { OrderFilters, UploadFileForm } from '@/features/shared/shared';
+import { OrdersDatasource, OrdersRepository, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderFilters, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
+import type { OrderFiltersReports, UploadFileForm } from '@/features/shared/shared';
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
@@ -32,8 +32,8 @@ export class OrdersRepositoryImpl implements OrdersRepository {
         return this.datasource.confirmOrder(orderId);
     }
 
-    getPaginatedOrders(limit: number, offset: number): Promise<PaginatedOrders> {
-        return this.datasource.getPaginatedOrders(limit, offset);
+    getPaginatedOrders({ limit, offset, filters }: { limit: number, offset: number, filters: OrderFilters }): Promise<PaginatedOrders> {
+        return this.datasource.getPaginatedOrders({ limit, offset, filters });
     }
 
     getOrderById(id: string): Promise<OrderDetails> {
@@ -56,7 +56,7 @@ export class OrdersRepositoryImpl implements OrdersRepository {
         return this.datasource.getOrderDetails(id);
     }
 
-    getOrders(filters: OrderFilters): Promise<Order[]> {
+    getOrders(filters: OrderFiltersReports): Promise<Order[]> {
         return this.datasource.getOrders(filters);
     }
 
