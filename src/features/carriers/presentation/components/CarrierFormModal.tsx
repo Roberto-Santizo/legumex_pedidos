@@ -1,7 +1,9 @@
 // Created by Luis
 
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Modal } from '@/features/shared/components/Modal';
+import { dcsProvider } from '@/features/dc/presentation/providers/dcsRepositoryProvider';
 import type { Carrier, CreateCarrierPayload } from '../../domain/domain';
 
 interface Props {
@@ -12,12 +14,18 @@ interface Props {
     onClose: () => void;
 }
 
-const empty = { name: '', shippingCost: '', rateUpdatedAt: '' };
+const empty = { name: '', shippingCost: '', rateUpdatedAt: '', dcId: '' };
 
 export function CarrierFormModal({ open, carrier, saving, onSave, onClose }: Props) {
     const isEdit = carrier !== null;
     const [form, setForm] = useState(empty);
     const [error, setError] = useState<string | null>(null);
+
+    const { data: dcs = [] } = useQuery({
+        queryKey: ['dcs-all'],
+        queryFn: () => dcsProvider.getAllDcs(),
+        staleTime: 60_000,
+    });
 
     useEffect(() => {
         if (carrier) {
@@ -25,6 +33,7 @@ export function CarrierFormModal({ open, carrier, saving, onSave, onClose }: Pro
                 name: carrier.name,
                 shippingCost: String(carrier.shippingCost),
                 rateUpdatedAt: carrier.rateUpdatedAt,
+                dcId: carrier.dcId != null ? String(carrier.dcId) : '',
             });
         } else {
             setForm(empty);
@@ -32,18 +41,20 @@ export function CarrierFormModal({ open, carrier, saving, onSave, onClose }: Pro
         setError(null);
     }, [carrier, open]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
 
         const cost = parseFloat(form.shippingCost);
+        const dcId = parseInt(form.dcId, 10);
         if (!form.name.trim()) { setError('Name is required.'); return; }
         if (isNaN(cost) || cost < 0) { setError('Shipping cost must be a non-negative number.'); return; }
         if (!form.rateUpdatedAt) { setError('Rate updated date is required.'); return; }
+        if (isNaN(dcId)) { setError('Distribution Center is required.'); return; }
 
         try {
             await onSave(
-                { name: form.name.trim(), shippingCost: cost, rateUpdatedAt: form.rateUpdatedAt },
+                { name: form.name.trim(), shippingCost: cost, rateUpdatedAt: form.rateUpdatedAt, dcId },
                 isEdit ? carrier.id : undefined,
             );
         } catch (err: unknown) {
@@ -64,6 +75,22 @@ export function CarrierFormModal({ open, carrier, saving, onSave, onClose }: Pro
                         {error}
                     </p>
                 )}
+
+                <div className="space-y-1">
+                    <label className="text-xs font-semibold text-slate-600">Distribution Center</label>
+                    <select
+                        value={form.dcId}
+                        onChange={(e) => setForm((f) => ({ ...f, dcId: e.target.value }))}
+                        className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40 bg-white"
+                    >
+                        <option value="">Select a DC...</option>
+                        {dcs.map((dc) => (
+                            <option key={dc.id} value={dc.id}>
+                                {dc.name} ({dc.code})
+                            </option>
+                        ))}
+                    </select>
+                </div>
 
                 <div className="space-y-1">
                     <label className="text-xs font-semibold text-slate-600">Carrier name</label>

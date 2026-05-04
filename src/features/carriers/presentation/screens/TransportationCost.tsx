@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotification } from '@/features/shared/shared';
 import { carriersProvider } from '../providers/carriersRepositoryProvider';
-import { CarrierFormModal } from '../components/components';
+import { CarrierFormModal, CarrierRateHistoryModal } from '../components/components';
 import type { Carrier, CreateCarrierPayload } from '../../domain/domain';
 
 export function TransportationCost() {
@@ -19,7 +19,7 @@ export function TransportationCost() {
 
     const invalidate = () => queryClient.invalidateQueries({ queryKey: ['carriers'] });
 
-    // ── Modal state ────────────────────────────────────────────────────────────
+    // ── Form modal ─────────────────────────────────────────────────────────────
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<Carrier | null>(null);
     const [saving, setSaving] = useState(false);
@@ -39,7 +39,7 @@ export function TransportationCost() {
                 notify.success('Carrier created successfully.');
             }
             closeModal();
-            invalidate(); // fire-and-forget — table refreshes in background
+            invalidate();
         } finally {
             setSaving(false);
         }
@@ -54,13 +54,16 @@ export function TransportationCost() {
         try {
             await carriersProvider.delete(id);
             notify.success('Carrier deleted.');
-            invalidate(); // fire-and-forget
+            invalidate();
         } catch (err: unknown) {
             notify.error(err instanceof Error ? err.message : 'Failed to delete carrier.');
         } finally {
             setDeletingId(null);
         }
     };
+
+    // ── Rate history modal ─────────────────────────────────────────────────────
+    const [historyCarrier, setHistoryCarrier] = useState<Carrier | null>(null);
 
     // ── Render ─────────────────────────────────────────────────────────────────
     return (
@@ -107,6 +110,7 @@ export function TransportationCost() {
                             <tr>
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">ID</th>
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Carrier name</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">DC</th>
                                 <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Shipping cost</th>
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Rate updated</th>
                                 <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide">Actions</th>
@@ -117,8 +121,28 @@ export function TransportationCost() {
                                 <tr key={carrier.id} className="hover:bg-slate-50/60 transition-colors">
                                     <td className="px-4 py-3 text-slate-400 font-mono text-xs">#{carrier.id}</td>
                                     <td className="px-4 py-3 font-semibold text-slate-800">{carrier.name}</td>
-                                    <td className="px-4 py-3 text-right font-medium text-slate-700">
-                                        ${carrier.shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    <td className="px-4 py-3 text-slate-600 text-xs">
+                                        {carrier.dcName ?? <span className="text-slate-300">—</span>}
+                                    </td>
+                                    <td className="px-4 py-3 text-right">
+                                        <button
+                                            type="button"
+                                            onClick={() => setHistoryCarrier(carrier)}
+                                            className="group inline-flex items-center gap-1.5 font-medium text-slate-700 hover:text-[#00C853] transition-colors"
+                                            title="Ver historial de tarifas"
+                                        >
+                                            <span>
+                                                ${carrier.shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                            </span>
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 16 16"
+                                                fill="currentColor"
+                                                className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm.75-10.25a.75.75 0 0 0-1.5 0v3.69L5.47 6.97a.75.75 0 0 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l3-3a.75.75 0 1 0-1.06-1.06L8.75 8.44V4.75z" clipRule="evenodd" />
+                                            </svg>
+                                        </button>
                                     </td>
                                     <td className="px-4 py-3 text-slate-500">{carrier.rateUpdatedAt}</td>
                                     <td className="px-4 py-3">
@@ -153,6 +177,12 @@ export function TransportationCost() {
                 saving={saving}
                 onSave={handleSave}
                 onClose={closeModal}
+            />
+
+            <CarrierRateHistoryModal
+                open={historyCarrier !== null}
+                carrier={historyCarrier}
+                onClose={() => setHistoryCarrier(null)}
             />
         </div>
     );

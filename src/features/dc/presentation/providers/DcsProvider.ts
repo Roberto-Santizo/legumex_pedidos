@@ -10,4 +10,8 @@ export class DcsProvider {
     async getDcs(client_id: string): Promise<Dc[]> {
         return this.repository.getDcs(client_id);
     }
+
+    async getAllDcs(): Promise<Dc[]> {
+        return this.repository.getAllDcs();
+    }
 } 

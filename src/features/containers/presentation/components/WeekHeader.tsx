@@ -43,6 +43,13 @@ export function WeekHeader({
                             Max 20 pallets · 40,000 lbs per container
                         </p>
                     </div>
+
+                    <div>
+                        <h1 className="text-xl font-bold text-slate-900">Containers</h1>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                            Max 20 pallets · 40,000 lbs per container
+                        </p>
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-2">

@@ -9,16 +9,19 @@ export class DcDatasourceImpl implements DcDatasource {
         try {
             const url = '/dcs';
             const { data } = await this.api.post(url, payload);
+            console.log(data);
 
             return data['message'];
         } catch (error) {
             if (isAxiosError(error)) {
+                console.log('[createDc] status:', error.response?.status);
+                console.log('[createDc] body:', error.response?.data);
                 if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
 
-                throw new Error("Error no controlado");
+                throw new Error("Unhandled error");
             }
 
-            throw new Error("Error no controlado");
+            throw new Error("Unhandled error");
         }
     }
 
@@ -32,9 +35,32 @@ export class DcDatasourceImpl implements DcDatasource {
                 return response.data.data;
             }
 
-            throw new Error("Información no válida");
+            throw new Error("Invalid data");
         } catch (error) {
-            throw new Error("Error no controlado");
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error("Unhandled error");
+            }
+            throw error instanceof Error ? error : new Error("Error no controlado");
+        }
+    }
+
+    async getAllDcs(): Promise<Dc[]> {
+        try {
+            const { data } = await this.api('/dcs');
+            const response = DcResponseSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data.data;
+            }
+
+            throw new Error("Invalid data");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+                throw new Error("Unhandled error");
+            }
+            throw error instanceof Error ? error : new Error("Error no controlado");
         }
     }
 }

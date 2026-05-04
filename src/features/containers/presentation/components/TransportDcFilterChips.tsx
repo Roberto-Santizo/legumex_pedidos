@@ -36,6 +36,7 @@ export function TransportDcFilterChips({
     }
 
     for (const c of containers) {
+        if (!c.transportType || !c.dc) continue;
         const key = `${c.transportType}__${c.dc}`;
         if (!groupMap.has(key)) {
             groupMap.set(key, { transportType: c.transportType, dc: c.dc, count: 0 });

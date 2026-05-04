@@ -20,6 +20,7 @@ export class ContainersDatasourceImpl implements ContainersDatasource {
             const parsed = WeekViewResponseSchema.safeParse(data);
 
             if (parsed.success) return parsed.data.data;
+            console.error('[ContainersDatasource] WeekView parse errors:', JSON.stringify(parsed.error.issues, null, 2));
             throw new Error('Invalid response from server');
         } catch (error) {
             if (isAxiosError(error)) {

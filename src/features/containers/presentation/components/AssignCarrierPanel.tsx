@@ -5,23 +5,19 @@ import { useQuery } from '@tanstack/react-query';
 import { carriersProvider } from '@/features/carriers/carriers';
 
 interface Props {
+    dcId: number | null;
     currentCarrierId: number | null;
     onAssign: (carrierId: number) => Promise<void>;
     onCancel: () => void;
     assigning: boolean;
 }
 
-/**
- * Inline panel shown inside ContainerDetailModal when the user clicks
- * "Assign Transport" or "Change Transport".
- * Fetches the carrier list and lets the user pick one.
- */
-export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assigning }: Props) {
+export function AssignCarrierPanel({ dcId, currentCarrierId, onAssign, onCancel, assigning }: Props) {
     const [selectedId, setSelectedId] = useState<number | null>(currentCarrierId);
 
     const { data: carriers = [], isLoading } = useQuery({
-        queryKey: ['carriers'],
-        queryFn: () => carriersProvider.getAll(),
+        queryKey: ['carriers', 'by-dc', dcId],
+        queryFn: () => dcId != null ? carriersProvider.getByDcId(dcId) : carriersProvider.getAll(),
         staleTime: 60_000,
     });
 
@@ -42,7 +38,7 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
 
             {!isLoading && carriers.length === 0 && (
                 <p className="text-xs text-slate-400 py-2">
-                    No carriers available. Add one in Transportation Cost first.
+                    No carriers for this DC. Add one in Transportation Cost first.
                 </p>
             )}
 

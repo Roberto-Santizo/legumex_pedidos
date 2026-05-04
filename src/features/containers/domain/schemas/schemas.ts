@@ -5,31 +5,49 @@ import z from 'zod';
 
 // ─── Nested schemas ───────────────────────────────────────────────────────────
 
+// Normalizes dc from either a plain string or a DC object {id,name,...} to a string name.
+// Also handles null and undefined (missing field).
+const normalizeDc = (v: unknown): string | null => {
+    if (v === null || v === undefined) return null;
+    if (typeof v === 'string') return v;
+    if (typeof v === 'object' && 'name' in v) return (v as { name: string }).name;
+    return null;
+};
+
+// Extracts numeric id from a DC object, or passes through a plain number.
+const normalizeDcId = (v: unknown): number | null => {
+    if (v === null || v === undefined) return null;
+    if (typeof v === 'number') return v;
+    if (typeof v === 'object' && 'id' in v) return (v as { id: number }).id;
+    return null;
+};
+
 export const OrderItemSchema = z.object({
-    productName: z.string().nullable(),
-    internationalCode: z.string().nullable(),
+    productName: z.string().nullable().default(null),
+    internationalCode: z.string().nullable().default(null),
     totalBoxes: z.number(),
-    po: z.string().nullable(),
+    po: z.string().nullable().default(null),
 });
 
 export const OrderSummarySchema = z.object({
     id: z.number(),
     client: z.object({ id: z.number(), name: z.string() }).nullable(),
-    transportType: z.string(),
-    dc: z.string().nullable(),
-    requiredByDate: z.string(),
+    transportType: z.string().default(''),
+    dc: z.preprocess(normalizeDc, z.string().nullable()),
+    requiredByDate: z.string().default(''),
     totalPallets: z.number(),
     totalPounds: z.number(),
     totalBoxes: z.number(),
     items: z.array(OrderItemSchema),
     inContainerId: z.number().nullable(),
-    exceedsLimits: z.boolean(),
+    exceedsLimits: z.boolean().default(false),
 });
 
 export const ContainerDetailSchema = z.object({
     id: z.number(),
     transportType: z.string(),
-    dc: z.string(),
+    dc: z.preprocess(normalizeDc, z.string().nullable()),
+    dcId: z.preprocess(normalizeDcId, z.number().nullable()),
     weekStart: z.string(),
     weekEnd: z.string(),
     status: z.enum(['draft', 'confirmed']),

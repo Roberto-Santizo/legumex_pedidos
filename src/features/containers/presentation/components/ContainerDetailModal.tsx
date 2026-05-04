@@ -40,7 +40,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
             <div className="flex items-center justify-between mb-5">
                 <div>
                     <p className="text-sm font-bold text-slate-800">
-                        {container.transportType} · {container.dc}
+                        {container.transportType}{container.dc ? ` · ${container.dc}` : ''}
                     </p>
                     <p className="text-xs text-slate-400 mt-0.5">Week of {container.weekStart}</p>
                 </div>
@@ -168,6 +168,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                     {showAssignPanel && (
                         <div className="mt-3">
                             <AssignCarrierPanel
+                                dcId={container.dcId}
                                 currentCarrierId={container.carrier?.id ?? null}
                                 onAssign={handleAssign}
                                 onCancel={() => setShowAssignPanel(false)}

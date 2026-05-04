@@ -8,6 +8,10 @@ export class DcRepositoryImpl implements DcRepository {
         return this.datasource.getDcs(client_id);
     }
 
+    getAllDcs(): Promise<Dc[]> {
+        return this.datasource.getAllDcs();
+    }
+
     createDc(payload: CreateOrUpdateDc): Promise<string> {
         return this.datasource.createDc(payload);
     }

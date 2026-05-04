@@ -14,6 +14,8 @@ import {
     ContainerDetailModal,
 } from '../components/components';
 import type { DraftContainer, OrderSummary, ContainerDetail } from '../../domain/types/types';
+import { downloadTransportCostReport } from '../../infrastructure/infrastructure';
+import { BiDownload } from 'react-icons/bi';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -73,6 +75,23 @@ export function Containers() {
 
     // ── Transport+DC filter ────────────────────────────────────────────────────
     const [activeFilter, setActiveFilter] = useState<{ transportType: string; dc: string } | null>(null);
+
+    // ── Transport cost Excel report ────────────────────────────────────────────
+    const [reportFrom, setReportFrom]           = useState<string>(weekStart);
+    const [reportTo, setReportTo]               = useState<string>(weekEnd);
+    const [downloadingReport, setDownloadingReport] = useState(false);
+
+    const handleDownloadReport = async () => {
+        if (!reportFrom || !reportTo) return;
+        setDownloadingReport(true);
+        try {
+            await downloadTransportCostReport({ from: reportFrom, to: reportTo });
+        } catch (err: unknown) {
+            notify.error(err instanceof Error ? err.message : 'Failed to generate the report.');
+        } finally {
+            setDownloadingReport(false);
+        }
+    };
 
     // ── Draft container ────────────────────────────────────────────────────────
     const [draft, setDraft] = useState<DraftContainer | null>(null);
@@ -318,6 +337,32 @@ export function Containers() {
                 onSetFilter={setActiveFilter}
             />
 
+            {/* Transport cost Excel report download */}
+            <div className="flex items-center gap-2 flex-wrap bg-white border border-slate-200 rounded-xl px-4 py-3 shadow-sm">
+                <span className="text-xs font-semibold text-slate-500 mr-1">Transport report:</span>
+                <input
+                    type="date"
+                    value={reportFrom}
+                    onChange={(e) => setReportFrom(e.target.value)}
+                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                />
+                <span className="text-slate-400 text-xs">—</span>
+                <input
+                    type="date"
+                    value={reportTo}
+                    onChange={(e) => setReportTo(e.target.value)}
+                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                />
+                <button
+                    onClick={handleDownloadReport}
+                    disabled={downloadingReport || !reportFrom || !reportTo}
+                    className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                >
+                    <BiDownload size={14} />
+                    {downloadingReport ? 'Downloading...' : 'Excel'}
+                </button>
+            </div>
+
             {/* Confirmed / existing containers list */}
             {(weekView?.containers ?? []).length > 0 && (
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
@@ -339,7 +384,7 @@ export function Containers() {
                                             #C-{c.id}
                                         </p>
                                         <p className="text-[11px] text-slate-400 mt-0.5">
-                                            {c.transportType} · {c.dc}
+                                            {c.transportType}{c.dc ? ` · ${c.dc}` : ''}
                                         </p>
                                     </div>
                                     <span
