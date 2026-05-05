@@ -26,7 +26,7 @@ function RateRow({ rate, prev, isCurrent }: { rate: CarrierRate; prev: CarrierRa
                     <span className="text-sm text-slate-600">{rate.effectiveDate}</span>
                     {isCurrent && (
                         <span className="text-[10px] font-bold bg-[#00C853] text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">
-                            actual
+                            current
                         </span>
                     )}
                 </div>
@@ -68,19 +68,19 @@ function TrendSummary({ rates }: { rates: CarrierRate[] }) {
     return (
         <div className="grid grid-cols-3 gap-3 mb-5">
             <div className="bg-slate-50 rounded-xl px-3 py-2.5 text-center">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Mínimo histórico</p>
+                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Historical low</p>
                 <p className="text-sm font-bold text-emerald-600">
                     ${min.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </p>
             </div>
             <div className="bg-slate-50 rounded-xl px-3 py-2.5 text-center">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Máximo histórico</p>
+                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Historical high</p>
                 <p className="text-sm font-bold text-red-500">
                     ${max.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </p>
             </div>
             <div className="bg-slate-50 rounded-xl px-3 py-2.5 text-center">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Cambio total</p>
+                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Total change</p>
                 <p className={`text-sm font-bold ${totalChange > 0 ? 'text-red-500' : totalChange < 0 ? 'text-emerald-600' : 'text-slate-500'}`}>
                     {totalChange >= 0 ? '+' : ''}${totalChange.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     <span className="text-[11px] font-medium ml-1 opacity-80">
@@ -97,26 +97,26 @@ export function CarrierRateHistoryModal({ carrier, open, onClose }: Props) {
         queryKey: ['carrier-rates', carrier?.id],
         queryFn: () => carriersProvider.getRates(carrier!.id),
         enabled: open && carrier !== null,
-        staleTime: 30_000,
+        staleTime: 0,
     });
 
     return (
         <Modal
             modal={open}
             closeModal={onClose}
-            title={carrier ? `Historial de tarifas — ${carrier.name}` : 'Historial de tarifas'}
+            title={carrier ? `Rate history — ${carrier.name}` : 'Rate history'}
             width="sm:max-w-lg"
         >
             {isLoading && (
                 <div className="flex items-center justify-center py-12">
-                    <p className="text-sm text-slate-400">Cargando historial...</p>
+                    <p className="text-sm text-slate-400">Loading history...</p>
                 </div>
             )}
 
             {!isLoading && rates.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12 gap-2">
-                    <p className="text-sm font-semibold text-slate-500">Sin historial de tarifas</p>
-                    <p className="text-xs text-slate-400">Las tarifas se registran automáticamente al crear o actualizar un transportista.</p>
+                    <p className="text-sm font-semibold text-slate-500">No rate history</p>
+                    <p className="text-xs text-slate-400">Rates are recorded automatically when a carrier is created or updated.</p>
                 </div>
             )}
 
@@ -128,9 +128,9 @@ export function CarrierRateHistoryModal({ carrier, open, onClose }: Props) {
                         <table className="w-full text-sm">
                             <thead className="bg-slate-50 border-b border-slate-200">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Fecha</th>
-                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Tarifa</th>
-                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Variación</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Date</th>
+                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Rate</th>
+                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Change</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">

@@ -34,6 +34,7 @@ export function TransportationCost() {
             if (id !== undefined) {
                 await carriersProvider.update(id, payload);
                 notify.success('Carrier updated successfully.');
+                queryClient.invalidateQueries({ queryKey: ['carrier-rates', id] });
             } else {
                 await carriersProvider.create(payload);
                 notify.success('Carrier created successfully.');
@@ -129,7 +130,7 @@ export function TransportationCost() {
                                             type="button"
                                             onClick={() => setHistoryCarrier(carrier)}
                                             className="group inline-flex items-center gap-1.5 font-medium text-slate-700 hover:text-[#00C853] transition-colors"
-                                            title="Ver historial de tarifas"
+                                            title="View rate history"
                                         >
                                             <span>
                                                 ${carrier.shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}

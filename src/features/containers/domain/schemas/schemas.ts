@@ -60,6 +60,7 @@ export const ContainerDetailSchema = z.object({
     confirmedAt: z.string().nullable(),
     confirmedBy: z.string().nullable(),
     carrier: z.object({ id: z.number(), name: z.string(), shippingCost: z.number() }).nullable().default(null),
+    carrierCostSnapshot: z.number().nullable().default(null),
 });
 
 // ─── Response schemas ─────────────────────────────────────────────────────────

@@ -144,7 +144,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                                 </p>
                                 <p className="text-sm font-bold text-slate-800">{container.carrier.name}</p>
                                 <p className="text-xs text-slate-500 mt-0.5">
-                                    ${container.carrier.shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2 })} / shipment
+                                    ${(container.carrierCostSnapshot ?? container.carrier.shippingCost).toLocaleString('en-US', { minimumFractionDigits: 2 })} / shipment
                                 </p>
                             </div>
                             <button
