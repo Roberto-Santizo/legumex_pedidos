@@ -8,3 +8,4 @@ export * from './ModalUploadFile';
 export * from './OrdersColumns';
 export * from './ResultsTable';
 export * from './FiltersComponent';
+export * from './DeleteButton';

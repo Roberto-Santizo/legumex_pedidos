@@ -63,4 +63,8 @@ export class OrdersProvider {
     async downloadItemsReport(startDate: string, endDate: string) {
         return this.repository.downloadItemsReport(startDate, endDate);
     }
+
+    async deleteOrderById(id: Order['id']) {
+        return this.repository.deleteOrderById(id);
+    }
 }

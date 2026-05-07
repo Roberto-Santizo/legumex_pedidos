@@ -6,6 +6,22 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
 
+    async deleteOrderById(order: Order['id']): Promise<string> {
+        try {
+            const url = `/orders/${order}`;
+            const { data } = await this.api.delete(url);
+
+            return data['message'];
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+
+                throw new Error('Error no controlado');
+            }
+            throw new Error('Method not implemented.');
+        }
+    }
+
     async downloadItemsReport(startDate: string, endDate: string): Promise<Blob> {
         try {
             const url = '/orders/ordersItemsReport';

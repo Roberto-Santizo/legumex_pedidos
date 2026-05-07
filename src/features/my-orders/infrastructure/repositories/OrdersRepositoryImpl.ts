@@ -4,6 +4,10 @@ import type { OrderFiltersReports, UploadFileForm } from '@/features/shared/shar
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
 
+    deleteOrderById(order: Order['id']): Promise<string> {
+        return this.datasource.deleteOrderById(order);
+    }
+
     downloadItemsReport(startDate: string, endDate: string): Promise<Blob> {
         return this.datasource.downloadItemsReport(startDate, endDate);
     }
