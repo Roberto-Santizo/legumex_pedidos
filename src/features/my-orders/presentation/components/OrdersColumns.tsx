@@ -34,18 +34,18 @@ export const ordersColumns: Column<Order>[] = [
     header: 'Delete',
     id: 'delete',
     render: (_, row) => {
-      return (
+      return row.status < 3 ? (
         <DeleteButton id={row.id} />
-      );
+      ) : <></>;
     },
   },
   {
     header: 'Update',
     id: 'update',
     render: (_, row) => {
-      return (
+      return row.status < 3 ? (
         <EditButton id={row.id} />
-      );
+      ) : <></>;
     },
   },
 ];
