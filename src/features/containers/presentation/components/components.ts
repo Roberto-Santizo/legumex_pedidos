@@ -10,3 +10,4 @@ export { AvailableOrdersPanel } from './AvailableOrdersPanel';
 export { ContainerBuilderPanel } from './ContainerBuilderPanel';
 export { ContainerDetailModal } from './ContainerDetailModal';
 export { AssignCarrierPanel } from './AssignCarrierPanel';
+export { ContainerStatusFilter } from './ContainerStatusFilter';
