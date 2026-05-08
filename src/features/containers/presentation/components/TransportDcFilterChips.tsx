@@ -1,6 +1,6 @@
 // Created by Luis
 
-import type { OrderSummary, ContainerDetail } from '../../domain/types/types';
+import type { OrderSummary } from '../../domain/types/types';
 
 interface FilterOption {
     transportType: string;
@@ -10,15 +10,13 @@ interface FilterOption {
 
 interface Props {
     availableOrders: OrderSummary[];
-    containers: ContainerDetail[];
     activeFilter: { transportType: string; dc: string } | null;
     onSetFilter: (f: { transportType: string; dc: string } | null) => void;
 }
 
-/** Groups orders + containers by transportType+dc and renders clickable filter chips. */
+/** Groups available orders by transportType+dc and renders clickable filter chips. */
 export function TransportDcFilterChips({
     availableOrders,
-    containers,
     activeFilter,
     onSetFilter,
 }: Props) {
@@ -33,14 +31,6 @@ export function TransportDcFilterChips({
             dc: o.dc,
             count: (existing?.count ?? 0) + 1,
         });
-    }
-
-    for (const c of containers) {
-        if (!c.transportType || !c.dc) continue;
-        const key = `${c.transportType}__${c.dc}`;
-        if (!groupMap.has(key)) {
-            groupMap.set(key, { transportType: c.transportType, dc: c.dc, count: 0 });
-        }
     }
 
     const options = Array.from(groupMap.values());

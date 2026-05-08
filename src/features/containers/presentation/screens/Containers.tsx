@@ -12,6 +12,7 @@ import {
     AvailableOrdersPanel,
     ContainerBuilderPanel,
     ContainerDetailModal,
+    ContainerStatusFilter,
 } from '../components/components';
 import type { DraftContainer, OrderSummary, ContainerDetail } from '../../domain/types/types';
 import { downloadTransportCostReport } from '../../infrastructure/infrastructure';
@@ -290,6 +291,21 @@ export function Containers() {
         (o) => !draftOrderIds.has(o.id) && !persistedContainerOrderIds.has(o.id),
     );
 
+    // ── Container logistics status filter ──────────────────────────────────────
+    const [containerStatusFilter, setContainerStatusFilter] = useState<4 | 5 | null>(null);
+
+    const allContainers = weekView?.containers ?? [];
+    // status 5 = carrier assigned, status 4 = in container but no carrier yet
+    const containerStatusCounts = {
+        status4: allContainers.filter((c) => c.carrier === null).length,
+        status5: allContainers.filter((c) => c.carrier !== null).length,
+    };
+    const visibleContainers = containerStatusFilter === null
+        ? allContainers
+        : containerStatusFilter === 5
+            ? allContainers.filter((c) => c.carrier !== null)
+            : allContainers.filter((c) => c.carrier === null);
+
     const isReadonly = weekView?.isReadonly ?? false;
 
     // ── Render ─────────────────────────────────────────────────────────────────
@@ -332,7 +348,6 @@ export function Containers() {
             {/* Transport + DC filter chips */}
             <TransportDcFilterChips
                 availableOrders={weekView?.availableOrders ?? []}
-                containers={weekView?.containers ?? []}
                 activeFilter={activeFilter}
                 onSetFilter={setActiveFilter}
             />
@@ -364,50 +379,63 @@ export function Containers() {
             </div>
 
             {/* Confirmed / existing containers list */}
-            {(weekView?.containers ?? []).length > 0 && (
+            {allContainers.length > 0 && (
                 <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
-                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
-                        Containers this week ({weekView!.containers.length})
-                    </p>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        {weekView!.containers.map((c) => (
-                            <button
-                                key={c.id}
-                                type="button"
-                                onClick={() => setSelectedContainer(c)}
-                                className="text-left border border-slate-200 rounded-xl p-3.5 hover:border-[#00C853] hover:shadow-md transition-all group bg-white"
-                            >
-                                <div className="flex items-start justify-between gap-2 mb-2">
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-800 group-hover:text-[#00C853] transition-colors">
-                                            #C-{c.id}
-                                        </p>
-                                        <p className="text-[11px] text-slate-400 mt-0.5">
-                                            {c.transportType}{c.dc ? ` · ${c.dc}` : ''}
-                                        </p>
-                                    </div>
-                                    <span
-                                        className={`text-[10px] font-bold rounded-full px-2.5 py-0.5 shrink-0 ${
-                                            c.status === 'confirmed'
-                                                ? 'bg-[#00C853] text-white'
-                                                : 'bg-[#00C853]/15 text-[#009940]'
-                                        }`}
-                                    >
-                                        {c.status === 'confirmed' ? '✓ CONFIRMED' : 'DRAFT'}
-                                    </span>
-                                </div>
-
-                                <div className="flex gap-3 text-[11px] font-medium text-slate-400 border-t border-slate-100 pt-2">
-                                    <span>{c.totalOrders} orders</span>
-                                    <span className="text-slate-300">·</span>
-                                    <span>{c.totalPallets} pal</span>
-                                    <span className="text-slate-300">·</span>
-                                    <span>{c.totalPounds.toLocaleString()} lbs</span>
-                                </div>
-                            </button>
-                        ))}
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                            Containers this week ({visibleContainers.length}{visibleContainers.length !== allContainers.length ? `/${allContainers.length}` : ''})
+                        </p>
+                        <ContainerStatusFilter
+                            activeStatus={containerStatusFilter}
+                            onSetStatus={setContainerStatusFilter}
+                            counts={containerStatusCounts}
+                        />
                     </div>
+
+                    {visibleContainers.length === 0 ? (
+                        <p className="text-xs text-slate-400 text-center py-4">
+                            No containers match the selected filter.
+                        </p>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {visibleContainers.map((c) => (
+                                <button
+                                    key={c.id}
+                                    type="button"
+                                    onClick={() => setSelectedContainer(c)}
+                                    className="text-left border border-slate-200 rounded-xl p-3.5 hover:border-[#00C853] hover:shadow-md transition-all group bg-white"
+                                >
+                                    <div className="flex items-start justify-between gap-2 mb-2">
+                                        <div>
+                                            <p className="text-sm font-bold text-slate-800 group-hover:text-[#00C853] transition-colors">
+                                                #C-{c.id}
+                                            </p>
+                                            <p className="text-[11px] text-slate-400 mt-0.5">
+                                                {c.transportType}{c.dc ? ` · ${c.dc}` : ''}
+                                            </p>
+                                        </div>
+                                        <span
+                                            className={`text-[10px] font-bold rounded-full px-2.5 py-0.5 shrink-0 ${
+                                                c.status === 'confirmed'
+                                                    ? 'bg-[#00C853] text-white'
+                                                    : 'bg-[#00C853]/15 text-[#009940]'
+                                            }`}
+                                        >
+                                            {c.status === 'confirmed' ? '✓ CONFIRMED' : 'DRAFT'}
+                                        </span>
+                                    </div>
+
+                                    <div className="flex gap-3 text-[11px] font-medium text-slate-400 border-t border-slate-100 pt-2">
+                                        <span>{c.totalOrders} orders</span>
+                                        <span className="text-slate-300">·</span>
+                                        <span>{c.totalPallets} pal</span>
+                                        <span className="text-slate-300">·</span>
+                                        <span>{c.totalPounds.toLocaleString()} lbs</span>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
