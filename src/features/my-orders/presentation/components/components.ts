@@ -9,3 +9,6 @@ export * from './OrdersColumns';
 export * from './ResultsTable';
 export * from './FiltersComponent';
 export * from './DeleteButton';
+export * from './Form';
+export * from './ModalEditOrder';
+export * from './EditButton';

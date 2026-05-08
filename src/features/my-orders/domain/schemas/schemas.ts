@@ -47,6 +47,22 @@ export const OrderDetailsSchema = z.object({
     confirmedBy: z.string().nullable()
 });
 
+
+export const OrderEditDetailsSchema = z.object({
+    po: z.string(),
+    requiredByDate: z.string(),
+    dc_id: z.number(),
+    client_id: z.number(),
+    transportType: z.string(),
+    year: z.number(),
+    week: z.number()
+
+});
+
+export const OrderEditDetailsSchemaResponse = ApiResponseSchema.extend({
+    data: OrderEditDetailsSchema
+});
+
 export const OrderConfirmedResponseSchema = ApiResponseSchema.extend({
     data: OrderDetailsSchema
 });

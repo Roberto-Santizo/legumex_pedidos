@@ -1,5 +1,5 @@
 import type { OrderFiltersReports, UploadFileForm } from "@/features/shared/shared";
-import type { AddItemForm, CreateOrderPayload, Order, OrderDetails, OrderDetailsToUpdate, OrderFilters, OrderItemDetails, OrderTotals, PaginatedOrders, UploadFileResponse } from "../domain";
+import type { AddItemForm, CreateOrderPayload, Order, OrderDetails, OrderDetailsToUpdate, OrderEditDetails, OrderFilters, OrderItemDetails, OrderTotals, PaginatedOrders, UploadFileResponse } from "../domain";
 
 export abstract class OrdersDatasource {
     abstract uploadFile(payload: UploadFileForm): Promise<UploadFileResponse>;
@@ -7,6 +7,8 @@ export abstract class OrdersDatasource {
     abstract getOrders(filters: OrderFiltersReports): Promise<Order[]>;
     abstract getPaginatedOrders({ limit, offset, filters }: { limit: number, offset: number, filters: OrderFilters }): Promise<PaginatedOrders>;
     abstract getOrderById(id: string): Promise<OrderDetails>;
+    abstract getOrderEditDetailsById(id: string): Promise<OrderEditDetails>;
+    abstract updateOrder(id: string, payload: CreateOrderPayload): Promise<string>;
     abstract getOrderDetails(id: string): Promise<OrderTotals>;
     abstract addItemToOrder(id: string, payload: AddItemForm): Promise<string>;
     abstract getOrderProducts(id: string): Promise<OrderItemDetails[]>;

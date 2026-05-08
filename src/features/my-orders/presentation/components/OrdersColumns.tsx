@@ -1,7 +1,7 @@
 import { BsEye } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Tag, type Column } from "@/features/shared/shared";
-import { DeleteButton, type Order } from "@/features/my-orders/my-orders";
+import { DeleteButton, EditButton, type Order } from "@/features/my-orders/my-orders";
 
 export const ordersColumns: Column<Order>[] = [
   { header: 'Created By', accessor: 'user', id: 'user' },
@@ -36,6 +36,15 @@ export const ordersColumns: Column<Order>[] = [
     render: (_, row) => {
       return (
         <DeleteButton id={row.id} />
+      );
+    },
+  },
+  {
+    header: 'Update',
+    id: 'update',
+    render: (_, row) => {
+      return (
+        <EditButton id={row.id} />
       );
     },
   },

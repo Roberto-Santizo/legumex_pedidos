@@ -1,6 +1,6 @@
 import { BiFile, BiMenu, BiPlus } from "react-icons/bi";
 import { CustomFilledButton, Pagination, Table } from "@/features/shared/shared";
-import { FiltersComponent } from "@/features/my-orders/my-orders";
+import { FiltersComponent, ModalEditOrder } from "@/features/my-orders/my-orders";
 import { ModalCreateOrder, ModalUploadFile, ordersColumns, type OrderFilters } from "@/features/my-orders/my-orders";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useForm } from "react-hook-form";
@@ -86,6 +86,7 @@ export function MyOrders() {
       )}
 
       <ModalCreateOrder />
+      <ModalEditOrder filters={filters} />
       <ModalUploadFile />
 
       <Pagination

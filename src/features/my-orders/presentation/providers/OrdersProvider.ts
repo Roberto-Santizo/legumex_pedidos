@@ -67,4 +67,12 @@ export class OrdersProvider {
     async deleteOrderById(id: Order['id']) {
         return this.repository.deleteOrderById(id);
     }
+
+    async getOrderEditDetailsById(id: string){
+        return this.repository.getOrderEditDetailsById(id);
+    }
+
+    async updateOrderById(id: string, payload: CreateOrderPayload){
+        return this.repository.updateOrder(id, payload);
+    }
 }

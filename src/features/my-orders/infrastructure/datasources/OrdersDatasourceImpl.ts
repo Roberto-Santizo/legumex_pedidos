@@ -1,10 +1,47 @@
 import { isAxiosError, type AxiosInstance } from 'axios';
-import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, UploadFileResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderFilters, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
+import { NotFoundErrorError, OrderConfirmedResponseSchema, OrderDetailsToUpdateResponseSchema, OrderEditDetailsSchemaResponse, OrderItemsDetailsResponseSchema, OrdersDatasource, OrdersPaginatedSchema, OrdersResponseSchema, OrderTotalsResponseSchema, UploadFileResponseSchema, type AddItemForm, type CreateOrderPayload, type Order, type OrderDetails, type OrderDetailsToUpdate, type OrderEditDetails, type OrderFilters, type OrderItemDetails, type OrderTotals, type PaginatedOrders, type UploadFileResponse } from '@/features/my-orders/my-orders';
 import type { OrderFiltersReports, UploadFileForm } from '@/features/shared/shared';
 
 export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
+
+    async updateOrder(id: string, payload: CreateOrderPayload): Promise<string> {
+        try {
+            const url = `/orders/${id}`;
+            const { data } = await this.api.patch(url, payload);
+
+            return data['message'];
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+
+                throw new Error('Error no controlado');
+            }
+            throw new Error('Method not implemented.');
+        }
+    }
+
+    async getOrderEditDetailsById(id: string): Promise<OrderEditDetails> {
+        try {
+            const url = `/orders/orderEditDetails/${id}`;
+            const { data } = await this.api.get(url);
+            const response = OrderEditDetailsSchemaResponse.safeParse(data);
+
+            if (response.success) {
+                return response.data.data;
+            }
+
+            throw new Error("Error no controlado");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
+
+                throw new Error('Error no controlado');
+            }
+            throw new Error('Method not implemented.');
+        }
+    }
 
     async deleteOrderById(order: Order['id']): Promise<string> {
         try {
