@@ -1,5 +1,5 @@
 export interface AddItemForm {
-    product_id: string;
+    product_id: number;
     total_boxes: number;
 }
 

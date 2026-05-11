@@ -2,6 +2,7 @@
 
 import { formatShortDate } from '../utils/weekFormatter';
 import type { OrderSummary } from '../../domain/types/types';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
     order: OrderSummary;
@@ -15,7 +16,11 @@ interface Props {
  * - Exceeds-limits variant: red background, no action button, warning message.
  */
 export function OrderCard({ order, onAdd }: Props) {
-    const primaryItem = order.items[0];
+    const navigate = useNavigate();
+
+    const handleOpenEditModal = () => {
+        navigate(`?editOrderDetails=${order.id}`);
+    }
 
     if (order.exceedsLimits) {
         return (
@@ -33,11 +38,9 @@ export function OrderCard({ order, onAdd }: Props) {
                     </span>
                 </div>
 
-                {primaryItem && (
-                    <p className="text-xs text-red-500 truncate">
-                        {primaryItem.productName} · PO {primaryItem.po}
-                    </p>
-                )}
+                <p className="text-xs text-red-500 truncate">
+                    PO - {order.po}
+                </p>
 
                 <div className="flex justify-between text-xs text-red-600 font-medium">
                     <span>{order.totalPallets} pallets</span>
@@ -47,6 +50,15 @@ export function OrderCard({ order, onAdd }: Props) {
                 <p className="text-[11px] text-red-400 pt-1 border-t border-red-200">
                     Exceeds container limits — manual review required
                 </p>
+
+                <button
+                    type="button"
+                    onClick={() => handleOpenEditModal()}
+                    className="w-full mt-0.5 text-xs bg-red-500 font-semibold text-white border rounded-lg py-1.5 hover:bg-red-400 hover:text-white transition-all"
+                    aria-label={`Add order #${order.id} to container`}
+                >
+                    Edit Order
+                </button>
             </div>
         );
     }
@@ -61,29 +73,38 @@ export function OrderCard({ order, onAdd }: Props) {
                     </span>
                 </div>
                 <span className="text-[11px] bg-sky-50 text-sky-600 rounded-md px-1.5 py-0.5 shrink-0 font-medium border border-sky-100">
-                    {formatShortDate(order.requiredByDate)}
+                    {order.status == 2 ? 'Sent' : 'Confirmed'}
                 </span>
             </div>
 
-            {primaryItem && (
-                <p className="text-xs text-slate-400 truncate">
-                    {primaryItem.productName} · PO {primaryItem.po}
-                </p>
-            )}
+            <p className="text-xs text-slate-400 truncate">
+                PO - {order.po}
+            </p>
 
             <div className="flex justify-between text-xs font-medium text-slate-600">
                 <span>{order.totalPallets} pallets</span>
                 <span>{order.totalPounds.toLocaleString()} lbs</span>
             </div>
 
-            <button
-                type="button"
-                onClick={() => onAdd(order)}
-                className="w-full mt-0.5 text-xs font-semibold text-[#00C853] border border-[#00C853]/30 rounded-lg py-1.5 hover:bg-[#00C853] hover:text-white transition-all group-hover:border-[#00C853]"
-                aria-label={`Add order #${order.id} to container`}
-            >
-                + Add to container
-            </button>
+            <div className='space-y-3'>
+                <button
+                    type="button"
+                    onClick={() => onAdd(order)}
+                    className="w-full mt-0.5 text-xs font-semibold text-[#00C853] border border-[#00C853]/30 rounded-lg py-1.5 hover:bg-[#00C853] hover:text-white transition-all group-hover:border-[#00C853]"
+                    aria-label={`Add order #${order.id} to container`}
+                >
+                    + Add to container
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => handleOpenEditModal()}
+                    className="w-full mt-0.5 text-xs font-semibold text-[#00C853] border border-[#00C853]/30 rounded-lg py-1.5 hover:bg-[#00C853] hover:text-white transition-all group-hover:border-[#00C853]"
+                    aria-label={`Add order #${order.id} to container`}
+                >
+                    Edit Order
+                </button>
+            </div>
         </div>
     );
 }

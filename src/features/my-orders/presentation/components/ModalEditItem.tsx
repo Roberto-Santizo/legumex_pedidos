@@ -2,7 +2,7 @@ import { Modal, CustomFilledButton, useNotification } from "@/features/shared/sh
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { ItemForm, type AddItemForm } from "@/features/my-orders/my-orders";
 import { useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
@@ -13,19 +13,18 @@ type Props = {
 }
 
 export function ModalEditItem({ client, transportType, dc }: Props) {
-    const navigate = useNavigate();
-    const location = useLocation();
     const params = useParams();
-    const id = params.id!;
-    const { success, error } = useNotification();
     const queryClient = useQueryClient();
+    const { success, error } = useNotification();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const id = params.id ?? searchParams.get('editOrderDetails')!;
 
-    const queryParams = new URLSearchParams(location.search);
-    const itemId = queryParams.get('editItem')!;
+    const itemId = searchParams.get('editItem')!;
     const show = itemId ? true : false;
 
     const handleCloseModal = () => {
-        navigate(location.pathname);
+        searchParams.delete("editItem");
+        setSearchParams(searchParams);
         reset();
     }
 
@@ -50,17 +49,20 @@ export function ModalEditItem({ client, transportType, dc }: Props) {
 
     const { handleSubmit, register, formState: { errors }, control, reset, setValue } = useForm<AddItemForm>();
 
-    const onSubmit = (data: AddItemForm) => mutate(data);
+    const onSubmit = (data: AddItemForm) => {
+        const formattedData: AddItemForm = { total_boxes: +data.total_boxes, product_id: data.product_id }
+        mutate(formattedData);
+    }
 
     useEffect(() => {
         if (item) {
-            setValue('product_id', item.product_id.toString());
+            setValue('product_id', item.product_id);
             setValue('total_boxes', item.total_boxes);
         }
     }, [item]);
 
     if (item) return (
-        <Modal modal={show} closeModal={() => handleCloseModal()} title="Add Item">
+        <Modal modal={show} closeModal={() => handleCloseModal()} title="Edit Item">
             <div className="p-10">
                 <form className="form" onSubmit={handleSubmit(onSubmit)}>
                     <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} dc={dc} />

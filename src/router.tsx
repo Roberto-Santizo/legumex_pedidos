@@ -1,16 +1,15 @@
 import { AddItemsToOrder, MyOrder, MyOrders } from "@/features/my-orders/my-orders";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Clients, CreateClient, UpdateClient } from "@/features/clients/clients";
+import { Containers } from "@/features/containers/containers";
+import { CreateDcs, Dcs } from "@/features/dc/dc";
 import { CreateProduct, ProductDetails, Products, UpdateProduct } from "@/features/products/products";
 import { CreateUser, UpdateUser, Users } from "@/features/users/users";
-import { CreateDcs, Dcs } from "@/features/dc/dc";
 import { Home } from "@/features/home/home";
 import { Login } from "@/features/login/login";
 import { Profile } from "@/features/profile/profile";
 import { ProtectedLayout, PublicLayout, RoleMiddleware } from "@/features/shared/shared";
 import { Reports } from "@/features/reports/reports";
-// Containers module — Created by Luis
-import { Containers } from "@/features/containers/containers";
 import { TransportationCost } from "@/features/carriers/carriers";
 
 export default function AppRouter() {

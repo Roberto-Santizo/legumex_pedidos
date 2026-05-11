@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { OrderCard } from './OrderCard';
 import type { OrderSummary } from '../../domain/types/types';
+import { ModalEditOrderDetails } from '@/features/my-orders/my-orders';
 
 const PAGE_SIZE = 50;
 
@@ -45,7 +46,6 @@ export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props
 
     return (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-full min-h-0">
-            {/* Header */}
             <div className="px-4 py-3 border-b border-slate-100 flex items-start justify-between gap-3">
                 <div>
                     <p className="text-sm font-bold text-slate-800">Available orders</p>
@@ -95,6 +95,8 @@ export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props
                     </>
                 )}
             </div>
+
+            <ModalEditOrderDetails />
         </div>
     );
 }

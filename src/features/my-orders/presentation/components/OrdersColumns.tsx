@@ -34,7 +34,7 @@ export const ordersColumns: Column<Order>[] = [
     header: 'Delete',
     id: 'delete',
     render: (_, row) => {
-      return row.status < 3 ? (
+      return row.status < 2 ? (
         <DeleteButton id={row.id} />
       ) : <></>;
     },
@@ -43,7 +43,7 @@ export const ordersColumns: Column<Order>[] = [
     header: 'Update',
     id: 'update',
     render: (_, row) => {
-      return row.status < 3 ? (
+      return row.status < 2 ? (
         <EditButton id={row.id} />
       ) : <></>;
     },

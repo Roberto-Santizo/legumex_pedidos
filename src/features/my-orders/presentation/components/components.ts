@@ -12,3 +12,5 @@ export * from './DeleteButton';
 export * from './Form';
 export * from './ModalEditOrder';
 export * from './EditButton';
+export * from './ModalEditOrderDetails';
+export * from './EditOrderDetails';

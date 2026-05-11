@@ -41,6 +41,8 @@ export const OrderSummarySchema = z.object({
     items: z.array(OrderItemSchema),
     inContainerId: z.number().nullable(),
     exceedsLimits: z.boolean().default(false),
+    status: z.number(),
+    po: z.string()
 });
 
 export const ContainerDetailSchema = z.object({

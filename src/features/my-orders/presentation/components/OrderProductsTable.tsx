@@ -14,7 +14,6 @@ export function OrderProductsTable({ id }: Props) {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
 
-
     const { mutate, isPending } = useMutation({
         mutationFn: (itemId: OrderItemDetails['id']) => ordersProvider.deleteOrderProduct(+id, itemId),
         onError: (err) => {
@@ -26,6 +25,21 @@ export function OrderProductsTable({ id }: Props) {
             queryClient.invalidateQueries({ queryKey: ['getOrderProducts', id] });
         }
     });
+
+    const handleDeleteItem = (id: number) => {
+        mutate(id);
+    }
+
+    const handleEditItem = (id: number) => {
+        const params = new URLSearchParams(location.search);
+
+        params.set('editItem', id.toString());
+
+        navigate({
+            pathname: location.pathname,
+            search: params.toString(),
+        });
+    }
 
     const { data: items } = useQuery({
         queryKey: ['getOrderProducts', id],
@@ -78,12 +92,12 @@ export function OrderProductsTable({ id }: Props) {
                                 </td>
 
                                 <td className="px-4 py-3 text-right font-semibold">
-                                    <button disabled={isPending} type="button" className="hover:text-red-700 hover:cursor-pointer" onClick={() => mutate(item.id)}>
+                                    <button disabled={isPending} type="button" className="hover:text-red-700 hover:cursor-pointer" onClick={() => handleDeleteItem(item.id)}>
                                         <BiTrash size={20} />
                                     </button>
                                 </td>
                                 <td className="px-4 py-3 text-right font-semibold">
-                                    <button disabled={isPending} type="button" className="hover:text-indigo-700 hover:cursor-pointer" onClick={() => navigate(`?editItem=${item.id}`)}>
+                                    <button disabled={isPending} type="button" className="hover:text-indigo-700 hover:cursor-pointer" onClick={() => handleEditItem(item.id)}>
                                         <BiPencil size={20} />
                                     </button>
                                 </td>
