@@ -34,6 +34,7 @@ export const OrderSummarySchema = z.object({
     client: z.object({ id: z.number(), name: z.string() }).nullable(),
     transportType: z.string().default(''),
     dc: z.preprocess(normalizeDc, z.string().nullable()),
+    warehouse: z.string().nullable().default(null),
     requiredByDate: z.string().default(''),
     totalPallets: z.number(),
     totalPounds: z.number(),

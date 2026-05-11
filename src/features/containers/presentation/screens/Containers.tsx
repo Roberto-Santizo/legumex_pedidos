@@ -76,6 +76,7 @@ export function Containers() {
 
     // ── Transport+DC filter ────────────────────────────────────────────────────
     const [activeFilter, setActiveFilter] = useState<{ transportType: string; dc: string } | null>(null);
+    const [warehouseFilter, setWarehouseFilter] = useState<string | null>(null);
 
     // ── Transport cost Excel report ────────────────────────────────────────────
     const [reportFrom, setReportFrom]           = useState<string>(weekStart);
@@ -93,7 +94,7 @@ export function Containers() {
             setDownloadingReport(false);
         }
     };
-
+    
     // ── Draft container ────────────────────────────────────────────────────────
     const [draft, setDraft] = useState<DraftContainer | null>(null);
 
@@ -288,7 +289,10 @@ export function Containers() {
     );
 
     const availableOrders = (weekView?.availableOrders ?? []).filter(
-        (o) => !draftOrderIds.has(o.id) && !persistedContainerOrderIds.has(o.id),
+        (o) =>
+            !draftOrderIds.has(o.id) &&
+            !persistedContainerOrderIds.has(o.id) &&
+            (warehouseFilter === null || o.warehouse === warehouseFilter),
     );
 
     // ── Container logistics status filter ──────────────────────────────────────
@@ -350,6 +354,11 @@ export function Containers() {
                 availableOrders={weekView?.availableOrders ?? []}
                 activeFilter={activeFilter}
                 onSetFilter={setActiveFilter}
+                warehouseFilter={warehouseFilter}
+                onWarehouseChange={(w) => {
+                    setWarehouseFilter(w);
+                    if (w !== null) setActiveFilter(null);
+                }}
             />
 
             {/* Transport cost Excel report download */}
