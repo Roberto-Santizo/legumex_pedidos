@@ -310,8 +310,6 @@ export function Containers() {
             ? allContainers.filter((c) => c.carrier !== null)
             : allContainers.filter((c) => c.carrier === null);
 
-    const isReadonly = weekView?.isReadonly ?? false;
-
     // ── Render ─────────────────────────────────────────────────────────────────
     if (isLoading) {
         return (
@@ -341,13 +339,6 @@ export function Containers() {
                 onToday={goToToday}
             />
 
-            {/* Read-only notice for past weeks */}
-            {isReadonly && (
-                <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 font-medium">
-                    <span>⚠</span>
-                    This week is in the past — containers are read-only.
-                </div>
-            )}
 
             {/* Transport + DC filter chips */}
             <TransportDcFilterChips
@@ -449,7 +440,7 @@ export function Containers() {
             )}
 
             {/* Main work area: available orders (left) + draft builder (right) */}
-            {!isReadonly && (
+            {(
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-150">
                     <AvailableOrdersPanel
                         orders={availableOrders}
