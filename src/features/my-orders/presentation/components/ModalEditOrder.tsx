@@ -1,21 +1,20 @@
 import { CustomFilledButton, Modal, useNotification } from "@/features/shared/shared";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { ordersProvider } from "../providers/ordersRepositoryProvider";
-import { useForm } from "react-hook-form";
 import { Form, type CreateOrderPayload, type OrderFilters } from "../../my-orders";
+import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useLocation, useSearchParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type Props = {
     filters: OrderFilters;
 }
 
 export function ModalEditOrder({ filters }: Props) {
-    const navigate = useNavigate();
     const location = useLocation();
     const notification = useNotification();
     const queryClient = useQueryClient();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || 0;
     const rowsPerPage = Number(searchParams.get("limit")) || 10;
@@ -31,13 +30,8 @@ export function ModalEditOrder({ filters }: Props) {
     });
 
     const handleCloseModal = () => {
-        const params = new URLSearchParams(location.search);
-        params.delete("editOrder");
-
-        navigate({
-            pathname: location.pathname,
-            search: params.toString(),
-        });
+        searchParams.delete('editOrder');
+        setSearchParams(searchParams);
     }
 
     const {
