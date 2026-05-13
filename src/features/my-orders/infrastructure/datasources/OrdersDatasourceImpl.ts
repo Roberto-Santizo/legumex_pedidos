@@ -59,10 +59,10 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async downloadItemsReport(startDate: string, endDate: string): Promise<Blob> {
+    async downloadItemsReport(year: string, week: string): Promise<Blob> {
         try {
             const url = '/orders/ordersItemsReport';
-            const { data } = await this.api.post(url, { startDate, endDate }, { responseType: 'blob' });
+            const { data } = await this.api.post(url, { year, week }, { responseType: 'blob' });
 
             return data;
         } catch (error) {
@@ -74,10 +74,10 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
         }
     }
 
-    async downloadHeadersReport(startDate: string, endDate: string): Promise<Blob> {
+    async downloadHeadersReport(year: string, week: string): Promise<Blob> {
         try {
             const url = '/orders/ordersHeadersReport';
-            const { data } = await this.api.post(url, { startDate, endDate }, { responseType: 'blob' });
+            const { data } = await this.api.post(url, { year, week }, { responseType: 'blob' });
 
             return data;
         } catch (error) {
@@ -301,7 +301,7 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
 
     async getOrders(filters: OrderFiltersReports): Promise<Order[]> {
         try {
-            const url = `/orders?client=&startDate=${filters.startDate}&endDate=${filters.endDate}`;
+            const url = `/orders?client=&startDate=${filters.year}&endDate=${filters.week}`;
             const { data } = await this.api.get(url);
             const response = OrdersResponseSchema.safeParse(data);
 

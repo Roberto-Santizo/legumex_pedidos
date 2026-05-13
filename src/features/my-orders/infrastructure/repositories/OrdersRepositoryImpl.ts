@@ -16,12 +16,12 @@ export class OrdersRepositoryImpl implements OrdersRepository {
         return this.datasource.deleteOrderById(order);
     }
 
-    downloadItemsReport(startDate: string, endDate: string): Promise<Blob> {
-        return this.datasource.downloadItemsReport(startDate, endDate);
+    downloadItemsReport(year: string, week: string): Promise<Blob> {
+        return this.datasource.downloadItemsReport(year, week);
     }
 
-    downloadHeadersReport(startDate: string, endDate: string): Promise<Blob> {
-        return this.datasource.downloadHeadersReport(startDate, endDate);
+    downloadHeadersReport(year: string, week: string): Promise<Blob> {
+        return this.datasource.downloadHeadersReport(year, week);
     }
 
     uploadFile(payload: UploadFileForm): Promise<UploadFileResponse> {

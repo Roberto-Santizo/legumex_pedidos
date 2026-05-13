@@ -7,8 +7,8 @@ export interface NotificationAdapter {
 
 
 export interface OrderFiltersReports {
-    startDate: string;
-    endDate: string;
+    year: string;
+    week: string;
 }
 
 export interface UploadFileForm {

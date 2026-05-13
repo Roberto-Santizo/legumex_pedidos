@@ -8,12 +8,12 @@ import { useState } from "react";
 export function Reports() {
   const notification = useNotification();
 
-  const [filters, setFilters] = useState<OrderFiltersReports>({ startDate: '', endDate: '' });
+  const [filters, setFilters] = useState<OrderFiltersReports>({ year: '', week: '' });
 
 
   const { mutate: downloadHeadersReport } = useMutation({
     mutationKey: ['downloadHeadersReport', filters],
-    mutationFn: () => ordersProvider.downloadHeadersReport(filters.startDate, filters.endDate),
+    mutationFn: () => ordersProvider.downloadHeadersReport(filters.year, filters.week),
     onError: (error) => {
       notification.error(error.message);
     },
@@ -24,7 +24,7 @@ export function Reports() {
 
   const { mutate: dowloadItemsReport } = useMutation({
     mutationKey: ['downloadItemsReport', filters],
-    mutationFn: () => ordersProvider.downloadItemsReport(filters.startDate, filters.endDate),
+    mutationFn: () => ordersProvider.downloadItemsReport(filters.year, filters.week),
     onError: (error) => {
       notification.error(error.message);
     },
@@ -34,7 +34,7 @@ export function Reports() {
   });
 
   const handleDownloadHeadersReport = (flag: string) => {
-    if (filters.startDate == '' || filters.endDate == '') {
+    if (filters.year == '' || filters.week == '') {
       notification.error("Please fill in both start and end dates");
       return;
     }
@@ -62,16 +62,18 @@ export function Reports() {
         <div className="flex flex-col gap-2 w-full">
           <label
             className="text-sm font-medium text-gray-700"
-            htmlFor={"startDate"}
+            htmlFor={"Year"}
           >
-            Start Date
+            Year
           </label>
 
           <input
-            type="date"
-            id="startDate"
-            name="startDate"
-            className={`text_form_field`}
+            id='year'
+            name='year'
+            type='number'
+            placeholder='Year'
+            autoComplete="off"
+            className="text_form_field"
             onChange={handleOnInputChange}
           />
         </div>
@@ -80,16 +82,18 @@ export function Reports() {
         <div className="flex flex-col gap-2 w-full">
           <label
             className="text-sm font-medium text-gray-700"
-            htmlFor={"endDate"}
+            htmlFor={"Week"}
           >
-            End Date
+            Week
           </label>
 
           <input
-            type="date"
-            id="endDate"
-            name="endDate"
-            className={`text_form_field`}
+            id='week'
+            name='week'
+            type='number'
+            placeholder='Week'
+            autoComplete="off"
+            className="text_form_field"
             onChange={handleOnInputChange}
           />
         </div>
