@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotification } from '@/features/shared/shared';
 import { containersProvider } from '../providers/containersRepositoryProvider';
-import { todayIso, getWeekBounds } from '../utils/weekFormatter';
+import { todayIso, getWeekBounds, getMondayOfISOWeek } from '../utils/weekFormatter';
 import { wouldExceedPounds } from '../utils/limits';
 import {
     WeekHeader,
@@ -57,6 +57,11 @@ export function Containers() {
     };
 
     const goToToday = () => setWeekAnchor(todayIso());
+
+    const goToWeek = (week: number, year: number) => {
+        const monday = getMondayOfISOWeek(year, week);
+        setWeekAnchor(monday.toISOString().slice(0, 10));
+    };
 
     // ── Data fetching ──────────────────────────────────────────────────────────
     const {
@@ -337,6 +342,7 @@ export function Containers() {
                 onPreviousWeek={goToPreviousWeek}
                 onNextWeek={goToNextWeek}
                 onToday={goToToday}
+                onGoToWeek={goToWeek}
             />
 
 

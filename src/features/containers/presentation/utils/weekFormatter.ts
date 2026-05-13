@@ -41,3 +41,37 @@ export function formatShortDate(dateStr: string): string {
 export function todayIso(): string {
     return new Date().toISOString().slice(0, 10);
 }
+
+/** Returns the ISO 8601 week number (1–53) for the given date. */
+export function getISOWeekNumber(date: Date): number {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    const yearStart = new Date(d.getFullYear(), 0, 1);
+    return Math.ceil(((d.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7);
+}
+
+/** Returns the ISO 8601 year for the given date (may differ from calendar year near year boundaries). */
+export function getISOWeekYear(date: Date): number {
+    const d = new Date(date);
+    d.setDate(d.getDate() + 4 - (d.getDay() || 7));
+    return d.getFullYear();
+}
+
+/** Returns the Monday (as a Date) of ISO week `week` in `year`. */
+export function getMondayOfISOWeek(year: number, week: number): Date {
+    // Jan 4 is always in week 1 per ISO 8601
+    const jan4 = new Date(year, 0, 4);
+    const dow = jan4.getDay() || 7; // 1=Mon … 7=Sun
+    const week1Monday = new Date(jan4);
+    week1Monday.setDate(jan4.getDate() - dow + 1);
+    const result = new Date(week1Monday);
+    result.setDate(week1Monday.getDate() + (week - 1) * 7);
+    return result;
+}
+
+/** Returns the total number of ISO weeks in a given year (52 or 53). */
+export function isoWeeksInYear(year: number): number {
+    const dec28 = new Date(year, 11, 28);
+    return getISOWeekNumber(dec28);
+}

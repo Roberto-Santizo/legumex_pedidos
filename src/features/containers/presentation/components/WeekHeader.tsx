@@ -1,6 +1,6 @@
 // Created by Luis
 
-import { formatWeekRange } from '../utils/weekFormatter';
+import { formatWeekRange, getISOWeekNumber, getISOWeekYear, isoWeeksInYear } from '../utils/weekFormatter';
 import type { WeekView } from '../../domain/types/types';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
     onPreviousWeek: () => void;
     onNextWeek: () => void;
     onToday: () => void;
+    onGoToWeek: (week: number, year: number) => void;
 }
 
 /** Header card with week navigation and 4 KPI counters. */
@@ -20,7 +21,13 @@ export function WeekHeader({
     onPreviousWeek,
     onNextWeek,
     onToday,
+    onGoToWeek,
 }: Props) {
+    const anchorDate = new Date(weekStart + 'T12:00:00');
+    const currentWeek = getISOWeekNumber(anchorDate);
+    const currentYear = getISOWeekYear(anchorDate);
+    const weeksInYear = isoWeeksInYear(currentYear);
+    const yearOptions = [currentYear - 1, currentYear, currentYear + 1];
     const totalOrders = weekView
         ? weekView.availableOrders.length +
           weekView.containers.reduce((s, c) => s + c.orders.length, 0)
@@ -52,7 +59,7 @@ export function WeekHeader({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     <button
                         type="button"
                         onClick={onPreviousWeek}
@@ -62,7 +69,7 @@ export function WeekHeader({
                         ◀
                     </button>
 
-                    <span className="px-4 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-sm text-slate-700 font-medium select-none">
+                    <span className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-sm text-slate-700 font-medium select-none">
                         {formatWeekRange(weekStart, weekEnd)}
                     </span>
 
@@ -74,6 +81,35 @@ export function WeekHeader({
                     >
                         ▶
                     </button>
+
+                    {/* Week number jump selector */}
+                    <div className="flex items-center gap-1 border border-slate-200 rounded-lg px-2 py-1 bg-slate-50">
+                        <span className="text-xs font-semibold text-slate-400 select-none">Wk</span>
+                        <select
+                            value={currentWeek}
+                            onChange={(e) => onGoToWeek(Number(e.target.value), currentYear)}
+                            className="text-xs font-semibold text-slate-700 bg-transparent focus:outline-none cursor-pointer"
+                            aria-label="Jump to week"
+                        >
+                            {Array.from({ length: weeksInYear }, (_, i) => i + 1).map((w) => (
+                                <option key={w} value={w}>
+                                    {w}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Year selector */}
+                    <select
+                        value={currentYear}
+                        onChange={(e) => onGoToWeek(currentWeek, Number(e.target.value))}
+                        className="text-xs font-semibold text-slate-700 border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 focus:outline-none cursor-pointer"
+                        aria-label="Jump to year"
+                    >
+                        {yearOptions.map((y) => (
+                            <option key={y} value={y}>{y}</option>
+                        ))}
+                    </select>
 
                     <button
                         type="button"
