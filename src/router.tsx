@@ -32,7 +32,7 @@ export default function AppRouter() {
                     //PROFILE
                     <Route path="/profile" element={<Profile />} />
 
-                    <Route element={<RoleMiddleware allowedRoles={['admin', 'administrative']} />}>
+                    <Route element={<RoleMiddleware allowedRoles={['admin', 'administrador']} />}>
                         //PRODUCTS
                         <Route path="/products" element={<Products />} />
                         <Route path="/products/create" element={<CreateProduct />} />

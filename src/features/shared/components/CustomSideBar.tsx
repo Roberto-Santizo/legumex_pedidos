@@ -30,7 +30,7 @@ export function CustomSideBar({ className }: Props) {
         <BiPackage size={25} />
       </CustomNavLink>
 
-      {(user.role == 'administrative' || user.role == 'admin') && (
+      {(user.role == 'administrador' || user.role == 'admin') && (
         <>
           <CustomNavLink to='/products' label='Products'>
             <BiBox size={25} />
