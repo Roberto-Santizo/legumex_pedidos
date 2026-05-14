@@ -38,4 +38,8 @@ export class ContainersProvider {
     assignCarrier(containerId: number, carrierId: number): Promise<ContainerDetail> {
         return this.repository.assignCarrier(containerId, carrierId);
     }
+
+    setDeliverySchedule(containerId: number, deliveryDate: string, deliveryTime: string): Promise<ContainerDetail> {
+        return this.repository.setDeliverySchedule(containerId, deliveryDate, deliveryTime);
+    }
 }

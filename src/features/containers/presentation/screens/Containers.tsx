@@ -278,6 +278,13 @@ export function Containers() {
         invalidateWeekView();
     };
 
+    const handleSetDeliverySchedule = async (deliveryDate: string, deliveryTime: string) => {
+        if (!selectedContainer) return;
+        const updated = await containersProvider.setDeliverySchedule(selectedContainer.id, deliveryDate, deliveryTime);
+        setSelectedContainer(updated);
+        invalidateWeekView();
+    };
+
     // ── Derived state ──────────────────────────────────────────────────────────
 
     /**
@@ -472,6 +479,7 @@ export function Containers() {
                 open={selectedContainer !== null}
                 onClose={() => setSelectedContainer(null)}
                 onAssignCarrier={handleAssignCarrier}
+                onSetDeliverySchedule={handleSetDeliverySchedule}
             />
 
         </div>
