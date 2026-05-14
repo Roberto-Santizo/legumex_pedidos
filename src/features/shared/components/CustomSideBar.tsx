@@ -30,7 +30,7 @@ export function CustomSideBar({ className }: Props) {
         <BiPackage size={25} />
       </CustomNavLink>
 
-      {(user.role == 'administrador' || user.role == 'admin') && (
+      {(user.role == 'administrator' || user.role == 'admin') && (
         <>
           <CustomNavLink to='/products' label='Products'>
             <BiBox size={25} />
@@ -48,7 +48,6 @@ export function CustomSideBar({ className }: Props) {
             <BiFile size={25} />
           </CustomNavLink>
 
-          {/* Containers module — Created by Luis */}
           <CustomNavLink to='/containers' label='Containers'>
             <BsTruck size={25} />
           </CustomNavLink>
