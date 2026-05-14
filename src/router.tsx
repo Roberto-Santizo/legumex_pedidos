@@ -59,7 +59,6 @@ export default function AppRouter() {
                         <Route path="/users/update/:id" element={<UpdateUser />} />
                     </Route>
 
-                    //CONTAINERS — Created by Luis
                     <Route element={<RoleMiddleware allowedRoles={['admin', 'administrator']} />}>
                         <Route path="/containers" element={<Containers />} />
                         <Route path="/transportation-cost" element={<TransportationCost />} />
