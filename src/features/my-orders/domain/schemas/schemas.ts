@@ -75,6 +75,7 @@ export const OrderItemDetailsSchema = z.object({
     total_amount: z.number(),
     product: z.string(),
     internationalCode: z.string(),
+    supplierStock: z.string()
 });
 
 export const OrderItemsDetailsResponseSchema = ApiResponseSchema.extend({
@@ -99,7 +100,8 @@ export const OrdersResponseSchema = ApiResponseSchema.extend({
 export const OrderDetailsToUpdateSchema = z.object({
     id: z.number(),
     total_boxes: z.number(),
-    product_id: z.number()
+    product_id: z.number(),
+    supplierStock: z.string()
 });
 
 export const OrderDetailsToUpdateResponseSchema = ApiResponseSchema.extend({

@@ -50,7 +50,7 @@ export function ModalEditItem({ client, transportType, dc }: Props) {
     const { handleSubmit, register, formState: { errors }, control, reset, setValue } = useForm<AddItemForm>();
 
     const onSubmit = (data: AddItemForm) => {
-        const formattedData: AddItemForm = { total_boxes: +data.total_boxes, product_id: data.product_id }
+        const formattedData: AddItemForm = { total_boxes: +data.total_boxes, product_id: data.product_id, supplierStock: data.supplierStock }
         mutate(formattedData);
     }
 
@@ -58,6 +58,7 @@ export function ModalEditItem({ client, transportType, dc }: Props) {
         if (item) {
             setValue('product_id', item.product_id);
             setValue('total_boxes', item.total_boxes);
+            setValue('supplierStock', item.supplierStock);
         }
     }, [item]);
 

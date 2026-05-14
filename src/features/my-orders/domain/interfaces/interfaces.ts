@@ -1,6 +1,7 @@
 export interface AddItemForm {
     product_id: number;
     total_boxes: number;
+    supplierStock: string;
 }
 
 export interface CreateOrderPayload {

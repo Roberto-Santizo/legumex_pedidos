@@ -40,6 +40,16 @@ export function ItemForm({ register, errors, control, client, transportType, dc 
                 validation={{ required: 'Total Boxes are required' }}
                 errorMessage={errors.total_boxes?.message}
             />
+
+            <TextFormField<AddItemForm>
+                label="Supplier Stock #"
+                name="supplierStock"
+                placeholder="Supplier Stock"
+                register={register}
+                type="text"
+                validation={{ required: 'The supplier Stock is required' }}
+                errorMessage={errors.supplierStock?.message}
+            />
         </>
     )
 }
