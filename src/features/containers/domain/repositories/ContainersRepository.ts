@@ -12,4 +12,5 @@ export abstract class ContainersRepository {
     abstract deleteContainer(containerId: number): Promise<string>;
     abstract getContainerById(containerId: number): Promise<ContainerDetail>;
     abstract assignCarrier(containerId: number, carrierId: number): Promise<ContainerDetail>;
+    abstract setDeliverySchedule(containerId: number, deliveryDate: string, deliveryTime: string): Promise<ContainerDetail>;
 }

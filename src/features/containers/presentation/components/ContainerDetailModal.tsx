@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Modal } from '@/features/shared/components/Modal';
 import { CapacityBar } from './CapacityBar';
 import { AssignCarrierPanel } from './AssignCarrierPanel';
+import { DeliveryScheduleModal } from './DeliveryScheduleModal';
 import { colorForOrder } from '../utils/orderColors';
 import { formatShortDate } from '../utils/weekFormatter';
 import { MAX_PALLETS, MAX_POUNDS } from '../utils/limits';
@@ -14,13 +15,15 @@ interface Props {
     open: boolean;
     onClose: () => void;
     onAssignCarrier?: (carrierId: number) => Promise<void>;
+    onSetDeliverySchedule?: (deliveryDate: string, deliveryTime: string) => Promise<void>;
 }
 
-export function ContainerDetailModal({ container, open, onClose, onAssignCarrier }: Props) {
+export function ContainerDetailModal({ container, open, onClose, onAssignCarrier, onSetDeliverySchedule }: Props) {
     const [showAssignPanel, setShowAssignPanel] = useState(false);
     const [assigning, setAssigning] = useState(false);
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<4 | 5 | null>(null);
+    const [showDeliveryModal, setShowDeliveryModal] = useState(false);
 
     if (!container) return null;
 
@@ -267,6 +270,51 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                         </div>
                     )}
                 </div>
+            )}
+
+            {/* Delivery schedule — only shown once a carrier is assigned */}
+            {isConfirmed && container.carrier && (
+                <div className="mb-5">
+                    {container.deliveryDate && container.deliveryTime ? (
+                        <div className="flex items-center justify-between px-4 py-3 rounded-xl border border-sky-200 bg-sky-50">
+                            <div>
+                                <p className="text-xs text-sky-600 font-semibold uppercase tracking-wide mb-0.5">
+                                    Delivery Schedule
+                                </p>
+                                <p className="text-sm font-bold text-slate-800">
+                                    {container.deliveryDate} · {container.deliveryTime}
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowDeliveryModal(true)}
+                                className="text-xs font-semibold text-sky-600 border border-sky-200 rounded-lg px-3 py-1.5 hover:bg-sky-100 transition-colors"
+                            >
+                                Edit Schedule
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            type="button"
+                            onClick={() => setShowDeliveryModal(true)}
+                            className="w-full py-2.5 text-sm font-semibold rounded-xl border-2 border-dashed border-slate-300 text-slate-500 hover:border-sky-400 hover:text-sky-600 transition-colors"
+                        >
+                            + Set Delivery Date & Time
+                        </button>
+                    )}
+                </div>
+            )}
+
+            {/* Delivery schedule modal */}
+            {showDeliveryModal && (
+                <DeliveryScheduleModal
+                    containerId={container.id}
+                    open={showDeliveryModal}
+                    onClose={() => setShowDeliveryModal(false)}
+                    onSubmit={async (date, time) => { await onSetDeliverySchedule?.(date, time); }}
+                    initialDate={container.deliveryDate}
+                    initialTime={container.deliveryTime}
+                />
             )}
 
             {/* Metadata */}

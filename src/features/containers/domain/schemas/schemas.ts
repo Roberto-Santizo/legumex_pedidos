@@ -64,6 +64,9 @@ export const ContainerDetailSchema = z.object({
     confirmedBy: z.string().nullable(),
     carrier: z.object({ id: z.number(), name: z.string(), shippingCost: z.number() }).nullable().default(null),
     carrierCostSnapshot: z.number().nullable().default(null),
+    // Delivery schedule — populated after carrier is assigned
+    deliveryDate: z.string().nullable().default(null),
+    deliveryTime: z.string().nullable().default(null),
 });
 
 // ─── Response schemas ─────────────────────────────────────────────────────────

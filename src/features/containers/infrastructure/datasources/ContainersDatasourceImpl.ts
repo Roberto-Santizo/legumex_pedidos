@@ -122,6 +122,24 @@ export class ContainersDatasourceImpl implements ContainersDatasource {
         }
     }
 
+    async setDeliverySchedule(containerId: number, deliveryDate: string, deliveryTime: string): Promise<ContainerDetail> {
+        try {
+            const { data } = await this.api.patch(`/containers/${containerId}/delivery-schedule`, { deliveryDate, deliveryTime });
+            const parsed = ContainerDetailResponseSchema.safeParse(data);
+
+            if (parsed.success) return parsed.data.data;
+            throw new Error('Invalid response from server');
+        } catch (error) {
+            if (isAxiosError(error)) {
+                if (error.response?.data?.statusCode === 404)
+                    throw new ContainerNotFoundError(error.response.data.message);
+                throw new Error(error.response?.data?.message ?? 'Connection error');
+            }
+            if (error instanceof Error) throw error;
+            throw new Error('Unexpected error');
+        }
+    }
+
     async assignCarrier(containerId: number, carrierId: number): Promise<ContainerDetail> {
         try {
             const { data } = await this.api.post(`/containers/${containerId}/assign-carrier`, { carrierId });
