@@ -6,6 +6,21 @@ export class OrdersDatasourceImpl implements OrdersDatasource {
 
     constructor(private api: AxiosInstance) { }
 
+    async downloadOrderDetailsReport(year: string, week: string): Promise<Blob> {
+        try {
+            const url = '/orders/ordersDetailsReport';
+            const { data } = await this.api.post(url, { year, week }, { responseType: 'blob' });
+
+            return data;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data['message']);
+            }
+
+            throw new Error("Error no controlado");
+        }
+    }
+
     async updateOrder(id: string, payload: CreateOrderPayload): Promise<string> {
         try {
             const url = `/orders/${id}`;

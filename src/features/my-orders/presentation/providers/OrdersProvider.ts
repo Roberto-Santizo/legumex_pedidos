@@ -56,23 +56,27 @@ export class OrdersProvider {
         return this.repository.uploadFile(payload);
     }
 
-    async downloadHeadersReport(startDate: string, endDate: string) {
-        return this.repository.downloadHeadersReport(startDate, endDate);
+    async downloadHeadersReport(year: string, week: string) {
+        return this.repository.downloadHeadersReport(year, week);
     }
 
-    async downloadItemsReport(startDate: string, endDate: string) {
-        return this.repository.downloadItemsReport(startDate, endDate);
+    async downloadItemsReport(year: string, week: string) {
+        return this.repository.downloadItemsReport(year, week);
+    }
+
+    async downloadOrderDetailsReport(year: string, week: string) {
+        return this.repository.downloadOrderDetailsReport(year, week);
     }
 
     async deleteOrderById(id: Order['id']) {
         return this.repository.deleteOrderById(id);
     }
 
-    async getOrderEditDetailsById(id: string){
+    async getOrderEditDetailsById(id: string) {
         return this.repository.getOrderEditDetailsById(id);
     }
 
-    async updateOrderById(id: string, payload: CreateOrderPayload){
+    async updateOrderById(id: string, payload: CreateOrderPayload) {
         return this.repository.updateOrder(id, payload);
     }
 }

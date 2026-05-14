@@ -19,5 +19,6 @@ export abstract class OrdersRepository {
     abstract confirmReceivedOrder(orderId: Order['id']): Promise<string>;
     abstract downloadHeadersReport(year: string, week: string): Promise<Blob>;
     abstract downloadItemsReport(year: string, week: string): Promise<Blob>;
+    abstract downloadOrderDetailsReport(year: string, week: string): Promise<Blob>;
     abstract deleteOrderById(order: Order['id']): Promise<string>;
 }

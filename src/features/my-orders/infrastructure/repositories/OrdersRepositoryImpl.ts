@@ -3,6 +3,10 @@ import type { OrderFiltersReports, UploadFileForm } from '@/features/shared/shar
 
 export class OrdersRepositoryImpl implements OrdersRepository {
     constructor(private datasource: OrdersDatasource) { }
+    
+    downloadOrderDetailsReport(year: string, week: string): Promise<Blob> {
+        return this.datasource.downloadOrderDetailsReport(year, week);
+    }
 
     updateOrder(id: string, payload: CreateOrderPayload): Promise<string> {
         return this.datasource.updateOrder(id, payload);
