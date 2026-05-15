@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { CapacityBar } from './CapacityBar';

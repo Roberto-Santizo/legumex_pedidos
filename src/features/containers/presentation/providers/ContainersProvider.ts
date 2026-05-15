@@ -1,4 +1,3 @@
-// Created by Luis
 
 import type { ContainersRepository } from '../../domain/repositories/ContainersRepository';
 import type { CreateContainerPayload } from '../../domain/interfaces/interfaces';

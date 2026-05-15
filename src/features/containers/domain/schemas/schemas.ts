@@ -7,18 +7,18 @@ import z from 'zod';
 
 // Normalizes dc from either a plain string or a DC object {id,name,...} to a string name.
 // Also handles null and undefined (missing field).
-const normalizeDc = (v: unknown): string | null => {
-    if (v === null || v === undefined) return null;
-    if (typeof v === 'string') return v;
-    if (typeof v === 'object' && 'name' in v) return (v as { name: string }).name;
+const normalizeDc = (rawValue: unknown): string | null => {
+    if (rawValue === null || rawValue === undefined) return null;
+    if (typeof rawValue === 'string') return rawValue;
+    if (typeof rawValue === 'object' && 'name' in rawValue) return (rawValue as { name: string }).name;
     return null;
 };
 
 // Extracts numeric id from a DC object, or passes through a plain number.
-const normalizeDcId = (v: unknown): number | null => {
-    if (v === null || v === undefined) return null;
-    if (typeof v === 'number') return v;
-    if (typeof v === 'object' && 'id' in v) return (v as { id: number }).id;
+const normalizeDcId = (rawValue: unknown): number | null => {
+    if (rawValue === null || rawValue === undefined) return null;
+    if (typeof rawValue === 'number') return rawValue;
+    if (typeof rawValue === 'object' && 'id' in rawValue) return (rawValue as { id: number }).id;
     return null;
 };
 

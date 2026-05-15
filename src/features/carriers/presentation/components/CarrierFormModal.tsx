@@ -1,12 +1,12 @@
 // Created by Luis
 
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
 import { Modal } from '@/features/shared/components/Modal';
+import { SelectFormField } from '@/features/shared/components/SelectFormField';
 import { dcsProvider } from '@/features/dc/presentation/providers/dcsRepositoryProvider';
 import type { Carrier, CreateCarrierPayload } from '../../domain/domain';
 import type { Dc } from '@/features/dc/dc';
-
 interface Props {
     open: boolean;
     carrier: Carrier | null;
@@ -14,8 +14,6 @@ interface Props {
     onSave: (payload: CreateCarrierPayload, id?: number) => Promise<void>;
     onClose: () => void;
 }
-
-// ── Inner form — gets remounted via key when carrier/open changes ──────────────
 
 interface FormProps {
     carrier: Carrier | null;
@@ -25,77 +23,77 @@ interface FormProps {
     onClose: () => void;
 }
 
-const empty = { name: '', shippingCost: '', rateUpdatedAt: '', dcId: '' };
+interface FormValues {
+    name: string;
+    shippingCost: string;
+    rateUpdatedAt: string;
+    dcId: number | string;
+}
 
 function CarrierForm({ carrier, dcs, saving, onSave, onClose }: FormProps) {
     const isEdit = carrier !== null;
 
-    const [form, setForm] = useState(() =>
-        carrier
+    const {
+        register,
+        handleSubmit,
+        control,
+        setError,
+        formState: { errors },
+    } = useForm<FormValues>({
+        defaultValues: carrier
             ? {
                   name: carrier.name,
                   shippingCost: String(carrier.shippingCost),
                   rateUpdatedAt: carrier.rateUpdatedAt,
-                  dcId: carrier.dcId != null ? String(carrier.dcId) : '',
+                  dcId: carrier.dcId ?? '',
               }
-            : empty,
-    );
-    const [error, setError] = useState<string | null>(null);
+            : { name: '', shippingCost: '', rateUpdatedAt: '', dcId: '' },
+    });
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError(null);
+    const dcOptions = dcs.map((dc) => ({ label: `${dc.name} (${dc.code})`, value: dc.id }));
 
-        const cost = parseFloat(form.shippingCost);
-        const dcId = parseInt(form.dcId, 10);
-        if (!form.name.trim()) { setError('Name is required.'); return; }
-        if (isNaN(cost) || cost < 0) { setError('Shipping cost must be a non-negative number.'); return; }
-        if (!form.rateUpdatedAt) { setError('Rate updated date is required.'); return; }
-        if (isNaN(dcId)) { setError('Distribution Center is required.'); return; }
-
+    const onSubmit = async (data: FormValues) => {
+        const cost = parseFloat(data.shippingCost);
+        if (isNaN(cost) || cost < 0) {
+            setError('shippingCost', { message: 'Shipping cost must be a non-negative number.' });
+            return;
+        }
         try {
             await onSave(
-                { name: form.name.trim(), shippingCost: cost, rateUpdatedAt: form.rateUpdatedAt, dcId },
+                { name: data.name.trim(), shippingCost: cost, rateUpdatedAt: data.rateUpdatedAt, dcId: Number(data.dcId) },
                 isEdit ? carrier.id : undefined,
             );
         } catch (err: unknown) {
-            setError(err instanceof Error ? err.message : 'An error occurred.');
+            setError('root', { message: err instanceof Error ? err.message : 'An error occurred.' });
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {errors.root && (
                 <p className="text-xs text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-                    {error}
+                    {errors.root.message}
                 </p>
             )}
 
-            <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600">Distribution Center</label>
-                <select
-                    value={form.dcId}
-                    onChange={(e) => setForm((f) => ({ ...f, dcId: e.target.value }))}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40 bg-white"
-                >
-                    <option value="">Select a DC...</option>
-                    {dcs.map((dc) => (
-                        <option key={dc.id} value={dc.id}>
-                            {dc.name} ({dc.code})
-                        </option>
-                    ))}
-                </select>
-            </div>
+            <SelectFormField<FormValues>
+                label="Distribution Center"
+                name="dcId"
+                options={dcOptions}
+                control={control}
+                validation={{ required: 'Distribution Center is required.' }}
+                errorMessage={errors.dcId?.message}
+            />
 
             <div className="space-y-1">
                 <label className="text-xs font-semibold text-slate-600">Carrier name</label>
                 <input
                     type="text"
-                    value={form.name}
-                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                     placeholder="e.g. FedEx Freight"
                     className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40"
+                    {...register('name', { required: 'Name is required.' })}
                 />
+                {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-1">
@@ -104,21 +102,21 @@ function CarrierForm({ carrier, dcs, saving, onSave, onClose }: FormProps) {
                     type="number"
                     min="0"
                     step="0.01"
-                    value={form.shippingCost}
-                    onChange={(e) => setForm((f) => ({ ...f, shippingCost: e.target.value }))}
                     placeholder="0.00"
                     className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40"
+                    {...register('shippingCost', { required: 'Shipping cost is required.' })}
                 />
+                {errors.shippingCost && <p className="text-xs text-red-500">{errors.shippingCost.message}</p>}
             </div>
 
             <div className="space-y-1">
                 <label className="text-xs font-semibold text-slate-600">Rate updated date</label>
                 <input
                     type="date"
-                    value={form.rateUpdatedAt}
-                    onChange={(e) => setForm((f) => ({ ...f, rateUpdatedAt: e.target.value }))}
                     className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40"
+                    {...register('rateUpdatedAt', { required: 'Rate updated date is required.' })}
                 />
+                {errors.rateUpdatedAt && <p className="text-xs text-red-500">{errors.rateUpdatedAt.message}</p>}
             </div>
 
             <div className="flex gap-2 pt-2">

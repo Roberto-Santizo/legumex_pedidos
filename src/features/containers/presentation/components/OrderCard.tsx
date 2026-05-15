@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { formatShortDate } from '../utils/weekFormatter';
 import type { OrderSummary } from '../../domain/types/types';

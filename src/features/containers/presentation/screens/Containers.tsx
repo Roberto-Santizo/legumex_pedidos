@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -6,14 +5,7 @@ import { useNotification } from '@/features/shared/shared';
 import { containersProvider } from '../providers/containersRepositoryProvider';
 import { todayIso, getWeekBounds, getMondayOfISOWeek } from '../utils/weekFormatter';
 import { wouldExceedPounds } from '../utils/limits';
-import {
-    WeekHeader,
-    TransportDcFilterChips,
-    AvailableOrdersPanel,
-    ContainerBuilderPanel,
-    ContainerDetailModal,
-    ContainerStatusFilter,
-} from '../components/components';
+import {WeekHeader,TransportDcFilterChips,AvailableOrdersPanel,ContainerBuilderPanel,ContainerDetailModal,ContainerStatusFilter,} from '../components/components';
 import type { DraftContainer, OrderSummary, ContainerDetail } from '../../domain/types/types';
 import { downloadTransportCostReport } from '../../infrastructure/infrastructure';
 import { BiDownload } from 'react-icons/bi';
@@ -24,8 +16,8 @@ import { BiDownload } from 'react-icons/bi';
 function recomputeDraft(draft: DraftContainer): DraftContainer {
     return {
         ...draft,
-        totalPallets: draft.orders.reduce((s, o) => s + o.totalPallets, 0),
-        totalPounds: draft.orders.reduce((s, o) => s + o.totalPounds, 0),
+        totalPallets: draft.orders.reduce((sum, order) => sum + order.totalPallets, 0),
+        totalPounds: draft.orders.reduce((sum, order) => sum + order.totalPounds, 0),
     };
 }
 
@@ -45,15 +37,15 @@ export function Containers() {
     const { start: weekStart, end: weekEnd } = getWeekBounds(new Date(weekAnchor + 'T12:00:00'));
 
     const goToPreviousWeek = () => {
-        const d = new Date(weekStart + 'T12:00:00');
-        d.setDate(d.getDate() - 7);
-        setWeekAnchor(d.toISOString().slice(0, 10));
+        const targetDate = new Date(weekStart + 'T12:00:00');
+        targetDate.setDate(targetDate.getDate() - 7);
+        setWeekAnchor(targetDate.toISOString().slice(0, 10));
     };
 
     const goToNextWeek = () => {
-        const d = new Date(weekStart + 'T12:00:00');
-        d.setDate(d.getDate() + 7);
-        setWeekAnchor(d.toISOString().slice(0, 10));
+        const targetDate = new Date(weekStart + 'T12:00:00');
+        targetDate.setDate(targetDate.getDate() + 7);
+        setWeekAnchor(targetDate.toISOString().slice(0, 10));
     };
 
     const goToToday = () => setWeekAnchor(todayIso());
@@ -82,6 +74,8 @@ export function Containers() {
     // ── Transport+DC filter ────────────────────────────────────────────────────
     const [activeFilter, setActiveFilter] = useState<{ transportType: string; dc: string } | null>(null);
     const [warehouseFilter, setWarehouseFilter] = useState<string | null>(null);
+    const [transportTypeFilter, setTransportTypeFilter] = useState<string | null>(null);
+    const [poFilter, setPoFilter] = useState<string>('');
 
     // ── Transport cost Excel report ────────────────────────────────────────────
     const [reportFrom, setReportFrom]           = useState<string>(weekStart);
@@ -125,8 +119,8 @@ export function Containers() {
         if (!draft) return;
 
         // Guard: reject if the order is already in a persisted container
-        const alreadyInContainer = (weekView?.containers ?? []).some((c) =>
-            c.orders.some((o) => o.id === order.id),
+        const alreadyInContainer = (weekView?.containers ?? []).some((container) =>
+            container.orders.some((existingOrder) => existingOrder.id === order.id),
         );
         if (alreadyInContainer) {
             notify.error(`Order #${order.id} is already assigned to another container.`);
@@ -156,8 +150,8 @@ export function Containers() {
             }
         } else {
             // In-memory only — just append
-            const updated = recomputeDraft({ ...draft, orders: [...draft.orders, order] });
-            setDraft(updated);
+            const updatedDraft = recomputeDraft({ ...draft, orders: [...draft.orders, order] });
+            setDraft(updatedDraft);
         }
     };
 
@@ -180,11 +174,11 @@ export function Containers() {
                 notify.error(err instanceof Error ? err.message : 'Failed to remove order.');
             }
         } else {
-            const updated = recomputeDraft({
+            const updatedDraft = recomputeDraft({
                 ...draft,
-                orders: draft.orders.filter((o) => o.id !== orderId),
+                orders: draft.orders.filter((order) => order.id !== orderId),
             });
-            setDraft(updated);
+            setDraft(updatedDraft);
         }
     };
 
@@ -215,17 +209,17 @@ export function Containers() {
             transportType: draft.transportType,
             dc: draft.dc,
             weekStart: draft.weekStart,
-            orderIds: draft.orders.map((o) => o.id),
+            orderIds: draft.orders.map((order) => order.id),
         });
 
         // Mark as persisted immediately so any retry won't try to create a duplicate
-        setDraft((prev) => (prev ? { ...prev, persistedId: id } : null));
+        setDraft((previousDraft) => (previousDraft ? { ...previousDraft, persistedId: id } : null));
 
         // Sync the draft orders/totals from the backend (best-effort, non-blocking on failure)
         try {
             const saved = await containersProvider.getContainerById(id);
-            setDraft((prev) =>
-                prev ? { ...prev, persistedId: id, orders: saved.orders, totalPallets: saved.totalPallets, totalPounds: saved.totalPounds } : null,
+            setDraft((previousDraft) =>
+                previousDraft ? { ...previousDraft, persistedId: id, orders: saved.orders, totalPallets: saved.totalPallets, totalPounds: saved.totalPounds } : null,
             );
         } catch {
             // Container was created successfully; detail fetch failing doesn't block the confirm flow
@@ -291,20 +285,22 @@ export function Containers() {
      * Orders that are not yet in any container and match the current filter.
      * Excludes orders already added to the current in-memory draft.
      */
-    const draftOrderIds = new Set(draft?.orders.map((o) => o.id) ?? []);
+    const draftOrderIds = new Set(draft?.orders.map((order) => order.id) ?? []);
 
     // Build a set of every order already inside a persisted container (draft or confirmed).
     // This is a defensive client-side guard: the backend already filters these out of
     // availableOrders, but stale cache or a race condition could let one slip through.
     const persistedContainerOrderIds = new Set(
-        (weekView?.containers ?? []).flatMap((c) => c.orders.map((o) => o.id)),
+        (weekView?.containers ?? []).flatMap((container) => container.orders.map((order) => order.id)),
     );
 
     const availableOrders = (weekView?.availableOrders ?? []).filter(
-        (o) =>
-            !draftOrderIds.has(o.id) &&
-            !persistedContainerOrderIds.has(o.id) &&
-            (warehouseFilter === null || o.warehouse === warehouseFilter),
+        (order) =>
+            !draftOrderIds.has(order.id) &&
+            !persistedContainerOrderIds.has(order.id) &&
+            (warehouseFilter === null || order.warehouse === warehouseFilter) &&
+            (transportTypeFilter === null || order.transportType === transportTypeFilter) &&
+            (poFilter === '' || order.po?.toLowerCase().includes(poFilter.toLowerCase())),
     );
 
     // ── Container logistics status filter ──────────────────────────────────────
@@ -313,14 +309,14 @@ export function Containers() {
     const allContainers = weekView?.containers ?? [];
     // status 5 = carrier assigned, status 4 = in container but no carrier yet
     const containerStatusCounts = {
-        status4: allContainers.filter((c) => c.carrier === null).length,
-        status5: allContainers.filter((c) => c.carrier !== null).length,
+        status4: allContainers.filter((container) => container.carrier === null).length,
+        status5: allContainers.filter((container) => container.carrier !== null).length,
     };
     const visibleContainers = containerStatusFilter === null
         ? allContainers
         : containerStatusFilter === 5
-            ? allContainers.filter((c) => c.carrier !== null)
-            : allContainers.filter((c) => c.carrier === null);
+            ? allContainers.filter((container) => container.carrier !== null)
+            : allContainers.filter((container) => container.carrier === null);
 
     // ── Render ─────────────────────────────────────────────────────────────────
     if (isLoading) {
@@ -359,10 +355,17 @@ export function Containers() {
                 activeFilter={activeFilter}
                 onSetFilter={setActiveFilter}
                 warehouseFilter={warehouseFilter}
-                onWarehouseChange={(w) => {
-                    setWarehouseFilter(w);
-                    if (w !== null) setActiveFilter(null);
+                onWarehouseChange={(warehouse) => {
+                    setWarehouseFilter(warehouse);
+                    if (warehouse !== null) setActiveFilter(null);
                 }}
+                transportTypeFilter={transportTypeFilter}
+                onTransportTypeChange={(type) => {
+                    setTransportTypeFilter(type);
+                    setActiveFilter(null);
+                }}
+                poFilter={poFilter}
+                onPoChange={setPoFilter}
             />
 
             {/* Transport cost Excel report download */}
@@ -371,14 +374,14 @@ export function Containers() {
                 <input
                     type="date"
                     value={reportFrom}
-                    onChange={(e) => setReportFrom(e.target.value)}
+                    onChange={(reportFromInputEvent) => setReportFrom(reportFromInputEvent.target.value)}
                     className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
                 <span className="text-slate-400 text-xs">—</span>
                 <input
                     type="date"
                     value={reportTo}
-                    onChange={(e) => setReportTo(e.target.value)}
+                    onChange={(reportToInputEvent) => setReportTo(reportToInputEvent.target.value)}
                     className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
                 <button
@@ -411,39 +414,39 @@ export function Containers() {
                         </p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {visibleContainers.map((c) => (
+                            {visibleContainers.map((container) => (
                                 <button
-                                    key={c.id}
+                                    key={container.id}
                                     type="button"
-                                    onClick={() => setSelectedContainer(c)}
+                                    onClick={() => setSelectedContainer(container)}
                                     className="text-left border border-slate-200 rounded-xl p-3.5 hover:border-[#00C853] hover:shadow-md transition-all group bg-white"
                                 >
                                     <div className="flex items-start justify-between gap-2 mb-2">
                                         <div>
                                             <p className="text-sm font-bold text-slate-800 group-hover:text-[#00C853] transition-colors">
-                                                #C-{c.id}
+                                                #C-{container.id}
                                             </p>
                                             <p className="text-[11px] text-slate-400 mt-0.5">
-                                                {c.transportType}{c.dc ? ` · ${c.dc}` : ''}
+                                                {container.transportType}{container.dc ? ` · ${container.dc}` : ''}
                                             </p>
                                         </div>
                                         <span
                                             className={`text-[10px] font-bold rounded-full px-2.5 py-0.5 shrink-0 ${
-                                                c.status === 'confirmed'
+                                                container.status === 'confirmed'
                                                     ? 'bg-[#00C853] text-white'
                                                     : 'bg-[#00C853]/15 text-[#009940]'
                                             }`}
                                         >
-                                            {c.status === 'confirmed' ? '✓ CONFIRMED' : 'DRAFT'}
+                                            {container.status === 'confirmed' ? '✓ CONFIRMED' : 'DRAFT'}
                                         </span>
                                     </div>
 
                                     <div className="flex gap-3 text-[11px] font-medium text-slate-400 border-t border-slate-100 pt-2">
-                                        <span>{c.totalOrders} orders</span>
+                                        <span>{container.totalOrders} orders</span>
                                         <span className="text-slate-300">·</span>
-                                        <span>{c.totalPallets} pal</span>
+                                        <span>{container.totalPallets} pal</span>
                                         <span className="text-slate-300">·</span>
-                                        <span>{c.totalPounds.toLocaleString()} lbs</span>
+                                        <span>{container.totalPounds.toLocaleString()} lbs</span>
                                     </div>
                                 </button>
                             ))}

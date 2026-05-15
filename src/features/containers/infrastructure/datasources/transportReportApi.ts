@@ -1,4 +1,3 @@
-// Created by Luis
 
 import api from "@/config/http/axios";
 import { isAxiosError } from "axios";

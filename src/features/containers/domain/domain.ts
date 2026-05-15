@@ -1,4 +1,4 @@
-// Created by Luis
+
 export * from './datasources/datasources';
 export * from './repositories/repositories';
 export * from './schemas/schemas';

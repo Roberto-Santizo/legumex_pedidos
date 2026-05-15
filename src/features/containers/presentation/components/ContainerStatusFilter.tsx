@@ -1,4 +1,3 @@
-// Created by Luis
 
 interface Props {
     activeStatus: 4 | 5 | null;

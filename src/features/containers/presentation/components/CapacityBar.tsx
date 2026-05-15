@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { usagePercent } from '../utils/limits';
 
