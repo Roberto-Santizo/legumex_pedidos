@@ -146,8 +146,8 @@ export function Reports() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            <ReportCard isLoading={isDownloadingHeaders} onClick={handleDownloadReport} text="1- Order Headers" flag="2" />
-            <ReportCard isLoading={isDownloadingItems} onClick={handleDownloadReport} text="2- Order Items" flag="1" />
+            <ReportCard isLoading={isDownloadingHeaders} onClick={handleDownloadReport} text="1- Order Headers" flag="1" />
+            <ReportCard isLoading={isDownloadingItems} onClick={handleDownloadReport} text="2- Order Items" flag="2" />
             <ReportCard isLoading={isDownloadingOrdersDetails} onClick={handleDownloadReport} text="3- Orders Details" flag="3" />
           </div>
         </div>
