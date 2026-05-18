@@ -1,4 +1,3 @@
-// Created by Luis
 
 import type { CreateCarrierPayload, UpdateCarrierPayload } from '../interfaces/interfaces';
 import type { Carrier, CarrierRate } from '../types/types';

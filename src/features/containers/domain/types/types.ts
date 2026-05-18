@@ -25,7 +25,7 @@ export interface DraftContainer {
     dc: string;
     weekStart: string;
     orders: OrderSummary[];
-    totalPallets: number; // computed from orders
-    totalPounds: number;  // computed from orders
-    persistedId: number | null; // null = in-memory only; number = saved as draft in DB
+    totalPallets: number; 
+    totalPounds: number;  
+    persistedId: number | null; 
 }

@@ -1,4 +1,4 @@
-// Created by Luis
+
 
 import { isAxiosError, type AxiosInstance } from 'axios';
 import { CarriersDatasource, CarrierListResponseSchema, CarrierResponseSchema, CarrierRateListResponseSchema } from '@/features/carriers/carriers';
@@ -8,14 +8,11 @@ import { CarrierNotFoundError } from '../errors/errors';
 
 export class CarriersDatasourceImpl implements CarriersDatasource {
     constructor(private api: AxiosInstance) {}
-
     async getAll(): Promise<Carrier[]> {
         try {
             const { data } = await this.api.get('/carriers');
-            // console.log('[CarriersDatasource] raw response sample:', JSON.stringify(data?.data?.[0], null, 2));
             const parsed = CarrierListResponseSchema.safeParse(data);
             if (parsed.success) return parsed.data.data;
-            // console.error('[CarriersDatasource] parse errors:', JSON.stringify(parsed.error.issues, null, 2));
             throw new Error('Invalid response from server');
         } catch (error) {
             if (isAxiosError(error)) throw new Error(error.response?.data?.message ?? 'Connection error');

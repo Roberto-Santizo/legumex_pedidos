@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNotification } from '@/features/shared/shared';
 import { containersProvider } from '../providers/containersRepositoryProvider';
-import { todayIso, getWeekBounds, getMondayOfISOWeek } from '../utils/weekFormatter';
+import { todayIso, getWeekBounds, getMondayOfISOWeek, getISOWeekNumber, getISOWeekYear } from '../utils/weekFormatter';
 import { wouldExceedPounds } from '../utils/limits';
 import {WeekHeader,TransportDcFilterChips,AvailableOrdersPanel,ContainerBuilderPanel,ContainerDetailModal,ContainerStatusFilter,} from '../components/components';
 import type { DraftContainer, OrderSummary, ContainerDetail } from '../../domain/types/types';
@@ -78,15 +78,19 @@ export function Containers() {
     const [poFilter, setPoFilter] = useState<string>('');
 
     // ── Transport cost Excel report ────────────────────────────────────────────
-    const [reportFrom, setReportFrom]           = useState<string>(weekStart);
-    const [reportTo, setReportTo]               = useState<string>(weekEnd);
+    const [reportWeek, setReportWeek] = useState<number>(() => getISOWeekNumber(new Date(weekStart + 'T12:00:00')));
+    const [reportYear, setReportYear] = useState<number>(() => getISOWeekYear(new Date(weekStart + 'T12:00:00')));
     const [downloadingReport, setDownloadingReport] = useState(false);
 
     const handleDownloadReport = async () => {
-        if (!reportFrom || !reportTo) return;
         setDownloadingReport(true);
         try {
-            await downloadTransportCostReport({ from: reportFrom, to: reportTo });
+            const monday = getMondayOfISOWeek(reportYear, reportWeek);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            const from = monday.toISOString().slice(0, 10);
+            const to = sunday.toISOString().slice(0, 10);
+            await downloadTransportCostReport({ from, to });
         } catch (err: unknown) {
             notify.error(err instanceof Error ? err.message : 'Failed to generate the report.');
         } finally {
@@ -371,22 +375,27 @@ export function Containers() {
             {/* Transport cost Excel report download */}
             <div className="flex items-center gap-2 flex-wrap bg-white border border-slate-200 rounded-xl px-4 py-3 shadow-sm">
                 <span className="text-xs font-semibold text-slate-500 mr-1">Transport report:</span>
+                <span className="text-xs text-slate-400">Week</span>
                 <input
-                    type="date"
-                    value={reportFrom}
-                    onChange={(reportFromInputEvent) => setReportFrom(reportFromInputEvent.target.value)}
-                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    type="number"
+                    min={1}
+                    max={53}
+                    value={reportWeek}
+                    onChange={(weekInputEvent) => setReportWeek(Number(weekInputEvent.target.value))}
+                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 w-16 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
-                <span className="text-slate-400 text-xs">—</span>
+                <span className="text-xs text-slate-400">Year</span>
                 <input
-                    type="date"
-                    value={reportTo}
-                    onChange={(reportToInputEvent) => setReportTo(reportToInputEvent.target.value)}
-                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    type="number"
+                    min={2024}
+                    max={2100}
+                    value={reportYear}
+                    onChange={(yearInputEvent) => setReportYear(Number(yearInputEvent.target.value))}
+                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 w-20 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                 />
                 <button
                     onClick={handleDownloadReport}
-                    disabled={downloadingReport || !reportFrom || !reportTo}
+                    disabled={downloadingReport}
                     className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
                 >
                     <BiDownload size={14} />

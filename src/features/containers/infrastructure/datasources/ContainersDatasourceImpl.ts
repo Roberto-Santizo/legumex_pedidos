@@ -69,7 +69,6 @@ export class ContainersDatasourceImpl implements ContainersDatasource {
             const { data } = await this.api.post(`/containers/${containerId}/confirm`);
             return {
                 message: data['message'],
-                // The backend optionally returns a warning when weight < 20,000 lbs
                 warning: data['data']?.warning ?? null,
             };
         } catch (error) {

@@ -1,15 +1,20 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useNotification } from '@/features/shared/shared';
+import { useSearchParams } from 'react-router-dom';
+import { useNotification, Pagination } from '@/features/shared/shared';
 import { carriersProvider } from '../providers/carriersRepositoryProvider';
 import { CarrierFormModal, CarrierRateHistoryModal } from '../components/components';
+import { ConfirmModal } from '@/features/containers/presentation/components/ConfirmModal';
 import type { Carrier, CreateCarrierPayload } from '../../domain/domain';
 
 export function TransportationCost() {
     const notify = useNotification();
     const queryClient = useQueryClient();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const page = Number(searchParams.get('page')) || 0;
+    const rowsPerPage = Number(searchParams.get('limit')) || 10;
 
     const { data: carriers = [], isLoading, isError } = useQuery({
         queryKey: ['carriers'],
@@ -17,15 +22,17 @@ export function TransportationCost() {
         staleTime: 0,
     });
 
+    const pagedCarriers = carriers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
     const invalidate = () => queryClient.invalidateQueries({ queryKey: ['carriers'] });
 
-    // ── Form modal ─────────────────────────────────────────────────────────────
+
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<Carrier | null>(null);
     const [saving, setSaving] = useState(false);
 
     const openCreate = () => { setEditing(null); setModalOpen(true); };
-    const openEdit = (c: Carrier) => { setEditing(c); setModalOpen(true); };
+    const openEdit = (selectedCarrier: Carrier) => { setEditing(selectedCarrier); setModalOpen(true); };
     const closeModal = () => { setModalOpen(false); setEditing(null); };
 
     const handleSave = async (payload: CreateCarrierPayload, id?: number) => {
@@ -46,15 +53,16 @@ export function TransportationCost() {
         }
     };
 
-    // ── Delete ─────────────────────────────────────────────────────────────────
+    const [carrierToDelete, setCarrierToDelete] = useState<Carrier | null>(null);
     const [deletingId, setDeletingId] = useState<number | null>(null);
 
-    const handleDelete = async (id: number) => {
-        if (!window.confirm('Are you sure you want to delete this carrier? This action cannot be undone.')) return;
-        setDeletingId(id);
+    const handleDelete = async () => {
+        if (!carrierToDelete) return;
+        setDeletingId(carrierToDelete.id);
         try {
-            await carriersProvider.delete(id);
+            await carriersProvider.delete(carrierToDelete.id);
             notify.success('Carrier deleted.');
+            setCarrierToDelete(null);
             invalidate();
         } catch (err: unknown) {
             notify.error(err instanceof Error ? err.message : 'Failed to delete carrier.');
@@ -66,10 +74,9 @@ export function TransportationCost() {
     // ── Rate history modal ─────────────────────────────────────────────────────
     const [historyCarrier, setHistoryCarrier] = useState<Carrier | null>(null);
 
-    // ── Render ─────────────────────────────────────────────────────────────────
+
     return (
         <div className="space-y-4">
-            {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-lg font-bold text-slate-800">Transportation Cost</h1>
@@ -84,7 +91,6 @@ export function TransportationCost() {
                 </button>
             </div>
 
-            {/* Table */}
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
                 {isLoading && (
                     <div className="flex items-center justify-center py-16">
@@ -112,18 +118,22 @@ export function TransportationCost() {
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">ID</th>
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Carrier name</th>
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">DC</th>
+                                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Client</th>
                                 <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Shipping cost</th>
                                 <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Rate updated</th>
                                 <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
-                            {carriers.map((carrier) => (
+                            {pagedCarriers.map((carrier) => (
                                 <tr key={carrier.id} className="hover:bg-slate-50/60 transition-colors">
                                     <td className="px-4 py-3 text-slate-400 font-mono text-xs">#{carrier.id}</td>
                                     <td className="px-4 py-3 font-semibold text-slate-800">{carrier.name}</td>
                                     <td className="px-4 py-3 text-slate-600 text-xs">
                                         {carrier.dcName ?? <span className="text-slate-300">—</span>}
+                                    </td>
+                                    <td className="px-4 py-3 text-slate-600 text-xs">
+                                        {carrier.clientName ?? <span className="text-slate-300">—</span>}
                                     </td>
                                     <td className="px-4 py-3 text-right">
                                         <button
@@ -157,7 +167,7 @@ export function TransportationCost() {
                                             </button>
                                             <button
                                                 type="button"
-                                                onClick={() => handleDelete(carrier.id)}
+                                                onClick={() => setCarrierToDelete(carrier)}
                                                 disabled={deletingId === carrier.id}
                                                 className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-red-200 text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
                                             >
@@ -171,6 +181,23 @@ export function TransportationCost() {
                     </table>
                 )}
             </div>
+
+            <Pagination
+                count={carriers.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                setSearchParams={setSearchParams}
+            />
+
+            <ConfirmModal
+                open={carrierToDelete !== null}
+                title="Delete carrier"
+                message={`Are you sure you want to delete "${carrierToDelete?.name}"? This action cannot be undone.`}
+                confirmLabel="Delete"
+                loading={deletingId !== null}
+                onConfirm={handleDelete}
+                onCancel={() => setCarrierToDelete(null)}
+            />
 
             <CarrierFormModal
                 open={modalOpen}

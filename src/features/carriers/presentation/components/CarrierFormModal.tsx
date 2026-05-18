@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { useForm } from 'react-hook-form';
 import { useQuery } from '@tanstack/react-query';
@@ -50,7 +49,7 @@ function CarrierForm({ carrier, dcs, saving, onSave, onClose }: FormProps) {
             : { name: '', shippingCost: '', rateUpdatedAt: '', dcId: '' },
     });
 
-    const dcOptions = dcs.map((dc) => ({ label: `${dc.name} (${dc.code})`, value: dc.id }));
+    const dcOptions = dcs.map((dc) => ({ label: `${dc.name} (${dc.code}) - ${dc.client}`, value: dc.id }));
 
     const onSubmit = async (data: FormValues) => {
         const cost = parseFloat(data.shippingCost);
