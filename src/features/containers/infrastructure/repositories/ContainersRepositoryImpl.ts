@@ -1,4 +1,3 @@
-// Created by Luis
 
 import type { ContainersDatasource } from '@/features/containers/containers';
 import type { ContainersRepository } from '../../domain/repositories/ContainersRepository';

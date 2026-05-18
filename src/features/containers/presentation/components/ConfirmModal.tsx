@@ -1,5 +1,3 @@
-// Created by Luis
-
 interface Props {
     open: boolean;
     title: string;

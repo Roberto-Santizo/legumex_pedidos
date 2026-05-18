@@ -1,4 +1,3 @@
-// Created by Luis
 
 export { CapacityBar } from './CapacityBar';
 export { ContainerVisualization } from './ContainerVisualization';

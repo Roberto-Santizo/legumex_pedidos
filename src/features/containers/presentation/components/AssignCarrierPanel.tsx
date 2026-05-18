@@ -1,8 +1,8 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { carriersProvider } from '@/features/carriers/carriers';
+import { dcsProvider } from '@/features/dc/presentation/providers/dcsRepositoryProvider';
 
 interface Props {
     dcId: number | null;
@@ -20,6 +20,14 @@ export function AssignCarrierPanel({ dcId, currentCarrierId, onAssign, onCancel,
         queryFn: () => dcId != null ? carriersProvider.getByDcId(dcId) : carriersProvider.getAll(),
         staleTime: 60_000,
     });
+
+    const { data: dcs = [] } = useQuery({
+        queryKey: ['dcs-all'],
+        queryFn: () => dcsProvider.getAllDcs(),
+        staleTime: 300_000,
+    });
+
+    const clientName = dcId != null ? (dcs.find(d => d.id === dcId)?.client ?? null) : null;
 
     const handleAssign = async () => {
         if (selectedId === null) return;
@@ -55,7 +63,9 @@ export function AssignCarrierPanel({ dcId, currentCarrierId, onAssign, onCancel,
                                     : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                             }`}
                         >
-                            <span className="font-medium">{carrier.name}</span>
+                            <span className="font-medium">
+                                {carrier.name}{clientName ? `-${clientName}` : ''}
+                            </span>
                             <span className="text-xs font-semibold text-slate-500">
                                 ${carrier.shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                             </span>

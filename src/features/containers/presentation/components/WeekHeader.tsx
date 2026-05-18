@@ -1,6 +1,5 @@
-// Created by Luis
 
-import { formatWeekRange, getISOWeekNumber, getISOWeekYear, isoWeeksInYear } from '../utils/weekFormatter';
+import {getISOWeekNumber, getISOWeekYear, isoWeeksInYear } from '../utils/weekFormatter';
 import type { WeekView } from '../../domain/types/types';
 
 interface Props {
@@ -14,14 +13,7 @@ interface Props {
 }
 
 /** Header card with week navigation and 4 KPI counters. */
-export function WeekHeader({
-    weekStart,
-    weekEnd,
-    weekView,
-    onPreviousWeek,
-    onNextWeek,
-    onToday,
-    onGoToWeek,
+export function WeekHeader({weekStart,weekView,onGoToWeek,
 }: Props) {
     const anchorDate = new Date(weekStart + 'T12:00:00');
     const currentWeek = getISOWeekNumber(anchorDate);
@@ -30,12 +22,12 @@ export function WeekHeader({
     const yearOptions = [currentYear - 1, currentYear, currentYear + 1];
     const totalOrders = weekView
         ? weekView.availableOrders.length +
-          weekView.containers.reduce((s, c) => s + c.orders.length, 0)
+          weekView.containers.reduce((sum, container) => sum + container.orders.length, 0)
         : 0;
 
     const unassigned = weekView?.availableOrders.length ?? 0;
-    const draftCount = weekView?.containers.filter((c) => c.status === 'draft').length ?? 0;
-    const confirmedCount = weekView?.containers.filter((c) => c.status === 'confirmed').length ?? 0;
+    const draftCount = weekView?.containers.filter((container) => container.status === 'draft').length ?? 0;
+    const confirmedCount = weekView?.containers.filter((container) => container.status === 'confirmed').length ?? 0;
 
     return (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
@@ -50,50 +42,21 @@ export function WeekHeader({
                             Max 20 pallets · 40,000 lbs per container
                         </p>
                     </div>
-
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-900">Containers</h1>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                            Max 20 pallets · 40,000 lbs per container
-                        </p>
-                    </div>
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                    <button
-                        type="button"
-                        onClick={onPreviousWeek}
-                        className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:border-[#00C853] hover:text-[#00C853] transition-colors"
-                        aria-label="Previous week"
-                    >
-                        ◀
-                    </button>
-
-                    <span className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-full text-sm text-slate-700 font-medium select-none">
-                        {formatWeekRange(weekStart, weekEnd)}
-                    </span>
-
-                    <button
-                        type="button"
-                        onClick={onNextWeek}
-                        className="p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:border-[#00C853] hover:text-[#00C853] transition-colors"
-                        aria-label="Next week"
-                    >
-                        ▶
-                    </button>
-
                     {/* Week number jump selector */}
                     <div className="flex items-center gap-1 border border-slate-200 rounded-lg px-2 py-1 bg-slate-50">
                         <span className="text-xs font-semibold text-slate-400 select-none">Wk</span>
                         <select
                             value={currentWeek}
-                            onChange={(e) => onGoToWeek(Number(e.target.value), currentYear)}
+                            onChange={(weekSelectEvent) => onGoToWeek(Number(weekSelectEvent.target.value), currentYear)}
                             className="text-xs font-semibold text-slate-700 bg-transparent focus:outline-none cursor-pointer"
                             aria-label="Jump to week"
                         >
-                            {Array.from({ length: weeksInYear }, (_, i) => i + 1).map((w) => (
-                                <option key={w} value={w}>
-                                    {w}
+                            {Array.from({ length: weeksInYear }, (_unused, index) => index + 1).map((week) => (
+                                <option key={week} value={week}>
+                                    {week}
                                 </option>
                             ))}
                         </select>
@@ -102,24 +65,19 @@ export function WeekHeader({
                     {/* Year selector */}
                     <select
                         value={currentYear}
-                        onChange={(e) => onGoToWeek(currentWeek, Number(e.target.value))}
+                        onChange={(yearSelectEvent) => onGoToWeek(currentWeek, Number(yearSelectEvent.target.value))}
                         className="text-xs font-semibold text-slate-700 border border-slate-200 rounded-lg px-2 py-1 bg-slate-50 focus:outline-none cursor-pointer"
                         aria-label="Jump to year"
                     >
-                        {yearOptions.map((y) => (
-                            <option key={y} value={y}>{y}</option>
+                        {yearOptions.map((year) => (
+                            <option key={year} value={year}>{year}</option>
                         ))}
                     </select>
 
-                    <button
-                        type="button"
-                        onClick={onToday}
-                        className="px-4 py-1.5 rounded-lg bg-[#00C853] text-white text-sm font-semibold hover:bg-[#00b34a] transition-colors shadow-sm"
-                        aria-label="Go to current week"
-                    >
-                        Today
-                    </button>
                 </div>
+
+
+
             </div>
 
             {/* KPI grid */}

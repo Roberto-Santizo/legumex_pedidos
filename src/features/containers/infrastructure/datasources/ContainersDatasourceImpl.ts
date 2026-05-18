@@ -1,14 +1,6 @@
-// Created by Luis
 
 import { isAxiosError, type AxiosInstance } from 'axios';
-import {
-    ContainerDetailResponseSchema,
-    ContainersDatasource,
-    WeekViewResponseSchema,
-    type ContainerDetail,
-    type CreateContainerPayload,
-    type WeekView,
-} from '@/features/containers/containers';
+import {ContainerDetailResponseSchema,ContainersDatasource,WeekViewResponseSchema,type ContainerDetail,type CreateContainerPayload,type WeekView,} from '@/features/containers/containers';
 import { ContainerNotFoundError } from '../errors/errors';
 
 export class ContainersDatasourceImpl implements ContainersDatasource {
@@ -77,7 +69,6 @@ export class ContainersDatasourceImpl implements ContainersDatasource {
             const { data } = await this.api.post(`/containers/${containerId}/confirm`);
             return {
                 message: data['message'],
-                // The backend optionally returns a warning when weight < 20,000 lbs
                 warning: data['data']?.warning ?? null,
             };
         } catch (error) {

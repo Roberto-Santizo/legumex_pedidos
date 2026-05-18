@@ -1,5 +1,3 @@
-// Created by Luis
-
 export class ContainerNotFoundError extends Error {
     constructor(message = 'Container not found') {
         super(message);

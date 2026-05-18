@@ -1,4 +1,3 @@
-// Created by Luis
 
 import type { CreateContainerPayload } from '../interfaces/interfaces';
 import type { ContainerDetail, WeekView } from '../types/types';

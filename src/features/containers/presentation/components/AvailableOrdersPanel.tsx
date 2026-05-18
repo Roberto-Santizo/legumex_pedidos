@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { OrderCard } from './OrderCard';
@@ -22,16 +21,16 @@ export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props
     const [searchQuery, setSearchQuery] = useState('');
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-    const filtered = orders.filter((o) => {
+    const filtered = orders.filter((order) => {
         if (activeFilter) {
-            if (o.transportType !== activeFilter.transportType) return false;
-            if (o.dc !== activeFilter.dc) return false;
+            if (order.transportType !== activeFilter.transportType) return false;
+            if (order.dc !== activeFilter.dc) return false;
         }
         if (searchQuery.trim()) {
-            const q = searchQuery.toLowerCase();
-            const clientMatch = o.client?.name.toLowerCase().includes(q) ?? false;
-            const poMatch = o.items.some((i) => i.po?.toLowerCase().includes(q));
-            const idMatch = String(o.id).includes(q);
+            const query = searchQuery.toLowerCase();
+            const clientMatch = order.client?.name.toLowerCase().includes(query) ?? false;
+            const poMatch = order.items.some((item) => item.po?.toLowerCase().includes(query));
+            const idMatch = String(order.id).includes(query);
             return clientMatch || poMatch || idMatch;
         }
         return true;
@@ -85,7 +84,7 @@ export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props
                         {remaining > 0 && (
                             <button
                                 type="button"
-                                onClick={() => setVisibleCount((v) => v + PAGE_SIZE)}
+                                onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
                                 className="w-full py-2 text-xs font-medium text-[#00C853] hover:text-[#00b34a] border border-dashed border-[#00C853]/40 hover:border-[#00C853] rounded-lg transition-colors"
                                 aria-label={`Load ${remaining} more orders`}
                             >

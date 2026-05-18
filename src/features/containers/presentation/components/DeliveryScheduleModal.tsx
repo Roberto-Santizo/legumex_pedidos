@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { Modal } from '@/features/shared/components/Modal';
@@ -20,8 +19,8 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = async (formEvent: React.FormEvent) => {
+        formEvent.preventDefault();
         if (!deliveryDate || !deliveryTime) return;
 
         setSaving(true);
@@ -51,7 +50,7 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
                     <input
                         type="date"
                         value={deliveryDate}
-                        onChange={(e) => setDeliveryDate(e.target.value)}
+                        onChange={(dateInputEvent) => setDeliveryDate(dateInputEvent.target.value)}
                         required
                         className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                     />
@@ -65,7 +64,7 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
                     <input
                         type="time"
                         value={deliveryTime}
-                        onChange={(e) => setDeliveryTime(e.target.value)}
+                        onChange={(timeInputEvent) => setDeliveryTime(timeInputEvent.target.value)}
                         required
                         className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                     />

@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { colorForOrder } from '../utils/orderColors';
 import { MAX_PALLETS } from '../utils/limits';

@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { formatShortDate } from '../utils/weekFormatter';
 import type { OrderSummary } from '../../domain/types/types';
@@ -96,14 +95,16 @@ export function OrderCard({ order, onAdd }: Props) {
                     + Add to container
                 </button>
 
-                <button
-                    type="button"
-                    onClick={() => handleOpenEditModal()}
-                    className="w-full mt-0.5 text-xs font-semibold text-[#00C853] border border-[#00C853]/30 rounded-lg py-1.5 hover:bg-[#00C853] hover:text-white transition-all group-hover:border-[#00C853]"
-                    aria-label={`Add order #${order.id} to container`}
-                >
-                    Edit Order
-                </button>
+                {order.status !== 3 && (
+                    <button
+                        type="button"
+                        onClick={() => handleOpenEditModal()}
+                        className="w-full mt-0.5 text-xs font-semibold text-[#00C853] border border-[#00C853]/30 rounded-lg py-1.5 hover:bg-[#00C853] hover:text-white transition-all group-hover:border-[#00C853]"
+                        aria-label={`Edit order #${order.id}`}
+                    >
+                        Edit Order
+                    </button>
+                )}
             </div>
         </div>
     );

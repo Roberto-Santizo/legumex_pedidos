@@ -1,24 +1,23 @@
-// Created by Luis
+
 
 import { ApiResponseSchema } from '@/features/shared/shared';
 import z from 'zod';
 
-// ─── Nested schemas ───────────────────────────────────────────────────────────
 
 // Normalizes dc from either a plain string or a DC object {id,name,...} to a string name.
 // Also handles null and undefined (missing field).
-const normalizeDc = (v: unknown): string | null => {
-    if (v === null || v === undefined) return null;
-    if (typeof v === 'string') return v;
-    if (typeof v === 'object' && 'name' in v) return (v as { name: string }).name;
+const normalizeDc = (rawValue: unknown): string | null => {
+    if (rawValue === null || rawValue === undefined) return null;
+    if (typeof rawValue === 'string') return rawValue;
+    if (typeof rawValue === 'object' && 'name' in rawValue) return (rawValue as { name: string }).name;
     return null;
 };
 
 // Extracts numeric id from a DC object, or passes through a plain number.
-const normalizeDcId = (v: unknown): number | null => {
-    if (v === null || v === undefined) return null;
-    if (typeof v === 'number') return v;
-    if (typeof v === 'object' && 'id' in v) return (v as { id: number }).id;
+const normalizeDcId = (rawValue: unknown): number | null => {
+    if (rawValue === null || rawValue === undefined) return null;
+    if (typeof rawValue === 'number') return rawValue;
+    if (typeof rawValue === 'object' && 'id' in rawValue) return (rawValue as { id: number }).id;
     return null;
 };
 
@@ -35,7 +34,7 @@ export const OrderSummarySchema = z.object({
     transportType: z.string().default(''),
     dc: z.preprocess(normalizeDc, z.string().nullable()),
     warehouse: z.string().nullable().default(null),
-    requiredByDate: z.string().default(''),
+    requiredByDate: z.string().min(1),
     totalPallets: z.number(),
     totalPounds: z.number(),
     totalBoxes: z.number(),
@@ -64,12 +63,11 @@ export const ContainerDetailSchema = z.object({
     confirmedBy: z.string().nullable(),
     carrier: z.object({ id: z.number(), name: z.string(), shippingCost: z.number() }).nullable().default(null),
     carrierCostSnapshot: z.number().nullable().default(null),
-    // Delivery schedule — populated after carrier is assigned
     deliveryDate: z.string().nullable().default(null),
     deliveryTime: z.string().nullable().default(null),
 });
 
-// ─── Response schemas ─────────────────────────────────────────────────────────
+
 
 export const WeekViewResponseSchema = ApiResponseSchema.extend({
     data: z.object({

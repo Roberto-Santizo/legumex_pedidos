@@ -1,4 +1,3 @@
-// Created by Luis
 
 import { useState } from 'react';
 import { Modal } from '@/features/shared/components/Modal';
@@ -35,12 +34,12 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
 
     const filteredOrders = container.orders.filter((order) => {
         if (statusFilter !== null && statusFilter !== logisticsStatus) return false;
-        const q = search.trim().toLowerCase();
-        if (!q) return true;
+        const searchQuery = search.trim().toLowerCase();
+        if (!searchQuery) return true;
         return (
-            String(order.id).includes(q) ||
-            (order.client?.name ?? '').toLowerCase().includes(q) ||
-            order.items.some((it) => (it.productName ?? '').toLowerCase().includes(q))
+            String(order.id).includes(searchQuery) ||
+            (order.client?.name ?? '').toLowerCase().includes(searchQuery) ||
+            order.items.some((orderItem) => (orderItem.productName ?? '').toLowerCase().includes(searchQuery))
         );
     });
 
@@ -100,7 +99,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                         <input
                             type="text"
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(searchInputEvent) => setSearch(searchInputEvent.target.value)}
                             placeholder="Search by client, product or #..."
                             className="w-full pl-6 pr-6 py-1.5 text-xs rounded-lg border border-slate-200 text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-transparent"
                         />
@@ -159,7 +158,6 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                             <tr>
                                 <th className="px-3 py-2.5 text-left font-semibold">#</th>
                                 <th className="px-3 py-2.5 text-left font-semibold">Client</th>
-                                <th className="px-3 py-2.5 text-left font-semibold">Product(s)</th>
                                 <th className="px-3 py-2.5 text-left font-semibold">Required by</th>
                                 <th className="px-3 py-2.5 text-right font-semibold">Pallets</th>
                                 <th className="px-3 py-2.5 text-right font-semibold">lbs</th>
@@ -169,7 +167,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                         <tbody className="divide-y divide-slate-100">
                             {filteredOrders.length === 0 ? (
                                 <tr>
-                                    <td colSpan={7} className="px-3 py-8 text-center text-slate-400">
+                                    <td colSpan={6} className="px-3 py-8 text-center text-slate-400">
                                         No orders match the current filter.
                                     </td>
                                 </tr>
@@ -186,16 +184,6 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                                         <td className="px-3 py-2 font-semibold text-slate-700 max-w-40 truncate">
                                             {order.client?.name ?? '—'}
                                         </td>
-                                        <td className="px-3 py-2 text-slate-600 max-w-48">
-                                            {order.items.length === 0
-                                                ? <span className="text-slate-300">—</span>
-                                                : order.items.map((item, i) => (
-                                                    <span key={i} className="block truncate">
-                                                        {item.productName ?? '—'}
-                                                    </span>
-                                                ))
-                                            }
-                                        </td>
                                         <td className="px-3 py-2 text-sky-500 font-medium">
                                             {formatShortDate(order.requiredByDate)}
                                         </td>
@@ -208,17 +196,17 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                         </tbody>
                         <tfoot className="bg-slate-50 border-t-2 border-slate-200">
                             <tr>
-                                <td colSpan={4} className="px-3 py-2.5 text-right text-slate-500 font-semibold">
+                                <td colSpan={3} className="px-3 py-2.5 text-right text-slate-500 font-semibold">
                                     Total
                                 </td>
                                 <td className="px-3 py-2.5 text-right font-bold text-slate-800">
-                                    {filteredOrders.reduce((s, o) => s + o.totalPallets, 0)}
+                                    {filteredOrders.reduce((palletSum, orderRow) => palletSum + orderRow.totalPallets, 0)}
                                 </td>
                                 <td className="px-3 py-2.5 text-right font-bold text-slate-800">
-                                    {filteredOrders.reduce((s, o) => s + o.totalPounds, 0).toLocaleString()}
+                                    {filteredOrders.reduce((poundsSum, orderRow) => poundsSum + orderRow.totalPounds, 0).toLocaleString()}
                                 </td>
                                 <td className="px-3 py-2.5 text-right font-bold text-slate-800">
-                                    {filteredOrders.reduce((s, o) => s + o.totalBoxes, 0).toLocaleString()}
+                                    {filteredOrders.reduce((boxSum, orderRow) => boxSum + orderRow.totalBoxes, 0).toLocaleString()}
                                 </td>
                             </tr>
                         </tfoot>
@@ -242,7 +230,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                             </div>
                             <button
                                 type="button"
-                                onClick={() => setShowAssignPanel((v) => !v)}
+                                onClick={() => setShowAssignPanel((panelVisible) => !panelVisible)}
                                 className="text-xs font-semibold text-[#009940] border border-[#00C853]/50 rounded-lg px-3 py-1.5 hover:bg-[#00C853]/10 transition-colors"
                             >
                                 Change Transport
@@ -251,7 +239,7 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                     ) : (
                         <button
                             type="button"
-                            onClick={() => setShowAssignPanel((v) => !v)}
+                            onClick={() => setShowAssignPanel((panelVisible) => !panelVisible)}
                             className="w-full py-2.5 text-sm font-semibold rounded-xl border-2 border-dashed border-slate-300 text-slate-500 hover:border-[#00C853] hover:text-[#009940] transition-colors"
                         >
                             + Assign Transport
