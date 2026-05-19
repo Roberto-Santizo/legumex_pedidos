@@ -1,7 +1,7 @@
-import { useParams } from "react-router-dom";
-import type { OrderDetails } from "@/features/my-orders/my-orders";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { OrderTotalsComponent, type OrderDetails } from "@/features/my-orders/my-orders";
 
 type Props = {
     order: OrderDetails;
@@ -25,41 +25,7 @@ export function OrderDetailsComponent({ order }: Props) {
                 </h2>
             </div>
 
-            <div>
-                <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
-                    Totals
-                </h3>
-
-                <div className="grid grid-cols-4 gap-4">
-                    <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-sm text-gray-500">Boxes</p>
-                        <p className="text-lg font-semibold text-gray-800">
-                            {totals.total_boxes}
-                        </p>
-                    </div>
-
-                    <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-sm text-gray-500">Pounds</p>
-                        <p className="text-lg font-semibold text-gray-800">
-                            {totals.total_lbs}
-                        </p>
-                    </div>
-
-                    <div className="bg-gray-50 rounded-xl p-4 text-center">
-                        <p className="text-sm text-gray-500">Pallets</p>
-                        <p className="text-lg font-semibold text-gray-800">
-                            {totals.total_pallets}
-                        </p>
-                    </div>
-
-                    <div className="bg-green-50 rounded-xl p-4 text-center">
-                        <p className="text-sm text-green-600">Amount</p>
-                        <p className="text-lg font-bold text-green-700">
-                            ${totals.total_price}
-                        </p>
-                    </div>
-                </div>
-            </div>
+            <OrderTotalsComponent totals={totals} />
 
             <div>
                 <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">

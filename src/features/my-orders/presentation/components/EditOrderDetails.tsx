@@ -1,12 +1,12 @@
 import { CustomFilledButton, useNotification } from "@/features/shared/shared";
 import { getWeekBounds, todayIso } from "@/features/containers/presentation/utils/weekFormatter";
+import { ModalAddItem } from "./ModalAddItem";
 import { ModalEditItem } from "./ModalEditItem";
 import { OrderProductsTable } from "./OrderProductsTable";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ModalAddItem } from "./ModalAddItem";
 
 export function EditOrderDetails({ id }: { id: string }) {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ export function EditOrderDetails({ id }: { id: string }) {
 
     if (order) return (
         <div className="w-full flex flex-col gap-4">
-            <div className="bg-white/90 backdrop-blur rounded-2xl shadow-lg border p-4 space-y-5">
+            <div className="rounded-2xl shadow-xl p-4 space-y-5">
                 <p className="main_title mb-3">Items</p>
                 <CustomFilledButton
                     label="Add Item"

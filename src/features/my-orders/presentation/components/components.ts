@@ -14,3 +14,4 @@ export * from './ModalEditOrder';
 export * from './EditButton';
 export * from './ModalEditOrderDetails';
 export * from './EditOrderDetails';
+export * from './OrderTotalsComponent';
