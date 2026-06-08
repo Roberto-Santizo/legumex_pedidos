@@ -2,7 +2,6 @@
 
 export interface CreateContainerPayload {
     transportType: string;
-    dc: string;
     weekStart: string;
     orderIds?: number[];
 }

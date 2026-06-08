@@ -6,7 +6,7 @@ import type { CreateCarrierPayload, UpdateCarrierPayload } from '../../domain/in
 import type { Carrier, CarrierRate } from '../../domain/types/types';
 import { CarrierNotFoundError } from '../errors/errors';
 
-export class CarriersDatasourceImpl implements CarriersDatasource {
+export class CarriersAPI implements CarriersDatasource {
     constructor(private api: AxiosInstance) {}
     async getAll(): Promise<Carrier[]> {
         try {

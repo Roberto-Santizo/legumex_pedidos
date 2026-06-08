@@ -5,7 +5,8 @@ import { useNotification } from '@/features/shared/shared';
 import { containersProvider } from '../providers/containersRepositoryProvider';
 import { todayIso, getWeekBounds, getMondayOfISOWeek, getISOWeekNumber, getISOWeekYear } from '../utils/weekFormatter';
 import { wouldExceedPounds } from '../utils/limits';
-import {WeekHeader,TransportDcFilterChips,AvailableOrdersPanel,ContainerBuilderPanel,ContainerDetailModal,ContainerStatusFilter,} from '../components/components';
+import { getErrorMessage } from '../utils/errors';
+import {WeekHeader,TransportDcFilterChips,AvailableOrdersPanel,ContainerAssignmentPanel,AssignTransportContainerModal,ContainersListPanel,} from '../components/components';
 import type { DraftContainer, OrderSummary, ContainerDetail } from '../../domain/types/types';
 import { downloadTransportCostReport } from '../../infrastructure/infrastructure';
 import { BiDownload } from 'react-icons/bi';
@@ -34,7 +35,7 @@ export function Containers() {
 
     // ── Week navigation ────────────────────────────────────────────────────────
     const [weekAnchor, setWeekAnchor] = useState<string>(todayIso);
-    const { start: weekStart, end: weekEnd } = getWeekBounds(new Date(weekAnchor + 'T12:00:00'));
+    const { start: weekStart } = getWeekBounds(new Date(weekAnchor + 'T12:00:00'));
 
     const goToPreviousWeek = () => {
         const targetDate = new Date(weekStart + 'T12:00:00');
@@ -48,7 +49,6 @@ export function Containers() {
         setWeekAnchor(targetDate.toISOString().slice(0, 10));
     };
 
-    const goToToday = () => setWeekAnchor(todayIso());
 
     const goToWeek = (week: number, year: number) => {
         const monday = getMondayOfISOWeek(year, week);
@@ -72,10 +72,10 @@ export function Containers() {
         queryClient.refetchQueries({ queryKey: ['containers_weekView', weekStart] });
 
     // ── Transport+DC filter ────────────────────────────────────────────────────
-    const [activeFilter, setActiveFilter] = useState<{ transportType: string; dc: string } | null>(null);
+    const [activeFilter, setActiveFilter] = useState<{ transportType: string } | null>(null);
     const [warehouseFilter, setWarehouseFilter] = useState<string | null>(null);
-    const [transportTypeFilter, setTransportTypeFilter] = useState<string | null>(null);
     const [poFilter, setPoFilter] = useState<string>('');
+    const [dcFilter, setDcFilter] = useState<string[]>([]);
 
     // ── Transport cost Excel report ────────────────────────────────────────────
     const [reportWeek, setReportWeek] = useState<number>(() => getISOWeekNumber(new Date(weekStart + 'T12:00:00')));
@@ -92,7 +92,7 @@ export function Containers() {
             const to = sunday.toISOString().slice(0, 10);
             await downloadTransportCostReport({ from, to });
         } catch (err: unknown) {
-            notify.error(err instanceof Error ? err.message : 'Failed to generate the report.');
+            notify.error(getErrorMessage(err, 'Failed to generate the report.'));
         } finally {
             setDownloadingReport(false);
         }
@@ -106,7 +106,6 @@ export function Containers() {
         if (!activeFilter) return;
         setDraft({
             transportType: activeFilter.transportType,
-            dc: activeFilter.dc,
             weekStart,
             orders: [],
             totalPallets: 0,
@@ -150,7 +149,7 @@ export function Containers() {
                 });
                 await invalidateWeekView();
             } catch (err: unknown) {
-                notify.error(err instanceof Error ? err.message : 'Failed to add order.');
+                notify.error(getErrorMessage(err, 'Failed to add order.'));
             }
         } else {
             // In-memory only — just append
@@ -159,7 +158,6 @@ export function Containers() {
         }
     };
 
-    /** Removes an order from the draft (in-memory or via API if persisted) */
     const handleRemoveOrder = async (orderId: number) => {
         if (!draft) return;
 
@@ -175,7 +173,7 @@ export function Containers() {
                 });
                 await invalidateWeekView();
             } catch (err: unknown) {
-                notify.error(err instanceof Error ? err.message : 'Failed to remove order.');
+                notify.error(getErrorMessage(err, 'Failed to remove order.'));
             }
         } else {
             const updatedDraft = recomputeDraft({
@@ -193,7 +191,7 @@ export function Containers() {
                 await containersProvider.deleteContainer(draft.persistedId);
                 await invalidateWeekView();
             } catch (err: unknown) {
-                notify.error(err instanceof Error ? err.message : 'Failed to delete container.');
+                notify.error(getErrorMessage(err, 'Failed to delete container.'));
             }
         }
         setDraft(null);
@@ -211,7 +209,6 @@ export function Containers() {
 
         const { message, id } = await containersProvider.createContainer({
             transportType: draft.transportType,
-            dc: draft.dc,
             weekStart: draft.weekStart,
             orderIds: draft.orders.map((order) => order.id),
         });
@@ -240,7 +237,7 @@ export function Containers() {
         try {
             await persistDraft();
         } catch (err: unknown) {
-            notify.error(err instanceof Error ? err.message : 'Failed to save container.');
+            notify.error(getErrorMessage(err, 'Failed to save container.'));
         }
     };
 
@@ -262,7 +259,7 @@ export function Containers() {
             setDraft(null);
             await invalidateWeekView();
         } catch (err: unknown) {
-            notify.error(err instanceof Error ? err.message : 'Failed to confirm container.');
+            notify.error(getErrorMessage(err, 'Failed to confirm container.'));
         }
     };
 
@@ -298,29 +295,22 @@ export function Containers() {
         (weekView?.containers ?? []).flatMap((container) => container.orders.map((order) => order.id)),
     );
 
+    // Orders filtered by active transport type + warehouse (source for DC select options — no DC filter applied here)
+    const ordersForDcOptions = (weekView?.availableOrders ?? []).filter(
+        (order) =>
+            (activeFilter === null || order.transportType === activeFilter.transportType) &&
+            (warehouseFilter === null || order.warehouse === warehouseFilter),
+    );
+
     const availableOrders = (weekView?.availableOrders ?? []).filter(
         (order) =>
             !draftOrderIds.has(order.id) &&
             !persistedContainerOrderIds.has(order.id) &&
             (warehouseFilter === null || order.warehouse === warehouseFilter) &&
-            (transportTypeFilter === null || order.transportType === transportTypeFilter) &&
-            (poFilter === '' || order.po?.toLowerCase().includes(poFilter.toLowerCase())),
+            (activeFilter === null || order.transportType === activeFilter.transportType) &&
+            (poFilter === '' || order.po?.toLowerCase().includes(poFilter.toLowerCase())) &&
+            (dcFilter.length === 0 || (order.dc !== null && dcFilter.includes(order.dc))),
     );
-
-    // ── Container logistics status filter ──────────────────────────────────────
-    const [containerStatusFilter, setContainerStatusFilter] = useState<4 | 5 | null>(null);
-
-    const allContainers = weekView?.containers ?? [];
-    // status 5 = carrier assigned, status 4 = in container but no carrier yet
-    const containerStatusCounts = {
-        status4: allContainers.filter((container) => container.carrier === null).length,
-        status5: allContainers.filter((container) => container.carrier !== null).length,
-    };
-    const visibleContainers = containerStatusFilter === null
-        ? allContainers
-        : containerStatusFilter === 5
-            ? allContainers.filter((container) => container.carrier !== null)
-            : allContainers.filter((container) => container.carrier === null);
 
     // ── Render ─────────────────────────────────────────────────────────────────
     if (isLoading) {
@@ -341,35 +331,32 @@ export function Containers() {
 
     return (
         <div className="space-y-4">
-            {/* Week navigation + KPI header */}
             <WeekHeader
                 weekStart={weekStart}
-                weekEnd={weekEnd}
                 weekView={weekView ?? null}
                 onPreviousWeek={goToPreviousWeek}
                 onNextWeek={goToNextWeek}
-                onToday={goToToday}
                 onGoToWeek={goToWeek}
             />
 
-
-            {/* Transport + DC filter chips */}
             <TransportDcFilterChips
                 availableOrders={weekView?.availableOrders ?? []}
+                ordersForDcOptions={ordersForDcOptions}
                 activeFilter={activeFilter}
-                onSetFilter={setActiveFilter}
+                onSetFilter={(filter) => {
+                    setActiveFilter(filter);
+                    setDcFilter([]);
+                }}
                 warehouseFilter={warehouseFilter}
                 onWarehouseChange={(warehouse) => {
                     setWarehouseFilter(warehouse);
-                    if (warehouse !== null) setActiveFilter(null);
-                }}
-                transportTypeFilter={transportTypeFilter}
-                onTransportTypeChange={(type) => {
-                    setTransportTypeFilter(type);
+                    setDcFilter([]);
                     setActiveFilter(null);
                 }}
                 poFilter={poFilter}
                 onPoChange={setPoFilter}
+                dcFilter={dcFilter}
+                onDcFilterChange={setDcFilter}
             />
 
             {/* Transport cost Excel report download */}
@@ -404,89 +391,29 @@ export function Containers() {
             </div>
 
             {/* Confirmed / existing containers list */}
-            {allContainers.length > 0 && (
-                <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">
-                            Containers this week ({visibleContainers.length}{visibleContainers.length !== allContainers.length ? `/${allContainers.length}` : ''})
-                        </p>
-                        <ContainerStatusFilter
-                            activeStatus={containerStatusFilter}
-                            onSetStatus={setContainerStatusFilter}
-                            counts={containerStatusCounts}
-                        />
-                    </div>
-
-                    {visibleContainers.length === 0 ? (
-                        <p className="text-xs text-slate-400 text-center py-4">
-                            No containers match the selected filter.
-                        </p>
-                    ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {visibleContainers.map((container) => (
-                                <button
-                                    key={container.id}
-                                    type="button"
-                                    onClick={() => setSelectedContainer(container)}
-                                    className="text-left border border-slate-200 rounded-xl p-3.5 hover:border-[#00C853] hover:shadow-md transition-all group bg-white"
-                                >
-                                    <div className="flex items-start justify-between gap-2 mb-2">
-                                        <div>
-                                            <p className="text-sm font-bold text-slate-800 group-hover:text-[#00C853] transition-colors">
-                                                #C-{container.id}
-                                            </p>
-                                            <p className="text-[11px] text-slate-400 mt-0.5">
-                                                {container.transportType}{container.dc ? ` · ${container.dc}` : ''}
-                                            </p>
-                                        </div>
-                                        <span
-                                            className={`text-[10px] font-bold rounded-full px-2.5 py-0.5 shrink-0 ${
-                                                container.status === 'confirmed'
-                                                    ? 'bg-[#00C853] text-white'
-                                                    : 'bg-[#00C853]/15 text-[#009940]'
-                                            }`}
-                                        >
-                                            {container.status === 'confirmed' ? '✓ CONFIRMED' : 'DRAFT'}
-                                        </span>
-                                    </div>
-
-                                    <div className="flex gap-3 text-[11px] font-medium text-slate-400 border-t border-slate-100 pt-2">
-                                        <span>{container.totalOrders} orders</span>
-                                        <span className="text-slate-300">·</span>
-                                        <span>{container.totalPallets} pal</span>
-                                        <span className="text-slate-300">·</span>
-                                        <span>{container.totalPounds.toLocaleString()} lbs</span>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
-            )}
+            <ContainersListPanel containers={weekView?.containers ?? []} onSelectContainer={setSelectedContainer} />
 
             {/* Main work area: available orders (left) + draft builder (right) */}
-            {(
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-150">
-                    <AvailableOrdersPanel
-                        orders={availableOrders}
-                        activeFilter={activeFilter}
-                        onAddOrder={handleAddOrder}
-                    />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 min-h-150">
+                <AvailableOrdersPanel
+                    orders={availableOrders}
+                    activeFilter={activeFilter}
+                    onAddOrder={handleAddOrder}
+                />
 
-                    <ContainerBuilderPanel
-                        draft={draft}
-                        activeFilter={activeFilter}
-                        onStartNewDraft={handleStartNewDraft}
-                        onRemoveOrder={handleRemoveOrder}
-                        onDiscard={handleDiscard}
-                        onSave={handleSave}
-                        onConfirm={handleConfirm}
-                    />
-                </div>
-            )}
+                <ContainerAssignmentPanel
+                    draft={draft}
+                    activeFilter={activeFilter}
+                    onStartNewDraft={handleStartNewDraft}
+                    onRemoveOrder={handleRemoveOrder}
+                    onDiscard={handleDiscard}
+                    onSave={handleSave}
+                    onConfirm={handleConfirm}
+                />
+            </div>
 
             {/* Container detail modal */}
-            <ContainerDetailModal
+            <AssignTransportContainerModal
                 container={selectedContainer}
                 open={selectedContainer !== null}
                 onClose={() => setSelectedContainer(null)}

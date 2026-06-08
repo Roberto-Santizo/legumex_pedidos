@@ -21,7 +21,7 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
 
     const handleSubmit = async (formEvent: React.FormEvent) => {
         formEvent.preventDefault();
-        if (!deliveryDate || !deliveryTime) return;
+        if (!deliveryDate) return;
 
         setSaving(true);
         setError(null);
@@ -59,13 +59,12 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
                 {/* Delivery time */}
                 <div>
                     <label className="block text-xs font-semibold text-slate-600 mb-1">
-                        Delivery Time
+                        Delivery Time <span className="text-slate-400 font-normal">(optional)</span>
                     </label>
                     <input
                         type="time"
                         value={deliveryTime}
                         onChange={(timeInputEvent) => setDeliveryTime(timeInputEvent.target.value)}
-                        required
                         className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                     />
                 </div>
@@ -89,7 +88,7 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
                     </button>
                     <button
                         type="submit"
-                        disabled={saving || !deliveryDate || !deliveryTime}
+                        disabled={saving || !deliveryDate}
                         className="px-4 py-2 text-xs font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg transition-colors disabled:opacity-50"
                     >
                         {saving ? 'Saving...' : 'Save Schedule'}

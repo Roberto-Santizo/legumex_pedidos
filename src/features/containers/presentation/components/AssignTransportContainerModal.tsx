@@ -17,7 +17,7 @@ interface Props {
     onSetDeliverySchedule?: (deliveryDate: string, deliveryTime: string) => Promise<void>;
 }
 
-export function ContainerDetailModal({ container, open, onClose, onAssignCarrier, onSetDeliverySchedule }: Props) {
+export function AssignTransportContainerModal({ container, open, onClose, onAssignCarrier, onSetDeliverySchedule }: Props) {
     const [showAssignPanel, setShowAssignPanel] = useState(false);
     const [assigning, setAssigning] = useState(false);
     const [search, setSearch] = useState('');
@@ -249,7 +249,6 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
                     {showAssignPanel && (
                         <div className="mt-3">
                             <AssignCarrierPanel
-                                dcId={container.dcId}
                                 currentCarrierId={container.carrier?.id ?? null}
                                 onAssign={handleAssign}
                                 onCancel={() => setShowAssignPanel(false)}
@@ -263,14 +262,14 @@ export function ContainerDetailModal({ container, open, onClose, onAssignCarrier
             {/* Delivery schedule — only shown once a carrier is assigned */}
             {isConfirmed && container.carrier && (
                 <div className="mb-5">
-                    {container.deliveryDate && container.deliveryTime ? (
+                    {container.deliveryDate ? (
                         <div className="flex items-center justify-between px-4 py-3 rounded-xl border border-sky-200 bg-sky-50">
                             <div>
                                 <p className="text-xs text-sky-600 font-semibold uppercase tracking-wide mb-0.5">
                                     Delivery Schedule
                                 </p>
                                 <p className="text-sm font-bold text-slate-800">
-                                    {container.deliveryDate} · {container.deliveryTime}
+                                    {container.deliveryDate}{container.deliveryTime ? ` · ${container.deliveryTime}` : ''}
                                 </p>
                             </div>
                             <button

@@ -16,10 +16,6 @@ function fillColor(percent: number): string {
     return 'bg-green-700';
 }
 
-/**
- * Horizontal progress bar showing used/max capacity with dynamic color coding.
- * Green < 75% · Amber 75–99% · Red 100%
- */
 export function CapacityBar({ label, used, max, note }: Props) {
     const percent = usagePercent(used, max);
     const remaining = Math.max(max - used, 0);
@@ -33,7 +29,6 @@ export function CapacityBar({ label, used, max, note }: Props) {
                 </span>
             </div>
 
-            {/* Progress bar */}
             <div
                 className="w-full bg-stone-200 h-2.5 rounded-full overflow-hidden"
                 role="progressbar"
