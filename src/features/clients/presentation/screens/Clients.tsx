@@ -1,9 +1,11 @@
-import { BiPencil, BiPlus } from "react-icons/bi";
+import { BiMenu, BiPencil, BiPlus } from "react-icons/bi";
 import { clientsProvider } from "../providers/clientsRepositoryProvider";
-import { CustomFilledButton, Table, type Column } from "@/features/shared/shared";
-import { Link, useNavigate } from "react-router-dom";
+import { CustomFilledButton, Pagination, Table, type Column } from "@/features/shared/shared";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import type { Client } from "@/features/clients/clients";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { FiltersComponent, type Client, type FiltersClients } from "@/features/clients/clients";
 
 const columns: Column<Client>[] = [
     { header: 'id', accessor: 'id', id: 'id' },
@@ -20,20 +22,41 @@ const columns: Column<Client>[] = [
     },
 ];
 
+const initialFilters: FiltersClients = { name: '', code: '' };
+
 export function Clients() {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [open, setOpen] = useState<boolean>(false);
+    const [filters, setFilters] = useState<FiltersClients>(initialFilters);
+
+    const page = Number(searchParams.get("page")) || 0;
+    const rowsPerPage = Number(searchParams.get("limit")) || 10;
 
     const { data: clients, isLoading } = useQuery({
-        queryKey: ['getClients'],
-        queryFn: () => clientsProvider.getClients(),
+        queryKey: ['getPaginatedClients', rowsPerPage, page, filters],
+        queryFn: () => clientsProvider.getPaginatedClients({ limit: rowsPerPage, offset: page + 1, filters }),
     });
+
+    const { handleSubmit, register, reset } = useForm<FiltersClients>({ defaultValues: initialFilters });
+
+    const onSubmit = (data: FiltersClients) => {
+        setFilters(data);
+    }
+
+    const clearFilters = () => {
+        setFilters(initialFilters);
+        reset();
+    }
 
     if (isLoading) return <p>Loading...</p>
     if (clients) return (
-        <div>
+        <div className="space-y-5">
             <h1 className="main_title">Clients</h1>
 
-            <div className="flex justify-end">
+            <div className="flex w-full items-end flex-col gap-5">
+                <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
+
                 <CustomFilledButton
                     label="Create"
                     type="button"
@@ -44,7 +67,23 @@ export function Clients() {
 
             <Table
                 columns={columns}
-                data={clients}
+                data={clients.data.response}
+            />
+
+            <Pagination
+                count={clients.data.total}
+                setSearchParams={setSearchParams}
+                page={page}
+                rowsPerPage={rowsPerPage}
+            />
+
+            <FiltersComponent
+                isOpen={open}
+                toggleMenu={setOpen}
+                handleSubmit={handleSubmit}
+                register={register}
+                onSubmit={onSubmit}
+                clearFilters={clearFilters}
             />
         </div>
     )

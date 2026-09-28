@@ -20,6 +20,7 @@ export function CreateClient() {
             notification.success(message);
             navigate('/clients');
             queryClient.invalidateQueries({ queryKey: ['getClients'] });
+            queryClient.invalidateQueries({ queryKey: ['getPaginatedClients'] });
         }
     });
 

@@ -26,6 +26,7 @@ export function CreateDcs() {
     onSuccess: (message) => {
       notification.success(message);
       queryClient.invalidateQueries({ queryKey: ['getDcs'] });
+      queryClient.invalidateQueries({ queryKey: ['getPaginatedDcs'] });
       navigate('/dcs');
     }
   });

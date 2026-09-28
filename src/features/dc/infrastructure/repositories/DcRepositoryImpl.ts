@@ -1,4 +1,4 @@
-import { type CreateOrUpdateDc, type Dc, DcDatasource, DcRepository } from '@/features/dc/dc';
+import { type CreateOrUpdateDc, type Dc, type FiltersDcs, type PaginatedDcs, DcDatasource, DcRepository } from '@/features/dc/dc';
 
 export class DcRepositoryImpl implements DcRepository {
 
@@ -10,6 +10,10 @@ export class DcRepositoryImpl implements DcRepository {
 
     getAllDcs(): Promise<Dc[]> {
         return this.datasource.getAllDcs();
+    }
+
+    getPaginatedDcs({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersDcs }): Promise<PaginatedDcs> {
+        return this.datasource.getPaginatedDcs({ limit, offset, filters });
     }
 
     createDc(payload: CreateOrUpdateDc): Promise<string> {

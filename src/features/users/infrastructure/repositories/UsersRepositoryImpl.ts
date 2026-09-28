@@ -1,4 +1,4 @@
-import { UsersDatasource, UsersRepository, type CreateOrUpdateUserPayload, type User } from '@/features/users/users';
+import { UsersDatasource, UsersRepository, type CreateOrUpdateUserPayload, type FiltersUsers, type PaginatedUsers, type User } from '@/features/users/users';
 
 export class UsersRepositoryImpl implements UsersRepository {
 
@@ -6,6 +6,10 @@ export class UsersRepositoryImpl implements UsersRepository {
 
     getUsers(): Promise<User[]> {
         return this.datasource.getUsers();
+    }
+
+    getPaginatedUsers({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersUsers }): Promise<PaginatedUsers> {
+        return this.datasource.getPaginatedUsers({ limit, offset, filters });
     }
 
     createUser(payload: CreateOrUpdateUserPayload): Promise<string> {

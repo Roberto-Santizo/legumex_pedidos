@@ -1,5 +1,5 @@
 import { isAxiosError, type AxiosInstance } from 'axios';
-import { ClientDatasource, ClientSchema, ClientsResponseSchema, type Client } from '../../domain/domain';
+import { ClientDatasource, ClientSchema, ClientsResponseSchema, PaginatedClientsResponseSchema, type Client, type FiltersClients, type PaginatedClients } from '../../domain/domain';
 import { ConflictError, NotFoundError } from '@/features/clients/clients';
 
 export class ClientDatasourceImpl implements ClientDatasource {
@@ -55,6 +55,26 @@ export class ClientDatasourceImpl implements ClientDatasource {
         } catch (error) {
             if (isAxiosError(error)) {
                 if (error.response?.data['statusCode'] == 409) throw new ConflictError(error.response.data['message']);
+                throw new Error(error.response?.data['message']);
+            }
+            throw new Error("Error no controlado");
+        }
+    }
+
+    async getPaginatedClients({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersClients }): Promise<PaginatedClients> {
+        try {
+            const params = new URLSearchParams({ limit: String(limit), offset: String(offset), ...filters });
+            const url = `/clients/getPaginatedClients?${params}`;
+            const { data } = await this.api.get(url);
+            const response = PaginatedClientsResponseSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data;
+            }
+
+            throw new Error("Información no válida");
+        } catch (error) {
+            if (isAxiosError(error)) {
                 throw new Error(error.response?.data['message']);
             }
             throw new Error("Error no controlado");

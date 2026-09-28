@@ -1,4 +1,4 @@
-import { type Client, ClientDatasource, ClientRepository } from '../../domain/domain';
+import { type Client, type FiltersClients, type PaginatedClients, ClientDatasource, ClientRepository } from '../../domain/domain';
 
 export class ClientRepositoryImpl implements ClientRepository {
     constructor(private datasource: ClientDatasource) { }
@@ -13,6 +13,10 @@ export class ClientRepositoryImpl implements ClientRepository {
 
     getClients(): Promise<Client[]> {
         return this.datasource.getClients();
+    }
+
+    getPaginatedClients({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersClients }): Promise<PaginatedClients> {
+        return this.datasource.getPaginatedClients({ limit, offset, filters });
     }
 
     getClientById(id: string): Promise<Client> {

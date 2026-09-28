@@ -1,4 +1,4 @@
-import { DcDatasource, DcResponseSchema, NotFoundErrorError, type CreateOrUpdateDc, type Dc } from '@/features/dc/dc';
+import { DcDatasource, DcResponseSchema, NotFoundErrorError, PaginatedDcsResponseSchema, type CreateOrUpdateDc, type Dc, type FiltersDcs, type PaginatedDcs } from '@/features/dc/dc';
 import { isAxiosError, type AxiosInstance } from 'axios';
 
 export class DcDatasourceImpl implements DcDatasource {
@@ -59,6 +59,26 @@ export class DcDatasourceImpl implements DcDatasource {
             if (isAxiosError(error)) {
                 if (error.response?.data['statusCode'] == 404) throw new NotFoundErrorError(error.response.data['message']);
                 throw new Error("Unhandled error");
+            }
+            throw error instanceof Error ? error : new Error("Error no controlado");
+        }
+    }
+
+    async getPaginatedDcs({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersDcs }): Promise<PaginatedDcs> {
+        try {
+            const params = new URLSearchParams({ limit: String(limit), offset: String(offset), ...filters });
+            const url = `/dcs/getPaginatedDcs?${params}`;
+            const { data } = await this.api.get(url);
+            const response = PaginatedDcsResponseSchema.safeParse(data);
+
+            if (response.success) {
+                return response.data;
+            }
+
+            throw new Error("Invalid data");
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new Error(error.response?.data['message']);
             }
             throw error instanceof Error ? error : new Error("Error no controlado");
         }

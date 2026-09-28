@@ -26,6 +26,7 @@ export function CreateUser() {
       notification.success(message);
       navigate('/users');
       queryClient.invalidateQueries({ queryKey: ['getUsers'] });
+      queryClient.invalidateQueries({ queryKey: ['getPaginatedUsers'] });
     }
   });
 

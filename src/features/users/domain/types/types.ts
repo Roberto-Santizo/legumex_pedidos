@@ -1,4 +1,5 @@
 import type z from "zod";
-import type { UserSchema } from "../domain";
+import type { PaginatedUsersResponseSchema, UserSchema } from "../domain";
 
 export type User  = z.infer<typeof UserSchema>;
+export type PaginatedUsers = z.infer<typeof PaginatedUsersResponseSchema>;

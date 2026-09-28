@@ -6,3 +6,10 @@ export type CreateOrUpdateUserPayload = {
     role: string;
     clients: string[];
 }
+//FILTERS
+export interface FiltersUsers {
+    name: string;
+    lastName: string;
+    email: string;
+    role: string;
+}

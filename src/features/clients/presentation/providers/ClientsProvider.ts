@@ -1,4 +1,4 @@
-import type { ClientRepository } from "../../clients";
+import type { ClientRepository, FiltersClients } from "../../clients";
 
 export class ClientsProvider {
     constructor(private repository: ClientRepository) { }
@@ -9,6 +9,10 @@ export class ClientsProvider {
 
     async getClients() {
         return this.repository.getClients();
+    }
+
+    async getPaginatedClients({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersClients }) {
+        return this.repository.getPaginatedClients({ limit, offset, filters });
     }
 
     async getUserClients() {

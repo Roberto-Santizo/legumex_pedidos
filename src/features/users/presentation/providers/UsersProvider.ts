@@ -1,5 +1,5 @@
 import { UsersDatasourceImpl, UsersRepositoryImpl } from "@/features/users/infrastructure/infrastructure";
-import { type CreateOrUpdateUserPayload, type UsersRepository  } from "@/features/users/domain/domain";
+import { type CreateOrUpdateUserPayload, type FiltersUsers, type UsersRepository  } from "@/features/users/domain/domain";
 
 import api from "@/config/http/axios";
 
@@ -12,6 +12,10 @@ export class UsersProvider {
 
     async getUsers() {
         return this.repository.getUsers();
+    }
+
+    async getPaginatedUsers({ limit, offset, filters }: { limit: number, offset: number, filters: FiltersUsers }) {
+        return this.repository.getPaginatedUsers({ limit, offset, filters });
     }
 }
 

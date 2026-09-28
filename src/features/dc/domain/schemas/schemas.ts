@@ -12,3 +12,11 @@ export const DcSchema = z.object({
 export const DcResponseSchema = ApiResponseSchema.extend({
     data: z.array(DcSchema)
 });
+export const PaginatedDcsResponseSchema = ApiResponseSchema.extend({
+    data: z.object({
+        response: z.array(DcSchema),
+        total: z.number(),
+        page: z.number(),
+        lastPage: z.number()
+    })
+});
