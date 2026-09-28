@@ -316,7 +316,7 @@ export function Containers() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center py-20">
-                <p className="text-sm text-gray-500">Loading...</p>
+                <p className="text-sm text-neutral-500">Loading...</p>
             </div>
         );
     }
@@ -360,30 +360,30 @@ export function Containers() {
             />
 
             {/* Transport cost Excel report download */}
-            <div className="flex items-center gap-2 flex-wrap bg-white border border-slate-200 rounded-xl px-4 py-3 shadow-sm">
-                <span className="text-xs font-semibold text-slate-500 mr-1">Transport report:</span>
-                <span className="text-xs text-slate-400">Week</span>
+            <div className="flex items-center gap-2 flex-wrap bg-white border border-neutral-200 rounded-xl px-4 py-3 shadow-sm">
+                <span className="text-xs font-semibold text-neutral-500 mr-1">Transport report:</span>
+                <span className="text-xs text-neutral-400">Week</span>
                 <input
                     type="number"
                     min={1}
                     max={53}
                     value={reportWeek}
                     onChange={(weekInputEvent) => setReportWeek(Number(weekInputEvent.target.value))}
-                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 w-16 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="border border-neutral-300 rounded-lg px-2 py-1 text-xs text-neutral-700 w-16 focus:outline-none focus:ring-2 focus:ring-brand-400"
                 />
-                <span className="text-xs text-slate-400">Year</span>
+                <span className="text-xs text-neutral-400">Year</span>
                 <input
                     type="number"
                     min={2024}
                     max={2100}
                     value={reportYear}
                     onChange={(yearInputEvent) => setReportYear(Number(yearInputEvent.target.value))}
-                    className="border border-slate-300 rounded-lg px-2 py-1 text-xs text-slate-700 w-20 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                    className="border border-neutral-300 rounded-lg px-2 py-1 text-xs text-neutral-700 w-20 focus:outline-none focus:ring-2 focus:ring-brand-400"
                 />
                 <button
                     onClick={handleDownloadReport}
                     disabled={downloadingReport}
-                    className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
+                    className="flex items-center gap-1.5 bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-white text-xs font-medium px-3 py-1.5 rounded-lg transition-colors"
                 >
                     <BiDownload size={14} />
                     {downloadingReport ? 'Downloading...' : 'Excel'}

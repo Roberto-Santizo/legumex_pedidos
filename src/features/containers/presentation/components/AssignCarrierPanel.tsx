@@ -46,11 +46,11 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
     };
 
     const selectClass =
-        'w-full text-xs border border-slate-200 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#00C853]/40 focus:border-[#00C853] transition-colors bg-white';
+        'w-full text-xs border border-neutral-200 rounded-lg px-2.5 py-1.5 text-neutral-700 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-colors bg-white';
 
     return (
-        <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50/60">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+        <div className="border border-neutral-200 rounded-xl p-4 space-y-3 bg-neutral-50/60">
+            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                 Select a carrier
             </p>
 
@@ -88,9 +88,9 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
                                     ...base,
                                     minHeight: '30px',
                                     fontSize: '12px',
-                                    borderColor: state.isFocused ? '#00C853' : '#e2e8f0',
+                                    borderColor: state.isFocused ? '#14a88c' : '#e5e5e5',
                                     boxShadow: state.isFocused ? '0 0 0 2px rgba(0,200,83,0.2)' : 'none',
-                                    '&:hover': { borderColor: '#00C853' },
+                                    '&:hover': { borderColor: '#14a88c' },
                                     borderRadius: '8px',
                                     backgroundColor: 'white',
                                 }),
@@ -101,7 +101,7 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
                                 option: (base, state) => ({
                                     ...base,
                                     fontSize: '12px',
-                                    backgroundColor: state.isSelected ? '#00C853' : state.isFocused ? '#f0fdf4' : 'white',
+                                    backgroundColor: state.isSelected ? '#14a88c' : state.isFocused ? '#ecfdf8' : 'white',
                                     color: state.isSelected ? 'white' : '#374151',
                                 }),
                                 menu: (base) => ({ ...base, borderRadius: '8px', fontSize: '12px', zIndex: 50 }),
@@ -113,17 +113,17 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
             )}
 
             {isLoading && (
-                <p className="text-xs text-slate-400 py-2">Loading carriers...</p>
+                <p className="text-xs text-neutral-400 py-2">Loading carriers...</p>
             )}
 
             {!isLoading && carriers.length === 0 && (
-                <p className="text-xs text-slate-400 py-2">No carriers available.</p>
+                <p className="text-xs text-neutral-400 py-2">No carriers available.</p>
             )}
 
             {!isLoading && carriers.length > 0 && (
                 <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                     {visibleCarriers.length === 0 ? (
-                        <p className="text-xs text-slate-400 py-2 text-center">
+                        <p className="text-xs text-neutral-400 py-2 text-center">
                             No carriers match the selected filters.
                         </p>
                     ) : (
@@ -134,12 +134,12 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
                                 onClick={() => setSelectedId(carrier.id)}
                                 className={`w-full text-left flex items-center justify-between px-3 py-2.5 rounded-lg border text-sm transition-all ${
                                     selectedId === carrier.id
-                                        ? 'border-[#00C853] bg-[#00C853]/8 text-slate-800'
-                                        : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
+                                        ? 'border-brand-500 bg-brand-500/8 text-neutral-800'
+                                        : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300'
                                 }`}
                             >
                                 <span className="font-medium">{carrier.name}</span>
-                                <span className="text-xs font-semibold text-slate-500">
+                                <span className="text-xs font-semibold text-neutral-500">
                                     ${carrier.shippingCost.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                                 </span>
                             </button>
@@ -152,7 +152,7 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="flex-1 py-2 text-xs rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-100 transition-colors"
+                    className="flex-1 py-2 text-xs rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-100 transition-colors"
                 >
                     Cancel
                 </button>
@@ -160,7 +160,7 @@ export function AssignCarrierPanel({ currentCarrierId, onAssign, onCancel, assig
                     type="button"
                     onClick={handleAssign}
                     disabled={selectedId === null || assigning}
-                    className="flex-1 py-2 text-xs rounded-lg bg-[#00C853] text-white font-semibold hover:bg-[#00b34a] transition-colors disabled:opacity-50"
+                    className="flex-1 py-2 text-xs rounded-lg bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-colors disabled:opacity-50"
                 >
                     {assigning ? 'Assigning...' : 'Assign'}
                 </button>

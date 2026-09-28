@@ -1,6 +1,6 @@
-import { BiMenu, BiPencil, BiPlus } from "react-icons/bi";
+import { BiPencil, BiPlus } from "react-icons/bi";
 import { clientsProvider } from "../providers/clientsRepositoryProvider";
-import { CustomFilledButton, Pagination, Table, type Column } from "@/features/shared/shared";
+import { CustomFilledButton, FilterButton, LoadingState, PageHeader, Pagination, Table, type Column } from "@/features/shared/shared";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -8,15 +8,15 @@ import { useState } from "react";
 import { FiltersComponent, type Client, type FiltersClients } from "@/features/clients/clients";
 
 const columns: Column<Client>[] = [
-    { header: 'id', accessor: 'id', id: 'id' },
-    { header: 'Name', accessor: 'name', id: 'name' },
+    { header: 'ID', accessor: 'id', id: 'id', render: (value) => <span className="font-mono text-xs text-neutral-400">#{value}</span> },
+    { header: 'Name', accessor: 'name', id: 'name', render: (value) => <span className="font-medium text-ink">{value}</span> },
     { header: 'Code', accessor: 'code', id: 'code' },
     {
         header: 'Actions',
         id: 'actions',
         render: (_, row) => (
-            <Link to={`/clients/update/${row.id}`}>
-                <BiPencil size={25} className="hover:text-gray-600" />
+            <Link to={`/clients/update/${row.id}`} className="icon_btn" title="Edit">
+                <BiPencil size={17} />
             </Link>
         ),
     },
@@ -49,32 +49,36 @@ export function Clients() {
         reset();
     }
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <LoadingState />
     if (clients) return (
-        <div className="space-y-5">
-            <h1 className="main_title">Clients</h1>
-
-            <div className="flex w-full items-end flex-col gap-5">
-                <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
-
-                <CustomFilledButton
-                    label="Create"
-                    type="button"
-                    icon={< BiPlus className="text-white" size={25} />}
-                    onClick={() => navigate('/clients/create')}
-                />
-            </div>
+        <div className="space-y-6">
+            <PageHeader
+                title="Clients"
+                description="Manage the clients orders are placed for."
+                actions={
+                    <>
+                        <FilterButton onClick={() => setOpen(true)} />
+                        <CustomFilledButton
+                            label="New client"
+                            type="button"
+                            icon={<BiPlus size={18} />}
+                            onClick={() => navigate('/clients/create')}
+                        />
+                    </>
+                }
+            />
 
             <Table
                 columns={columns}
                 data={clients.data.response}
-            />
-
-            <Pagination
-                count={clients.data.total}
-                setSearchParams={setSearchParams}
-                page={page}
-                rowsPerPage={rowsPerPage}
+                footer={
+                    <Pagination
+                        count={clients.data.total}
+                        setSearchParams={setSearchParams}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                    />
+                }
             />
 
             <FiltersComponent

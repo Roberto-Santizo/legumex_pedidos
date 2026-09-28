@@ -59,15 +59,15 @@ export function ContainerAssignmentPanel({
     // ── Empty state ────────────────────────────────────────────────────────────
     if (!draft) {
         return (
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col items-center h-full min-h-64 p-8 pt-12 text-center gap-5">
+            <div className="bg-white rounded-xl border border-neutral-200 shadow-sm flex flex-col items-center h-full min-h-64 p-8 pt-12 text-center gap-5">
                 {/* Icon placeholder */}
-                <div className="w-14 h-14 rounded-2xl bg-[#00C853]/10 flex items-center justify-center text-2xl">
+                <div className="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center text-2xl">
                     📦
                 </div>
 
                 <div className="space-y-1">
-                    <p className="text-sm font-bold text-slate-700">No container open</p>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-sm font-bold text-neutral-700">No container open</p>
+                    <p className="text-xs text-neutral-400">
                         Select a transport group and click "New container"
                     </p>
                 </div>
@@ -76,14 +76,14 @@ export function ContainerAssignmentPanel({
                     type="button"
                     onClick={onStartNewDraft}
                     disabled={!activeFilter}
-                    className="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-dashed border-[#00C853] text-[#00C853] hover:bg-[#00C853] hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="px-5 py-2 text-sm font-semibold rounded-lg border-2 border-dashed border-brand-500 text-brand-500 hover:bg-brand-500 hover:text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                     aria-label="Start a new draft container"
                 >
                     + New container
                 </button>
 
                 {!activeFilter && (
-                    <p className="text-[11px] text-slate-300">
+                    <p className="text-[11px] text-neutral-300">
                         Select a transport group filter first
                     </p>
                 )}
@@ -97,18 +97,18 @@ export function ContainerAssignmentPanel({
 
     return (
         <>
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col h-full min-h-0">
+            <div className="bg-white rounded-xl border border-neutral-200 shadow-sm flex flex-col h-full min-h-0">
                 {/* Header — green accent gradient */}
-                <div className="px-4 py-3 bg-linear-to-r from-[#00C853]/10 to-[#00C853]/5 border-b border-[#00C853]/20 flex items-center justify-between rounded-t-xl">
+                <div className="px-4 py-3 bg-linear-to-r from-brand-500/10 to-brand-500/5 border-b border-brand-500/20 flex items-center justify-between rounded-t-xl">
                     <div>
-                        <p className="text-sm font-bold text-slate-800">
+                        <p className="text-sm font-bold text-neutral-800">
                             {draft.persistedId ? `Container #C-${draft.persistedId}` : 'New container'}
                         </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
+                        <p className="text-xs text-neutral-500 mt-0.5">
                             {draft.transportType}
                         </p>
                     </div>
-                    <span className="text-[11px] bg-[#00C853] text-white font-bold rounded-full px-2.5 py-0.5 tracking-wide">
+                    <span className="text-[11px] bg-brand-500 text-white font-bold rounded-full px-2.5 py-0.5 tracking-wide">
                         DRAFT
                     </span>
                 </div>
@@ -134,32 +134,32 @@ export function ContainerAssignmentPanel({
                     {/* Orders list */}
                     {draft.orders.length > 0 && (
                         <div className="space-y-1.5">
-                            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                            <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wide">
                                 Included orders ({draft.orders.length})
                             </p>
                             {draft.orders.map((order, idx) => (
                                 <div
                                     key={order.id}
-                                    className="flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-lg px-3 py-2"
+                                    className="flex items-center gap-2 bg-neutral-50 border border-neutral-100 rounded-lg px-3 py-2"
                                 >
                                     <span
                                         className="w-2.5 h-2.5 rounded-sm shrink-0"
                                         style={{ backgroundColor: colorForOrder(idx) }}
                                     />
-                                    <span className="text-xs text-slate-400">#{order.id}</span>
-                                    <span className="text-xs font-semibold text-slate-700 truncate flex-1">
+                                    <span className="text-xs text-neutral-400">#{order.id}</span>
+                                    <span className="text-xs font-semibold text-neutral-700 truncate flex-1">
                                         {order.client?.name ?? '—'}
                                     </span>
                                     <span className="text-[11px] text-sky-500 font-medium">
                                         {formatShortDate(order.requiredByDate)}
                                     </span>
-                                    <span className="text-[11px] text-slate-400">
+                                    <span className="text-[11px] text-neutral-400">
                                         {order.totalPallets}p · {order.totalPounds.toLocaleString()}lb
                                     </span>
                                     <button
                                         type="button"
                                         onClick={() => onRemoveOrder(order.id)}
-                                        className="text-slate-300 hover:text-red-400 transition-colors ml-1 shrink-0 text-xs"
+                                        className="text-neutral-300 hover:text-red-400 transition-colors ml-1 shrink-0 text-xs"
                                         aria-label={`Remove order #${order.id}`}
                                     >
                                         ✕
@@ -170,7 +170,7 @@ export function ContainerAssignmentPanel({
                     )}
 
                     {draft.orders.length === 0 && (
-                        <p className="text-xs text-slate-300 text-center py-6">
+                        <p className="text-xs text-neutral-300 text-center py-6">
                             No orders added yet — use the left panel to add orders
                         </p>
                     )}
@@ -184,11 +184,11 @@ export function ContainerAssignmentPanel({
                 </div>
 
                 {/* Action buttons */}
-                <div className="px-4 py-3 border-t border-slate-100 flex gap-2">
+                <div className="px-4 py-3 border-t border-neutral-100 flex gap-2">
                     <button
                         type="button"
                         onClick={() => setShowDiscardConfirm(true)}
-                        className="flex-1 py-2 text-sm rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors"
+                        className="flex-1 py-2 text-sm rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-50 transition-colors"
                         aria-label="Discard draft container"
                     >
                         Discard
@@ -199,7 +199,7 @@ export function ContainerAssignmentPanel({
                             type="button"
                             onClick={handleSave}
                             disabled={saving || draft.orders.length === 0}
-                            className="flex-1 py-2 text-sm rounded-lg border-2 border-[#00C853] text-[#00C853] font-semibold hover:bg-[#00C853] hover:text-white transition-all disabled:opacity-40"
+                            className="flex-1 py-2 text-sm rounded-lg border-2 border-brand-500 text-brand-500 font-semibold hover:bg-brand-500 hover:text-white transition-all disabled:opacity-40"
                             aria-label="Save as draft"
                         >
                             {saving ? 'Saving...' : 'Save draft'}
@@ -210,7 +210,7 @@ export function ContainerAssignmentPanel({
                         type="button"
                         onClick={handleConfirmClick}
                         disabled={confirming || draft.orders.length === 0}
-                        className="flex-1 py-2 text-sm rounded-lg bg-[#00C853] text-white font-bold hover:bg-[#00b34a] transition-colors shadow-sm disabled:opacity-40"
+                        className="flex-1 py-2 text-sm rounded-lg bg-brand-500 text-white font-bold hover:bg-brand-600 transition-colors shadow-sm disabled:opacity-40"
                         aria-label="Confirm container"
                     >
                         {confirming ? 'Confirming...' : '✓ Confirm'}

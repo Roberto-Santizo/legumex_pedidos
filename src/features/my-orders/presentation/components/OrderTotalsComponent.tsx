@@ -5,40 +5,24 @@ type Props = {
 }
 
 export function OrderTotalsComponent({ totals }: Props) {
+    const stats = [
+        { label: 'Boxes', value: totals.total_boxes },
+        { label: 'Pounds', value: totals.total_lbs },
+        { label: 'Pallets', value: totals.total_pallets },
+    ];
+
     return (
-        <div>
-            <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
-                Totals
-            </h3>
-
-            <div className="grid grid-cols-4 gap-4">
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                    <p className="text-sm text-gray-500">Boxes</p>
-                    <p className="text-lg font-semibold text-gray-800">
-                        {totals.total_boxes}
-                    </p>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {stats.map((stat) => (
+                <div key={stat.label} className="rounded-xl border border-neutral-200/80 p-4">
+                    <p className="text-xs font-medium text-neutral-500">{stat.label}</p>
+                    <p className="mt-1 text-xl font-semibold tracking-tight text-ink tabular-nums">{stat.value}</p>
                 </div>
+            ))}
 
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                    <p className="text-sm text-gray-500">Pounds</p>
-                    <p className="text-lg font-semibold text-gray-800">
-                        {totals.total_lbs}
-                    </p>
-                </div>
-
-                <div className="bg-gray-50 rounded-xl p-4 text-center">
-                    <p className="text-sm text-gray-500">Pallets</p>
-                    <p className="text-lg font-semibold text-gray-800">
-                        {totals.total_pallets}
-                    </p>
-                </div>
-
-                <div className="bg-green-50 rounded-xl p-4 text-center">
-                    <p className="text-sm text-green-600">Amount</p>
-                    <p className="text-lg font-bold text-green-700">
-                        ${totals.total_price}
-                    </p>
-                </div>
+            <div className="rounded-xl bg-brand-50 ring-1 ring-inset ring-brand-200 p-4">
+                <p className="text-xs font-medium text-brand-700">Amount</p>
+                <p className="mt-1 text-xl font-semibold tracking-tight text-brand-800 tabular-nums">${totals.total_price}</p>
             </div>
         </div>
     )

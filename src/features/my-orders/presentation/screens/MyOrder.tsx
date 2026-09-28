@@ -3,6 +3,7 @@ import { ordersProvider } from "../providers/ordersRepositoryProvider";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { LoadingState, PageHeader, Tag } from "@/features/shared/shared";
 
 export function MyOrder() {
   const params = useParams();
@@ -23,16 +24,21 @@ export function MyOrder() {
     queryFn: () => ordersProvider.getOrderTotals(id)
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (!order || !products || !totals) return null;
+  if (isLoading || !order || !products || !totals) return <LoadingState />;
 
   return (
-    <div className="h-screen flex gap-4 p-4 from-gray-100 to-gray-200">
-      <div className="flex-1 bg-white/90 backdrop-blur rounded-2xl shadow-lg border overflow-hidden">
-        <PDFViewer width="100%" height="100%">
+    <div className="space-y-6">
+      <PageHeader
+        title={order.po ? `Order ${order.po}` : 'Order'}
+        description={`${order.client} · ${order.dc}`}
+        backTo="/my-orders"
+        actions={<Tag status={order.status} />}
+      />
+
+      <div className="card overflow-hidden h-[calc(100vh-13rem)] min-h-[500px]">
+        <PDFViewer width="100%" height="100%" className="border-0">
           <OrderDocument order={order} products={products} totals={totals} />
         </PDFViewer>
-
       </div>
     </div>
   );

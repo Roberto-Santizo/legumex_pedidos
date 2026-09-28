@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom"
 import { Form, productsProvider, type CreateOrUpdateProductPayload } from "@/features/products/products";
-import { CustomFilledButton, useNotification } from "@/features/shared/shared";
+import { CustomFilledButton, LoadingState, PageHeader, useNotification } from "@/features/shared/shared";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
@@ -55,12 +55,12 @@ export function UpdateProduct() {
 
     const onSubmit = (payload: CreateOrUpdateProductPayload) => mutate({ id, payload });
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <LoadingState />
 
     if (product) return (
-        <div className="space-y-5">
-            <h1 className="main_title">Update Product</h1>
-            <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div className="space-y-6">
+            <PageHeader title="Edit product" description="Update product information and pricing." backTo="/products" />
+            <form className="form max-w-3xl" onSubmit={handleSubmit(onSubmit)} noValidate>
                 <Form register={register} errors={errors} control={control} />
 
                 <CustomFilledButton

@@ -29,7 +29,7 @@ export function FileFormField<T extends Record<string, any>>({
                 className={errorMessage ? 'text_form_field_error' : 'text_form_field'}
             />
 
-            <p className="text-red-400 text-xs">{errorMessage}</p>
+            <p className="form_error">{errorMessage}</p>
         </div>
     );
 }

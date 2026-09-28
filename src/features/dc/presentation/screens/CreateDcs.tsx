@@ -1,5 +1,5 @@
 import { type CreateOrUpdateDc, dcsProvider, Form } from "@/features/dc/dc";
-import { CustomFilledButton, useNotification } from "@/features/shared/shared";
+import { CustomFilledButton, PageHeader, useNotification } from "@/features/shared/shared";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -34,9 +34,9 @@ export function CreateDcs() {
   const onSubmit = (data: CreateOrUpdateDc) => mutate(data);
   return (
     <div>
-      <h1 className="main_title">Create Dc</h1>
+      <PageHeader title="New distribution center" description="Register a delivery destination." backTo="/dcs" />
 
-      <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)}>
+      <form className="form max-w-3xl" onSubmit={handleSubmit(onSubmit)}>
         <Form register={register} errors={errors} control={control} />
 
         <CustomFilledButton

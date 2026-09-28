@@ -4,48 +4,41 @@ import { Tag, type Column } from "@/features/shared/shared";
 import { DeleteButton, EditButton, type Order } from "@/features/my-orders/my-orders";
 
 export const ordersColumns: Column<Order>[] = [
-  { header: 'Created By', accessor: 'user', id: 'user' },
+  { header: 'PO', accessor: 'po', id: 'po', render: (value) => <span className="font-medium text-ink">{value}</span> },
   { header: 'Client', accessor: 'client', id: 'client' },
-  { header: 'Transaport Type', accessor: 'transportType', id: 'transportType' },
   { header: 'DC', accessor: 'dc', id: 'dc' },
-  { header: 'PO', accessor: 'po', id: 'po' },
-  { header: 'Required By', accessor: 'requiredByDate', id: 'requiredByDate' },
-  { header: 'Year', accessor: 'year', id: 'year' },
-  { header: 'Week', accessor: 'week', id: 'week' },
+  { header: 'Transport Type', accessor: 'transportType', id: 'transportType' },
+  { header: 'Required By', accessor: 'requiredByDate', id: 'requiredByDate', render: (value) => <span className="tabular-nums">{value}</span> },
   {
-    header: 'status',
+    header: 'Week',
+    id: 'week',
+    render: (_, row) => <span className="tabular-nums text-neutral-500">W{row.week} · {row.year}</span>,
+  },
+  { header: 'Created By', accessor: 'user', id: 'user', render: (value) => <span className="text-neutral-500">{value}</span> },
+  {
+    header: 'Status',
     id: 'status',
     render: (_, row) => <Tag status={row.status} />,
   },
   {
-    header: 'Details',
-    id: 'details',
+    header: 'Actions',
+    id: 'actions',
     render: (_, row) => {
       const url = row.status == 1 ? `/my-orders/addItems/${row.id}` : `/my-orders/${row.id}`;
 
       return (
-        <Link to={url}>
-          <BsEye size={25} className="hover:text-gray-600" />
-        </Link>
+        <div className="flex items-center gap-1">
+          <Link to={url} className="icon_btn" title="Details">
+            <BsEye size={16} />
+          </Link>
+          {row.status < 2 && (
+            <>
+              <EditButton id={row.id} />
+              <DeleteButton id={row.id} />
+            </>
+          )}
+        </div>
       );
-    },
-  },
-  {
-    header: 'Delete',
-    id: 'delete',
-    render: (_, row) => {
-      return row.status < 2 ? (
-        <DeleteButton id={row.id} />
-      ) : <></>;
-    },
-  },
-  {
-    header: 'Update',
-    id: 'update',
-    render: (_, row) => {
-      return row.status < 2 ? (
-        <EditButton id={row.id} />
-      ) : <></>;
     },
   },
 ];

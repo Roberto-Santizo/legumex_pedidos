@@ -14,9 +14,9 @@ type Props<T extends Record<string, any>> = {
 
 export function TextFormField<T extends Record<string, any>>({ label, name, placeholder, type, errorMessage, register, validation, value }: Props<T>) {
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
             <label
-                className="text-sm font-medium text-gray-700"
+                className="form_label"
                 htmlFor={name}
             >
                 {label}
@@ -32,7 +32,7 @@ export function TextFormField<T extends Record<string, any>>({ label, name, plac
                 className={errorMessage ? 'text_form_field_error' : 'text_form_field'}
                 value={value}
             />
-            <p className="text-red-400 text-xs">{errorMessage}</p>
+            <p className="form_error">{errorMessage}</p>
         </div>
     )
 }

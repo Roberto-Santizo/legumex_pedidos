@@ -65,7 +65,7 @@ export function ModalEditItem({ client, transportType, dc }: Props) {
     if (item) return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Edit Item">
             <div className="p-10">
-                <form className="form" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
                     <ItemForm register={register} errors={errors} control={control} client={client} transportType={transportType} dc={dc} />
 
                     <CustomFilledButton

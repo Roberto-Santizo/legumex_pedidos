@@ -31,8 +31,8 @@ export function ContainerVisualization({ orders, totalPallets }: Props) {
     return (
         <div className="space-y-2">
             <div className="flex justify-between items-center">
-                <span className="text-xs font-medium text-gray-600">Container layout</span>
-                <span className="text-xs text-gray-400">{totalPallets} / {MAX_PALLETS} pallets</span>
+                <span className="text-xs font-medium text-neutral-600">Container layout</span>
+                <span className="text-xs text-neutral-400">{totalPallets} / {MAX_PALLETS} pallets</span>
             </div>
 
             {/* 10 columns × 2 rows */}
@@ -48,7 +48,7 @@ export function ContainerVisualization({ orders, totalPallets }: Props) {
                     ) : (
                         <div
                             key={idx}
-                            className="aspect-square rounded-sm border border-dashed border-gray-300"
+                            className="aspect-square rounded-sm border border-dashed border-neutral-300"
                             title={`Pallet ${idx + 1} — empty`}
                         />
                     )

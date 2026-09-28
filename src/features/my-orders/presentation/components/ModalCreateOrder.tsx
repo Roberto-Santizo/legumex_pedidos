@@ -57,7 +57,7 @@ export function ModalCreateOrder() {
 
     return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Create Order">
-            <form className="form mx-auto" onSubmit={handleSubmit(onSubmit)}>
+            <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
                 <Form register={register} control={control} errors={errors} currentValues={currentValues} />
 
                 <CustomFilledButton

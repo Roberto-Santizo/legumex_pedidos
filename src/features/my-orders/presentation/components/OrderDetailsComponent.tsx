@@ -18,27 +18,18 @@ export function OrderDetailsComponent({ order }: Props) {
     });
 
     if (totals) return (
-        <div className="bg-white rounded-2xl shadow-lg p-6 w-full space-y-6">
-            <div className="flex justify-between items-center border-b pb-3">
-                <h2 className="text-xl font-semibold text-gray-800">
-                    Order Details
-                </h2>
+        <div className="card p-5 w-full space-y-5">
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-x-6 gap-y-4">
+                <Info label="PO" value={order.po} />
+                <Info label="Client" value={order.client} />
+                <Info label="DC" value={order.dc} />
+                <Info label="Transport" value={order.transportType} />
+                <Info label="Created at" value={order.date} />
+                <Info label="Required by" value={order.requiredDate} />
             </div>
 
-            <OrderTotalsComponent totals={totals} />
-
-            <div>
-                <h3 className="text-sm font-semibold text-gray-500 mb-3 uppercase tracking-wide">
-                    Information
-                </h3>
-                <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-sm">
-                    <Info label="Client" value={order.client} />
-                    <Info label="DC" value={order.dc} />
-                    <Info label="Transport" value={order.transportType} />
-                    <Info label="Created At" value={order.date} />
-                    <Info label="Required By" value={order.requiredDate} />
-                    <Info label="PO" value={order.po} />
-                </div>
+            <div className="border-t border-neutral-100 pt-5">
+                <OrderTotalsComponent totals={totals} />
             </div>
         </div>
     );
@@ -46,9 +37,9 @@ export function OrderDetailsComponent({ order }: Props) {
 
 function Info({ label, value }: { label: string; value: string | number }) {
     return (
-        <div className="flex flex-col">
-            <span className="text-gray-500">{label}</span>
-            <span className="font-medium text-gray-800">{value}</span>
+        <div className="flex flex-col min-w-0">
+            <span className="text-xs text-neutral-500">{label}</span>
+            <span className="mt-0.5 text-sm font-medium text-ink truncate">{value}</span>
         </div>
     );
 }

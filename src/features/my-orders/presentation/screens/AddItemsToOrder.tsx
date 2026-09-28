@@ -1,5 +1,5 @@
-import { BiPlus } from "react-icons/bi";
-import { CustomFilledButton, useNotification } from '@/features/shared/shared';
+import { BiCheck, BiPlus } from "react-icons/bi";
+import { CustomFilledButton, LoadingState, PageHeader, useNotification } from '@/features/shared/shared';
 import { ModalAddItem, OrderProductsTable, OrderDetailsComponent, ModalEditItem } from "@/features/my-orders/my-orders";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -37,32 +37,45 @@ export function AddItemsToOrder() {
     }
   }, [order]);
 
-  if (order) return (
-    <div className="w-full space-y-5">
-      <h1 className="main_title">Add Items To Order</h1>
+  if (!order) return <LoadingState />;
+
+  return (
+    <div className="w-full space-y-6">
+      <PageHeader
+        title="Add items to order"
+        description="Build the order by adding products and quantities."
+        backTo="/my-orders"
+        actions={
+          <CustomFilledButton
+            label="Confirm order"
+            type="button"
+            variant="brand"
+            icon={<BiCheck size={18} />}
+            onClick={() => { mutate() }}
+            disabled={isPending}
+          />
+        }
+      />
+
       <OrderDetailsComponent order={order} />
 
-      <div className="flex w-full justify-end">
-        <CustomFilledButton
-          label="Add Item"
-          icon={<BiPlus className="text-white" />}
-          type="button"
-          onClick={() => navigate('?addItem=true')}
-        />
-      </div>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="section_title">Items</h2>
+          <CustomFilledButton
+            label="Add item"
+            icon={<BiPlus size={18} />}
+            type="button"
+            variant="secondary"
+            onClick={() => navigate('?addItem=true')}
+          />
+        </div>
 
-      <OrderProductsTable id={id} />
+        <OrderProductsTable id={id} />
+      </div>
 
       <ModalAddItem client={order.client_id} transportType={order.transportType} dc={order.dc_id} />
       <ModalEditItem client={order.client_id} transportType={order.transportType} dc={order.dc_id} />
-
-      <CustomFilledButton
-        label="Confirm Order"
-        type="button"
-        onClick={() => { mutate() }}
-        fullWitdh={true}
-        disabled={isPending}
-      />
     </div>
   )
 }

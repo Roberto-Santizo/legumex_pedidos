@@ -29,8 +29,8 @@ export function DeleteButton({ id }: Props) {
         }
     });
     return (
-        <button disabled={isPending} onClick={() => mutate()} className="hover:cursor-pointer">
-            <BiTrash size={25} />
+        <button disabled={isPending} onClick={() => mutate()} className="icon_btn icon_btn_danger" title="Delete">
+            <BiTrash size={17} />
         </button>
     )
 }

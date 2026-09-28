@@ -12,15 +12,19 @@ export function CustomNavLink({ to, children, label }: Props) {
         <NavLink
             to={to}
             className={({ isActive }) =>
-                `
-                    flex items-center gap-3 px-3 py-2 rounded-lg
-                    text-sm font-medium transition-all duration-150
-                    ${isActive ? "bg-white/10 text-white" : "text-gray-400 hover:text-white hover:bg-white/5"}
-                `
+                `group flex items-center gap-3 h-9 px-2.5 rounded-lg text-sm transition-colors duration-150 ${isActive
+                    ? "bg-neutral-100 text-ink font-medium"
+                    : "text-neutral-500 hover:text-ink hover:bg-neutral-50"}`
             }
         >
-            <span className="text-lg">{children}</span>
-            <span>{label}</span>
+            {({ isActive }) => (
+                <>
+                    <span className={`text-lg transition-colors ${isActive ? "text-brand-600" : "text-neutral-400 group-hover:text-neutral-600"}`}>
+                        {children}
+                    </span>
+                    <span className="truncate">{label}</span>
+                </>
+            )}
         </NavLink>
     );
 }

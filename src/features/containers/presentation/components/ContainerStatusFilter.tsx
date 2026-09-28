@@ -13,16 +13,16 @@ const CHIPS = [
         dot: 'bg-sky-400',
         active: 'bg-sky-500 text-white border-sky-500 shadow-sm shadow-sky-200',
         inactive: 'bg-sky-50 text-sky-600 border-sky-200 hover:bg-sky-100',
-        zero: 'bg-slate-50 text-slate-400 border-slate-200 cursor-default',
+        zero: 'bg-neutral-50 text-neutral-400 border-neutral-200 cursor-default',
     },
     {
         value: 5 as const,
         label: 'Status 5',
         sub: 'Carrier Assigned',
-        dot: 'bg-[#00C853]',
-        active: 'bg-[#00C853] text-white border-[#00C853] shadow-sm shadow-[#00C853]/20',
-        inactive: 'bg-[#00C853]/10 text-[#009940] border-[#00C853]/30 hover:bg-[#00C853]/20',
-        zero: 'bg-slate-50 text-slate-400 border-slate-200 cursor-default',
+        dot: 'bg-brand-500',
+        active: 'bg-brand-500 text-white border-brand-500 shadow-sm shadow-brand-500/20',
+        inactive: 'bg-brand-500/10 text-brand-700 border-brand-500/30 hover:bg-brand-500/20',
+        zero: 'bg-neutral-50 text-neutral-400 border-neutral-200 cursor-default',
     },
 ] as const;
 
@@ -31,7 +31,7 @@ export function ContainerStatusFilter({ activeStatus, onSetStatus, counts }: Pro
 
     return (
         <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-widest shrink-0">
+            <span className="text-xs font-semibold text-neutral-400 uppercase tracking-widest shrink-0">
                 Logistics status:
             </span>
 
@@ -42,8 +42,8 @@ export function ContainerStatusFilter({ activeStatus, onSetStatus, counts }: Pro
                 className={`
                     flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold border transition-all
                     ${activeStatus === null
-                        ? 'bg-slate-700 text-white border-slate-700 shadow-sm'
-                        : 'bg-slate-50 text-slate-500 border-slate-200 hover:border-slate-400 hover:text-slate-700'
+                        ? 'bg-neutral-700 text-white border-neutral-700 shadow-sm'
+                        : 'bg-neutral-50 text-neutral-500 border-neutral-200 hover:border-neutral-400 hover:text-neutral-700'
                     }
                 `}
             >
@@ -68,7 +68,7 @@ export function ContainerStatusFilter({ activeStatus, onSetStatus, counts }: Pro
                             ${isEmpty ? zero : isSelected ? active : inactive}
                         `}
                     >
-                        <span className={`w-2 h-2 rounded-full shrink-0 ${isEmpty ? 'bg-slate-300' : dot}`} />
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${isEmpty ? 'bg-neutral-300' : dot}`} />
                         {label}
                         <span className="opacity-60">· {sub}</span>
                         <span className={`ml-0.5 font-bold ${isEmpty ? 'opacity-40' : ''}`}>({count})</span>

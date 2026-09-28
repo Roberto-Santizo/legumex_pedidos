@@ -48,7 +48,7 @@ export function ModalAddItem({ client, transportType, dc }: Props) {
     return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Add Item">
             <div className="p-10">
-                <form className="form" onSubmit={handleSubmit(onSubmit)}>
+                <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
                     <ItemForm register={register} control={control} errors={errors} client={client} transportType={transportType} dc={dc} />
                     <CustomFilledButton
                         label="Add Item"

@@ -11,17 +11,19 @@ export function ProtectedLayout() {
     }
 
     return (
-        <main className="h-screen grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] overflow-hidden">
-            <aside className="row-span-2 bg-gray-900 text-white">
-                <CustomSideBar className="py-10 px-5 space-y-4 h-full overflow-y-auto" />
+        <main className="h-screen grid grid-cols-[auto_1fr] grid-rows-[auto_1fr] overflow-hidden bg-canvas">
+            <aside className="row-span-2 w-60 bg-white border-r border-neutral-200/80">
+                <CustomSideBar className="h-full flex flex-col" />
             </aside>
 
-            <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-10">
+            <header className="bg-white/80 backdrop-blur border-b border-neutral-200/80 px-8 h-16 flex items-center sticky top-0 z-10">
                 <CustomHeader />
             </header>
 
-            <section className="bg-gray-50 p-6 overflow-y-auto">
-                <Outlet />
+            <section className="overflow-y-auto thin_scroll">
+                <div className="px-8 py-7 max-w-[1600px] mx-auto">
+                    <Outlet />
+                </div>
             </section>
         </main>
     );

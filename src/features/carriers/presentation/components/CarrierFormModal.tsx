@@ -85,34 +85,34 @@ function CarrierForm({ carrier, dcs, saving, onSave, onClose }: FormProps) {
             />
 
             <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600">Carrier name</label>
+                <label className="text-xs font-semibold text-neutral-600">Carrier name</label>
                 <input
                     type="text"
                     placeholder="e.g. FedEx Freight"
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40"
+                    className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                     {...register('name', { required: 'Name is required.' })}
                 />
                 {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
             </div>
 
             <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600">Shipping cost (USD)</label>
+                <label className="text-xs font-semibold text-neutral-600">Shipping cost (USD)</label>
                 <input
                     type="number"
                     min="0"
                     step="0.01"
                     placeholder="0.00"
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40"
+                    className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                     {...register('shippingCost', { required: 'Shipping cost is required.' })}
                 />
                 {errors.shippingCost && <p className="text-xs text-red-500">{errors.shippingCost.message}</p>}
             </div>
 
             <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600">Rate updated date</label>
+                <label className="text-xs font-semibold text-neutral-600">Rate updated date</label>
                 <input
                     type="date"
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#00C853]/40"
+                    className="w-full border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                     {...register('rateUpdatedAt', { required: 'Rate updated date is required.' })}
                 />
                 {errors.rateUpdatedAt && <p className="text-xs text-red-500">{errors.rateUpdatedAt.message}</p>}
@@ -122,14 +122,14 @@ function CarrierForm({ carrier, dcs, saving, onSave, onClose }: FormProps) {
                 <button
                     type="button"
                     onClick={onClose}
-                    className="flex-1 py-2 text-sm rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors"
+                    className="flex-1 py-2 text-sm rounded-lg border border-neutral-200 text-neutral-500 hover:bg-neutral-50 transition-colors"
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
                     disabled={saving}
-                    className="flex-1 py-2 text-sm rounded-lg bg-[#00C853] text-white font-semibold hover:bg-[#00b34a] transition-colors disabled:opacity-50"
+                    className="flex-1 py-2 text-sm rounded-lg bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-colors disabled:opacity-50"
                 >
                     {saving ? 'Saving...' : isEdit ? 'Save changes' : 'Create carrier'}
                 </button>

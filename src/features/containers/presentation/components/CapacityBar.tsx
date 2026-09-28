@@ -13,7 +13,7 @@ interface Props {
 function fillColor(percent: number): string {
     if (percent >= 100) return 'bg-red-600';
     if (percent >= 75) return 'bg-amber-500';
-    return 'bg-green-700';
+    return 'bg-brand-700';
 }
 
 export function CapacityBar({ label, used, max, note }: Props) {
@@ -23,8 +23,8 @@ export function CapacityBar({ label, used, max, note }: Props) {
     return (
         <div className="space-y-1">
             <div className="flex justify-between items-center text-xs">
-                <span className="text-gray-600 font-medium">{label}</span>
-                <span className="text-gray-500">
+                <span className="text-neutral-600 font-medium">{label}</span>
+                <span className="text-neutral-500">
                     {used.toLocaleString()} / {max.toLocaleString()} max
                 </span>
             </div>
@@ -42,7 +42,7 @@ export function CapacityBar({ label, used, max, note }: Props) {
                 />
             </div>
 
-            <div className="flex justify-between items-center text-[11px] text-gray-400">
+            <div className="flex justify-between items-center text-[11px] text-neutral-400">
                 <span>{remaining.toLocaleString()} remaining</span>
                 {note && <span className="text-amber-600">{note}</span>}
             </div>

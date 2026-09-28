@@ -10,8 +10,8 @@ export function EditButton({ id }: { id: number }) {
     }
     
     return (
-        <button onClick={() => handleOpenEditModal()} className='hover:cursor-pointer'>
-            <BiPencil size={25} />
+        <button onClick={() => handleOpenEditModal()} className='icon_btn' title='Edit'>
+            <BiPencil size={17} />
         </button>
     )
 }

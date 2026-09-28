@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { productPricesTableColumns, productsProvider } from "../presentation";
-import { Table } from "@/features/shared/shared";
+import { LoadingState, PageHeader, Table } from "@/features/shared/shared";
 import { ProductDetailsComponent } from "@/features/products/products";
 
 export function ProductDetails() {
@@ -13,24 +13,21 @@ export function ProductDetails() {
     enabled: !!id,
   });
 
-  if (product) return (
-    <div className="p-6 max-w-5xl mx-auto">
-      <h1 className="main_title mb-6">Product Details</h1>
+  if (!product) return <LoadingState />;
+
+  return (
+    <div className="space-y-6 max-w-5xl">
+      <PageHeader title={product.name} description="Product information and price history." backTo="/products" />
       <ProductDetailsComponent product={product} />
 
-      <div className="mt-8">
-        <h2 className="text-xl font-bold mb-4">Price History</h2>
+      <div className="space-y-3">
+        <h2 className="section_title">Price history</h2>
 
-        {product.prices?.length === 0 ? (
-          <p className="text-gray-500">No price history available</p>
-        ) : (
-          <div className="bg-white p-5 shadow-2xl">
-            <Table
-              columns={productPricesTableColumns}
-              data={product.prices ?? []}
-            />
-          </div>
-        )}
+        <Table
+          columns={productPricesTableColumns}
+          data={product.prices ?? []}
+          emptyMessage="No price history available"
+        />
       </div>
     </div>
   );

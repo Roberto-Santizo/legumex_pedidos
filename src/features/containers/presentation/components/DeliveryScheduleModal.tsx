@@ -37,14 +37,14 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
 
     return (
         <Modal modal={open} closeModal={onClose} title={`Delivery Schedule — #C-${containerId}`} width="sm:max-w-md">
-            <p className="text-xs text-slate-500 mb-5">
+            <p className="text-xs text-neutral-500 mb-5">
                 Set the expected delivery date and time for this container.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Delivery date */}
                 <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">
+                    <label className="block text-xs font-semibold text-neutral-600 mb-1">
                         Delivery Date
                     </label>
                     <input
@@ -52,20 +52,20 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
                         value={deliveryDate}
                         onChange={(dateInputEvent) => setDeliveryDate(dateInputEvent.target.value)}
                         required
-                        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm text-neutral-700 focus:outline-none focus:ring-2 focus:ring-brand-400"
                     />
                 </div>
 
                 {/* Delivery time */}
                 <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">
-                        Delivery Time <span className="text-slate-400 font-normal">(optional)</span>
+                    <label className="block text-xs font-semibold text-neutral-600 mb-1">
+                        Delivery Time <span className="text-neutral-400 font-normal">(optional)</span>
                     </label>
                     <input
                         type="time"
                         value={deliveryTime}
                         onChange={(timeInputEvent) => setDeliveryTime(timeInputEvent.target.value)}
-                        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+                        className="w-full border border-neutral-300 rounded-lg px-3 py-2 text-sm text-neutral-700 focus:outline-none focus:ring-2 focus:ring-brand-400"
                     />
                 </div>
 
@@ -82,14 +82,14 @@ export function DeliveryScheduleModal({ containerId, open, onClose, onSubmit, in
                         type="button"
                         onClick={onClose}
                         disabled={saving}
-                        className="px-4 py-2 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors disabled:opacity-50"
+                        className="px-4 py-2 text-xs font-medium text-neutral-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors disabled:opacity-50"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={saving || !deliveryDate}
-                        className="px-4 py-2 text-xs font-medium text-white bg-emerald-500 hover:bg-emerald-600 rounded-lg transition-colors disabled:opacity-50"
+                        className="px-4 py-2 text-xs font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors disabled:opacity-50"
                     >
                         {saving ? 'Saving...' : 'Save Schedule'}
                     </button>

@@ -1,5 +1,5 @@
 import { clientsProvider } from "../providers/clientsRepositoryProvider";
-import { CustomFilledButton, useNotification } from "@/features/shared/shared";
+import { CustomFilledButton, LoadingState, PageHeader, useNotification } from "@/features/shared/shared";
 import { Form } from "../presentation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -47,12 +47,12 @@ export function UpdateClient() {
 
     const onSubmit = ({ name }: CreateOrUpdateClient) => mutate({ id, name })
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <LoadingState />
     if (client) return (
         <div>
-            <h1 className="main_title">Update Client</h1>
+            <PageHeader title="Edit client" description="Update client information." backTo="/clients" />
 
-            <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)}>
+            <form className="form max-w-3xl" onSubmit={handleSubmit(onSubmit)}>
                 <Form register={register} errors={errors} />
 
                 <CustomFilledButton

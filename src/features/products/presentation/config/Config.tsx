@@ -5,29 +5,32 @@ import { type Column } from "@/features/shared/shared";
 import type { Product, ProductPrice } from "@/features/products/domain/domain";
 
 export const productsTableColumns: Column<Product>[] = [
-    { header: 'Name', accessor: 'name', id: 'name' },
-    { header: 'Local Code', accessor: 'localCode', id: 'localCode' },
-    { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode' },
+    { header: 'Name', accessor: 'name', id: 'name', render: (value) => <span className="font-medium text-ink">{value}</span> },
+    { header: 'Local Code', accessor: 'localCode', id: 'localCode', render: (value) => <span className="font-mono text-xs">{value}</span> },
+    { header: 'International Code', accessor: 'internationalCode', id: 'internationalCode', render: (value) => <span className="font-mono text-xs">{value}</span> },
     { header: 'Client', accessor: 'client', id: 'client' },
-    { header: 'Price', accessor: 'price', id: 'price' },
+    { header: 'Price', accessor: 'price', id: 'price', render: (value) => <span className="font-medium tabular-nums text-ink">{value}</span> },
     { header: 'DC', accessor: 'dc', id: 'dc' },
-    { header: 'Transport Type', accessor: 'transportType', id: 'transportType' },
     {
-        header: 'Edit',
-        id: 'action_edit',
-        render: (_, row) => (
-            <Link to={`/products/update/${row.id}`}>
-                <BiPencil size={25} className="hover:text-gray-600" />
-            </Link>
+        header: 'Transport Type',
+        accessor: 'transportType',
+        id: 'transportType',
+        render: (value) => (
+            <span className="inline-flex items-center h-6 px-2.5 rounded-full bg-neutral-100 text-xs font-medium text-neutral-700">{value}</span>
         )
     },
     {
-        header: 'Details',
-        id: 'action_view',
+        header: 'Actions',
+        id: 'actions',
         render: (_, row) => (
-            <Link to={`/products/${row.id}`}>
-                <BsEye size={25} className="hover:text-gray-600" />
-            </Link>
+            <div className="flex items-center gap-1">
+                <Link to={`/products/${row.id}`} className="icon_btn" title="Details">
+                    <BsEye size={16} />
+                </Link>
+                <Link to={`/products/update/${row.id}`} className="icon_btn" title="Edit">
+                    <BiPencil size={17} />
+                </Link>
+            </div>
         )
     }
 ];

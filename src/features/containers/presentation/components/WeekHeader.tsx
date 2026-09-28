@@ -34,13 +34,13 @@ export function WeekHeader({weekStart,weekView,onPreviousWeek,onNextWeek,onGoToW
     const confirmedCount = weekView?.containers.filter((container) => container.status === 'confirmed').length ?? 0;
 
     return (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-neutral-100">
                 <div className="flex items-center gap-3">
-                    <div className="w-1 h-10 rounded-full bg-[#00C853] shrink-0" />
+                    <div className="w-1 h-10 rounded-full bg-brand-500 shrink-0" />
                     <div>
-                        <h1 className="text-xl font-bold text-slate-900">Containers</h1>
-                        <p className="text-xs text-slate-400 mt-0.5">
+                        <h1 className="text-xl font-bold text-neutral-900">Containers</h1>
+                        <p className="text-xs text-neutral-400 mt-0.5">
                             Max 20 pallets · 40,000 lbs per container
                         </p>
                     </div>
@@ -48,11 +48,11 @@ export function WeekHeader({weekStart,weekView,onPreviousWeek,onNextWeek,onGoToW
 
                 <div className="flex flex-wrap items-center gap-3">
                     {/* Week navigator: prev / input / next */}
-                    <div className="flex items-center gap-1 border border-slate-200 hover:border-[#00C853] rounded-xl px-2 py-2 bg-white shadow-sm transition-all">
+                    <div className="flex items-center gap-1 border border-neutral-200 hover:border-brand-500 rounded-xl px-2 py-2 bg-white shadow-sm transition-all">
                         <button
                             type="button"
                             onClick={onPreviousWeek}
-                            className="p-1 rounded-lg text-slate-400 hover:text-[#00C853] hover:bg-slate-50 transition-colors"
+                            className="p-1 rounded-lg text-neutral-400 hover:text-brand-500 hover:bg-neutral-50 transition-colors"
                             aria-label="Previous week"
                         >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -60,7 +60,7 @@ export function WeekHeader({weekStart,weekView,onPreviousWeek,onNextWeek,onGoToW
                             </svg>
                         </button>
                         <div className="flex flex-col items-center leading-none px-2">
-                            <span className="text-[10px] font-bold text-[#00C853] uppercase tracking-widest select-none mb-0.5">Week</span>
+                            <span className="text-[10px] font-bold text-brand-500 uppercase tracking-widest select-none mb-0.5">Week</span>
                             <input
                                 type="number"
                                 min={1}
@@ -76,14 +76,14 @@ export function WeekHeader({weekStart,weekView,onPreviousWeek,onNextWeek,onGoToW
                                     }
                                 }}
                                 onKeyDown={(keyEvent) => { if (keyEvent.key === 'Enter') keyEvent.currentTarget.blur(); }}
-                                className="text-2xl font-bold text-slate-800 bg-transparent focus:outline-none w-12 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                className="text-2xl font-bold text-neutral-800 bg-transparent focus:outline-none w-12 text-center [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                 aria-label="Week number"
                             />
                         </div>
                         <button
                             type="button"
                             onClick={onNextWeek}
-                            className="p-1 rounded-lg text-slate-400 hover:text-[#00C853] hover:bg-slate-50 transition-colors"
+                            className="p-1 rounded-lg text-neutral-400 hover:text-brand-500 hover:bg-neutral-50 transition-colors"
                             aria-label="Next week"
                         >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,13 +93,13 @@ export function WeekHeader({weekStart,weekView,onPreviousWeek,onNextWeek,onGoToW
                     </div>
 
                     {/* Year selector */}
-                    <label className="relative flex items-center gap-2 border border-slate-200 hover:border-[#00C853] rounded-xl px-4 py-2.5 bg-white shadow-sm cursor-pointer transition-all">
+                    <label className="relative flex items-center gap-2 border border-neutral-200 hover:border-brand-500 rounded-xl px-4 py-2.5 bg-white shadow-sm cursor-pointer transition-all">
                         <div className="flex flex-col leading-none">
-                            <span className="text-[10px] font-bold text-[#00C853] uppercase tracking-widest select-none mb-0.5">Year</span>
+                            <span className="text-[10px] font-bold text-brand-500 uppercase tracking-widest select-none mb-0.5">Year</span>
                             <select
                                 value={currentYear}
                                 onChange={(yearSelectEvent) => onGoToWeek(currentWeek, Number(yearSelectEvent.target.value))}
-                                className="appearance-none text-2xl font-bold text-slate-800 bg-transparent focus:outline-none cursor-pointer w-20"
+                                className="appearance-none text-2xl font-bold text-neutral-800 bg-transparent focus:outline-none cursor-pointer w-20"
                                 aria-label="Jump to year"
                             >
                                 {yearOptions.map((year) => (
@@ -107,7 +107,7 @@ export function WeekHeader({weekStart,weekView,onPreviousWeek,onNextWeek,onGoToW
                                 ))}
                             </select>
                         </div>
-                        <svg className="w-4 h-4 text-slate-400 shrink-0 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-4 h-4 text-neutral-400 shrink-0 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
                         </svg>
                     </label>
@@ -139,24 +139,24 @@ function KpiCard({
     accent?: 'default' | 'amber' | 'green' | 'teal';
 }) {
     const valueClass = {
-        default: 'text-slate-800',
+        default: 'text-neutral-800',
         amber:   'text-amber-500',
-        green:   'text-[#00C853]',
+        green:   'text-brand-500',
         teal:    'text-teal-500',
     }[accent];
 
     const dotClass = {
-        default: 'bg-slate-300',
+        default: 'bg-neutral-300',
         amber:   'bg-amber-400',
-        green:   'bg-[#00C853]',
+        green:   'bg-brand-500',
         teal:    'bg-teal-400',
     }[accent];
 
     return (
-        <div className="px-5 py-4 border-r border-slate-100 last:border-r-0 bg-white hover:bg-slate-50/50 transition-colors">
+        <div className="px-5 py-4 border-r border-neutral-100 last:border-r-0 bg-white hover:bg-neutral-50/50 transition-colors">
             <div className="flex items-center gap-1.5 mb-1">
                 <span className={`w-1.5 h-1.5 rounded-full ${dotClass}`} />
-                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">{label}</p>
+                <p className="text-[11px] font-medium text-neutral-400 uppercase tracking-wide">{label}</p>
             </div>
             <p className={`text-3xl font-bold leading-tight ${valueClass}`}>{value}</p>
         </div>

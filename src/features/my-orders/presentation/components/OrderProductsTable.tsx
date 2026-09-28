@@ -48,62 +48,62 @@ export function OrderProductsTable({ id }: Props) {
     });
 
     if (items) return (
-        <div className="w-full overflow-x-auto rounded-xl border border-gray-200">
+        <div className="card w-full overflow-x-auto thin_scroll">
             <table className="w-full text-sm text-left">
-                <thead className="bg-gray-100 text-gray-600 uppercase text-xs">
+                <thead className="bg-neutral-50/70 border-b border-neutral-200/80 text-neutral-500 uppercase text-[11px] tracking-wider">
                     <tr>
-                        <th className="px-4 py-3">Product</th>
-                        <th className="px-4 py-3">Code</th>
-                        <th className="px-4 py-3">Supplier Stock #</th>
-                        <th className="px-4 py-3 text-right">Total Boxes</th>
-                        <th className="px-4 py-3 text-right">Total Pounds</th>
-                        <th className="px-4 py-3 text-right">Total Amount</th>
-                        <th className="px-4 py-3 text-right">Total Pallets</th>
-                        <th className="px-4 py-3 text-right"></th>
-                        <th className="px-4 py-3 text-right"></th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap">Product</th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap">Code</th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap">Supplier Stock #</th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap text-right">Total Boxes</th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap text-right">Total Pounds</th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap text-right">Total Amount</th>
+                        <th className="px-5 py-3 font-semibold whitespace-nowrap text-right">Total Pallets</th>
+                        <th className="px-5 py-3 w-0"></th>
+                        <th className="px-5 py-3 w-0"></th>
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody className="divide-y divide-neutral-100">
                     {items.length > 0 ? (
                         items.map((item) => (
-                            <tr key={item.id} className="hover:bg-gray-50 transition-colors shadow-xs">
-                                <td className="px-4 py-3 font-medium text-gray-800">
+                            <tr key={item.id} className="hover:bg-neutral-50/70 transition-colors">
+                                <td className="px-5 py-3.5 font-medium text-ink">
                                     {item.product}
                                 </td>
 
-                                <td className="px-4 py-3 text-gray-600">
+                                <td className="px-5 py-3.5 text-neutral-600">
                                     {item.internationalCode}
                                 </td>
 
-                                <td className="px-4 py-3 text-gray-600">
+                                <td className="px-5 py-3.5 text-neutral-600">
                                     {item.supplierStock}
                                 </td>
 
-                                <td className="px-4 py-3 text-right">
+                                <td className="px-5 py-3.5 text-right">
                                     {item.total_boxes}
                                 </td>
 
-                                <td className="px-4 py-3 text-right">
+                                <td className="px-5 py-3.5 text-right">
                                     {item.total_lbs}
                                 </td>
 
-                                <td className="px-4 py-3 text-right font-semibold text-green-600">
+                                <td className="px-5 py-3.5 text-right font-semibold text-brand-700 tabular-nums">
                                     ${item.total_amount}
                                 </td>
 
-                                <td className="px-4 py-3 text-right">
+                                <td className="px-5 py-3.5 text-right">
                                     {item.total_pallets}
                                 </td>
 
-                                <td className="px-4 py-3 text-right font-semibold">
-                                    <button disabled={isPending} type="button" className="hover:text-red-700 hover:cursor-pointer" onClick={() => handleDeleteItem(item.id)}>
-                                        <BiTrash size={20} />
+                                <td className="px-2 py-3.5 text-right w-0">
+                                    <button disabled={isPending} type="button" className="icon_btn icon_btn_danger" title="Delete" onClick={() => handleDeleteItem(item.id)}>
+                                        <BiTrash size={17} />
                                     </button>
                                 </td>
-                                <td className="px-4 py-3 text-right font-semibold">
-                                    <button disabled={isPending} type="button" className="hover:text-indigo-700 hover:cursor-pointer" onClick={() => handleEditItem(item.id)}>
-                                        <BiPencil size={20} />
+                                <td className="px-2 py-3.5 text-right w-0">
+                                    <button disabled={isPending} type="button" className="icon_btn" title="Edit" onClick={() => handleEditItem(item.id)}>
+                                        <BiPencil size={17} />
                                     </button>
                                 </td>
                             </tr>
@@ -111,10 +111,10 @@ export function OrderProductsTable({ id }: Props) {
                     ) : (
                         <tr>
                             <td
-                                colSpan={5}
-                                className="text-center py-6 text-gray-400"
+                                colSpan={9}
+                                className="text-center py-14 text-sm text-neutral-400"
                             >
-                                No hay productos en esta orden
+                                No items in this order yet
                             </td>
                         </tr>
                     )}

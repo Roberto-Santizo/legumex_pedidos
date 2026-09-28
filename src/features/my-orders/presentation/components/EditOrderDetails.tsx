@@ -1,3 +1,4 @@
+import { BiCheck, BiPlus } from "react-icons/bi";
 import { CustomFilledButton, useNotification } from "@/features/shared/shared";
 import { getWeekBounds, todayIso } from "@/features/containers/presentation/utils/weekFormatter";
 import { ModalAddItem } from "./ModalAddItem";
@@ -46,20 +47,27 @@ export function EditOrderDetails({ id }: { id: string }) {
 
     if (order) return (
         <div className="w-full flex flex-col gap-4">
-            <div className="rounded-2xl shadow-xl p-4 space-y-5">
-                <p className="main_title mb-3">Items</p>
-                <CustomFilledButton
-                    label="Add Item"
-                    type="button"
-                    disabled={isPending}
-                    onClick={() => handleAddItem()}
-                />
+            <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                    <h3 className="section_title">Items</h3>
+                    <CustomFilledButton
+                        label="Add item"
+                        type="button"
+                        variant="secondary"
+                        icon={<BiPlus size={18} />}
+                        disabled={isPending}
+                        onClick={() => handleAddItem()}
+                    />
+                </div>
+
                 <OrderProductsTable id={id} />
 
                 <CustomFilledButton
-                    label="Confirm Order"
+                    label="Confirm order"
                     type="button"
-                    className="w-full"
+                    variant="brand"
+                    icon={<BiCheck size={18} />}
+                    fullWitdh={true}
                     disabled={isPending}
                     onClick={() => mutate()}
                 />

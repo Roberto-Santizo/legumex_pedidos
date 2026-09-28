@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
-import { useNotification, Pagination } from '@/features/shared/shared';
+import { useNotification, Pagination, PageHeader } from '@/features/shared/shared';
+import { BiPlus } from 'react-icons/bi';
 import { carriersProvider } from '../providers/carriersRepositoryProvider';
 import { CarrierFormModal, CarrierRateHistoryModal } from '../components/components';
 import { ConfirmModal } from '@/features/containers/presentation/components/ConfirmModal';
@@ -94,28 +95,25 @@ export function TransportationCost() {
     const [historyCarrier, setHistoryCarrier] = useState<Carrier | null>(null);
 
     return (
-        <div className="space-y-4">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-lg font-bold text-slate-800">Transportation Cost</h1>
-                    <p className="text-xs text-slate-400 mt-0.5">Manage carriers and their shipping rates</p>
-                </div>
-                <button
-                    type="button"
-                    onClick={openCreate}
-                    className="px-4 py-2 text-sm font-semibold rounded-lg bg-[#00C853] text-white hover:bg-[#00b34a] transition-colors shadow-sm"
-                >
-                    + New carrier
-                </button>
-            </div>
+        <div className="space-y-6">
+            <PageHeader
+                title="Transportation cost"
+                description="Manage carriers and their shipping rates."
+                actions={
+                    <button type="button" onClick={openCreate} className="btn btn_primary">
+                        <BiPlus size={18} />
+                        New carrier
+                    </button>
+                }
+            />
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="card overflow-hidden">
                 {/* Search bar */}
                 {!isLoading && !isError && (
-                    <div className="px-4 py-3 border-b border-slate-100">
+                    <div className="px-4 py-3 border-b border-neutral-100">
                         <div className="relative w-full sm:max-w-sm">
                             <svg
-                                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none"
                                 fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             >
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z" />
@@ -125,13 +123,13 @@ export function TransportationCost() {
                                 value={searchInput}
                                 onChange={(searchEvent) => setSearchInput(searchEvent.target.value)}
                                 placeholder="Search by carrier name..."
-                                className="w-full pl-9 pr-8 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-[#00C853] focus:ring-2 focus:ring-[#00C853]/20 transition-all"
+                                className="w-full pl-9 pr-8 py-2 border border-neutral-200 rounded-lg text-sm focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 transition-all"
                             />
                             {searchInput && (
                                 <button
                                     type="button"
                                     onClick={() => setSearchInput('')}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
                                 >
                                     <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
@@ -144,7 +142,7 @@ export function TransportationCost() {
 
                 {isLoading && (
                     <div className="flex items-center justify-center py-16">
-                        <p className="text-sm text-slate-400">Loading...</p>
+                        <p className="text-sm text-neutral-400">Loading...</p>
                     </div>
                 )}
 
@@ -156,48 +154,48 @@ export function TransportationCost() {
 
                 {!isLoading && !isError && carriers.length === 0 && (
                     <div className="flex flex-col items-center justify-center py-16 gap-3">
-                        <p className="text-sm font-semibold text-slate-500">No carriers yet</p>
-                        <p className="text-xs text-slate-400">Click "New carrier" to add your first one.</p>
+                        <p className="text-sm font-semibold text-neutral-500">No carriers yet</p>
+                        <p className="text-xs text-neutral-400">Click "New carrier" to add your first one.</p>
                     </div>
                 )}
 
                 {!isLoading && !isError && carriers.length > 0 && (
                     <>
                         <table className="w-full text-sm">
-                            <thead className="bg-slate-50 border-b border-slate-200">
+                            <thead className="bg-neutral-50 border-b border-neutral-200">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">ID</th>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Carrier name</th>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">DC</th>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Client</th>
-                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Shipping cost</th>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Rate updated</th>
-                                    <th className="px-4 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide">Actions</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">ID</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">Carrier name</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">DC</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">Client</th>
+                                    <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wide">Shipping cost</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">Rate updated</th>
+                                    <th className="px-4 py-3 text-center text-xs font-semibold text-neutral-500 uppercase tracking-wide">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-neutral-100">
                                 {pagedCarriers.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-400">
+                                        <td colSpan={7} className="px-4 py-12 text-center text-sm text-neutral-400">
                                             No carriers match <span className="font-semibold">"{debouncedSearch}"</span>
                                         </td>
                                     </tr>
                                 ) : (
                                     pagedCarriers.map((carrier) => (
-                                        <tr key={carrier.id} className="hover:bg-slate-50/60 transition-colors">
-                                            <td className="px-4 py-3 text-slate-400 font-mono text-xs">#{carrier.id}</td>
-                                            <td className="px-4 py-3 font-semibold text-slate-800">{carrier.name}</td>
-                                            <td className="px-4 py-3 text-slate-600 text-xs">
-                                                {carrier.dcName ?? <span className="text-slate-300">—</span>}
+                                        <tr key={carrier.id} className="hover:bg-neutral-50/60 transition-colors">
+                                            <td className="px-4 py-3 text-neutral-400 font-mono text-xs">#{carrier.id}</td>
+                                            <td className="px-4 py-3 font-semibold text-neutral-800">{carrier.name}</td>
+                                            <td className="px-4 py-3 text-neutral-600 text-xs">
+                                                {carrier.dcName ?? <span className="text-neutral-300">—</span>}
                                             </td>
-                                            <td className="px-4 py-3 text-slate-600 text-xs">
-                                                {carrier.clientName ?? <span className="text-slate-300">—</span>}
+                                            <td className="px-4 py-3 text-neutral-600 text-xs">
+                                                {carrier.clientName ?? <span className="text-neutral-300">—</span>}
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <button
                                                     type="button"
                                                     onClick={() => setHistoryCarrier(carrier)}
-                                                    className="group inline-flex items-center gap-1.5 font-medium text-slate-700 hover:text-[#00C853] transition-colors"
+                                                    className="group inline-flex items-center gap-1.5 font-medium text-neutral-700 hover:text-brand-500 transition-colors"
                                                     title="View rate history"
                                                 >
                                                     <span>
@@ -213,13 +211,13 @@ export function TransportationCost() {
                                                     </svg>
                                                 </button>
                                             </td>
-                                            <td className="px-4 py-3 text-slate-500">{carrier.rateUpdatedAt}</td>
+                                            <td className="px-4 py-3 text-neutral-500">{carrier.rateUpdatedAt}</td>
                                             <td className="px-4 py-3">
                                                 <div className="flex items-center justify-center gap-2">
                                                     <button
                                                         type="button"
                                                         onClick={() => openEdit(carrier)}
-                                                        className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 text-slate-600 hover:border-[#00C853] hover:text-[#00C853] transition-colors"
+                                                        className="px-3 py-1.5 text-xs font-semibold rounded-lg border border-neutral-200 text-neutral-600 hover:border-brand-500 hover:text-brand-500 transition-colors"
                                                     >
                                                         Edit
                                                     </button>
@@ -242,7 +240,7 @@ export function TransportationCost() {
                 )}
             </div>
 
-            <Pagination
+            <Pagination bordered
                 count={filteredCarriers.length}
                 page={page}
                 rowsPerPage={rowsPerPage}

@@ -7,15 +7,26 @@ type Props = {
     disabled?: boolean;
     fullWitdh?: boolean;
     className?: string;
+    variant?: 'primary' | 'brand' | 'secondary' | 'ghost' | 'danger';
 }
-export function CustomFilledButton({ label, type, onClick, icon, disabled = false, fullWitdh = false, className }: Props) {
-    const hasIcon = icon ? true : false;
-    const classNameComponent = `${fullWitdh ? 'w-full' : ''} bg-green-500 hover:bg-green-600 transition-colors hover:cursor-pointer p-2 rounded-md ${hasIcon ? 'flex items-center gap-2' : ''} ${className}`;
+
+const variantClass = {
+    primary: 'btn_primary',
+    brand: 'btn_brand',
+    secondary: 'btn_secondary',
+    ghost: 'btn_ghost',
+    danger: 'btn_danger',
+} as const;
+
+export function CustomFilledButton({ label, type, onClick, icon, disabled = false, fullWitdh = false, className = '', variant = 'primary' }: Props) {
+    const classNameComponent = `btn ${variantClass[variant]} ${fullWitdh ? 'w-full' : ''} ${className}`;
 
     return (
         <button disabled={disabled} type={type} className={classNameComponent} onClick={onClick ? () => onClick() : () => { }}>
-            {icon ? (icon) : (<></>)}
-            {disabled ? <p className="text-white font-semibold">Loading...</p> : (<p className="text-white font-semibold">{label}</p>)}
+            {disabled ? (
+                <span className="size-4 rounded-full border-2 border-current border-r-transparent animate-spin" />
+            ) : icon}
+            <span>{disabled ? 'Loading...' : label}</span>
         </button>
     )
 }

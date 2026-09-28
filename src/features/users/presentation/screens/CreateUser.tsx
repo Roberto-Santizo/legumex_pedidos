@@ -1,4 +1,4 @@
-import { CustomFilledButton, useNotification } from "@/features/shared/shared";
+import { CustomFilledButton, PageHeader, useNotification } from "@/features/shared/shared";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -33,9 +33,9 @@ export function CreateUser() {
   const onSubmit = (data: CreateOrUpdateUserPayload) => mutate(data);
   return (
     <div>
-      <h1 className="main_title">Create User</h1>
+      <PageHeader title="New user" description="Give someone access to the platform." backTo="/users" />
 
-      <form className="form mx-auto w-1/2" onSubmit={handleSubmit(onSubmit)}>
+      <form className="form max-w-3xl" onSubmit={handleSubmit(onSubmit)}>
         <Form register={register} errors={errors} control={control} />
 
         <CustomFilledButton

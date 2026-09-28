@@ -20,8 +20,8 @@ export function SelectFormField<T extends FieldValues>({
     validation
 }: Props<T>) {
     return (
-        <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">
+        <div className="flex flex-col gap-1.5">
+            <label className="form_label">
                 {label}
             </label>
 
@@ -35,7 +35,7 @@ export function SelectFormField<T extends FieldValues>({
                         options={options}
                         isSearchable
                         placeholder="Select an option"
-                        classNamePrefix="react-select "
+                        classNamePrefix="react-select"
                         value={options.find((opt) => opt.value === field.value) || null}
                         onChange={(selected) => field.onChange(selected?.value)}
 
@@ -43,7 +43,7 @@ export function SelectFormField<T extends FieldValues>({
                 )}
             />
 
-            <p className="text-red-400 text-xs">{errorMessage}</p>
+            <p className="form_error">{errorMessage}</p>
         </div>
     );
 }

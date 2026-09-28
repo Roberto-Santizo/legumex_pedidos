@@ -16,9 +16,9 @@ export function PasswordFormField<T extends Record<string, any>>({ label, name, 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
             <label
-                className="text-sm font-medium text-gray-700"
+                className="form_label"
                 htmlFor={name}
             >
                 {label}
@@ -38,13 +38,13 @@ export function PasswordFormField<T extends Record<string, any>>({ label, name, 
                 <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-700 transition-colors"
                 >
                     {showPassword ? <BsEyeSlash size={18} /> : <BsEye size={18} />}
                 </button>
             </div>
 
-            <p className="text-red-400 text-xs">{errorMessage}</p>
+            <p className="form_error">{errorMessage}</p>
         </div>
     )
 }

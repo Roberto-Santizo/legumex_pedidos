@@ -1,5 +1,5 @@
-import { BiFile, BiMenu, BiPlus } from "react-icons/bi";
-import { CustomFilledButton, Pagination } from '@/features/shared/shared';
+import { BiPlus, BiUpload } from "react-icons/bi";
+import { CustomFilledButton, FilterButton, LoadingState, PageHeader, Pagination } from '@/features/shared/shared';
 import { FiltersComponent, productsProvider, productsTableColumns } from "../presentation";
 import { Table } from "@/features/shared/shared";
 import { useForm } from "react-hook-form";
@@ -35,40 +35,44 @@ export function Products() {
     reset();
   }
 
-  if (products) return (
-    <div className="space-y-5">
-      <h1 className="main_title">Products</h1>
+  if (!products) return <LoadingState />
 
-      <div className="flex w-full items-end flex-col gap-5">
-        <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
-
-        <div className="flex gap-5">
-          <CustomFilledButton
-            label="Create Product"
-            type="button"
-            onClick={() => navigate('/products/create')}
-            icon={<BiPlus className="text-white" />}
-          />
-
-          <CustomFilledButton
-            label="Upload Files"
-            type="button"
-            onClick={() => navigate('?upload=true')}
-            icon={<BiFile className="text-white" />}
-          />
-        </div>
-      </div>
+  return (
+    <div className="space-y-6">
+      <PageHeader
+        title="Products"
+        description="Catalog of products with pricing per client and DC."
+        actions={
+          <>
+            <FilterButton onClick={() => setOpen(true)} />
+            <CustomFilledButton
+              label="Upload files"
+              type="button"
+              variant="secondary"
+              onClick={() => navigate('?upload=true')}
+              icon={<BiUpload size={18} />}
+            />
+            <CustomFilledButton
+              label="New product"
+              type="button"
+              onClick={() => navigate('/products/create')}
+              icon={<BiPlus size={18} />}
+            />
+          </>
+        }
+      />
 
       <Table<Product>
         columns={productsTableColumns}
         data={products.data.response}
-      />
-
-      <Pagination
-        count={products.data.total}
-        setSearchParams={setSearchParams}
-        page={page}
-        rowsPerPage={rowsPerPage}
+        footer={
+          <Pagination
+            count={products.data.total}
+            setSearchParams={setSearchParams}
+            page={page}
+            rowsPerPage={rowsPerPage}
+          />
+        }
       />
 
       <FiltersComponent

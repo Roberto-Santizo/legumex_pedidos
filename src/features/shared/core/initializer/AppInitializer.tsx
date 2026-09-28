@@ -1,6 +1,7 @@
 import { authRepositoryProvider, logout, login } from '@/features/login/login';
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { LoadingState } from '../../components/LoadingState';
 
 export const AppInitializer = ({ children }: { children: React.ReactNode }) => {
     const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export const AppInitializer = ({ children }: { children: React.ReactNode }) => {
     });
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingState fullScreen />;
     }
 
     return <>{children}</>;

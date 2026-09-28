@@ -1,3 +1,4 @@
+import { BiCloudUpload, BiFile } from "react-icons/bi";
 import { Modal, useNotification, type UploadFileForm } from "@/features/shared/shared";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback } from "react";
@@ -65,19 +66,20 @@ export function ModalUpload() {
 
     return (
         <Modal modal={show} closeModal={handleCloseModal} title="Upload File">
-            <div className="p-8 space-y-6">
+            <div className="flex flex-col gap-5">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div
                         {...getRootProps()}
-                        className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition
-                        ${isDragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"}
+                        className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition
+                        ${isDragActive ? "border-brand-500 bg-brand-50" : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"}
                         ${errors.file ? "border-red-400 bg-red-50" : ""}`}
                     >
                         <input {...getInputProps()} />
 
                         {!file && (
-                            <div className="text-gray-500 space-y-2">
-                                <p className="text-sm font-medium">
+                            <div className="flex flex-col items-center gap-2 text-neutral-500">
+                                <div className="size-11 rounded-full bg-neutral-100 grid place-items-center text-neutral-500"><BiCloudUpload size={22} /></div>
+                                <p className="text-sm font-medium text-ink">
                                     Drag & drop your PDF here
                                 </p>
                                 <p className="text-xs">
@@ -87,10 +89,10 @@ export function ModalUpload() {
                         )}
 
                         {file && (
-                            <div className="text-gray-700 text-sm flex flex-col items-center gap-2">
-                                <span className="text-2xl">📄</span>
+                            <div className="text-neutral-700 text-sm flex flex-col items-center gap-2">
+                                <div className="size-11 rounded-full bg-brand-50 grid place-items-center text-brand-600"><BiFile size={22} /></div>
                                 <p className="font-medium">{file.name}</p>
-                                <p className="text-xs text-gray-500">
+                                <p className="text-xs text-neutral-500">
                                     {(file.size / 1024).toFixed(2)} KB
                                 </p>
                             </div>
@@ -98,7 +100,7 @@ export function ModalUpload() {
                     </div>
 
                     {errors.file && (
-                        <p className="text-red-500 text-xs">
+                        <p className="form_error">
                             {errors.file.message}
                         </p>
                     )}
@@ -106,8 +108,7 @@ export function ModalUpload() {
                     <button
                         type="submit"
                         disabled={isPending}
-                        className={`w-full py-2 rounded-lg text-white transition
-                        ${isPending ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"}`}
+                        className="btn btn_primary w-full"
                     >
                         {isPending ? "Uploading..." : "Upload File"}
                     </button>

@@ -1,5 +1,5 @@
-import { BiFile, BiMenu, BiPlus } from "react-icons/bi";
-import { CustomFilledButton, Pagination, Table } from "@/features/shared/shared";
+import { BiPlus, BiUpload } from "react-icons/bi";
+import { CustomFilledButton, FilterButton, LoadingState, PageHeader, Pagination, Table } from "@/features/shared/shared";
 import { FiltersComponent, ModalEditOrder } from "@/features/my-orders/my-orders";
 import { ModalCreateOrder, ModalUploadFile, ordersColumns, type OrderFilters } from "@/features/my-orders/my-orders";
 import { ordersProvider } from "../providers/ordersRepositoryProvider";
@@ -56,45 +56,49 @@ export function MyOrders() {
     reset();
   }
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingState />;
   if (orders) return (
-    <div className="space-y-5">
-      <h1 className="main_title">My Orders</h1>
+    <div className="space-y-6">
+      <PageHeader
+        title="My orders"
+        description="Create, track and manage purchase orders by week."
+        actions={
+          <>
+            <FilterButton onClick={() => setOpen(true)} />
+            <CustomFilledButton
+              label="Upload file"
+              type="button"
+              variant="secondary"
+              icon={<BiUpload size={18} />}
+              onClick={() => handleOpenUploadFile()}
+            />
+            <CustomFilledButton
+              label="New order"
+              type="button"
+              icon={<BiPlus size={18} />}
+              onClick={() => handleOpenCreateOrderModal()}
+            />
+          </>
+        }
+      />
 
-      <div className="flex w-full justify-end gap-5">
-        <CustomFilledButton
-          label="Create Order"
-          type="button"
-          icon={<BiPlus className="text-white" />}
-          onClick={() => handleOpenCreateOrderModal()}
-        />
-
-        <CustomFilledButton
-          label="Upload File"
-          type="button"
-          icon={<BiFile className="text-white" />}
-          onClick={() => handleOpenUploadFile()}
-        />
-        <BiMenu size={40} onClick={() => setOpen(true)} className="cursor-pointer hover:text-gray-500" />
-      </div>
-
-      {orders.data.response.length > 0 && (
-        <Table
-          columns={ordersColumns}
-          data={orders.data.response}
-        />
-      )}
+      <Table
+        columns={ordersColumns}
+        data={orders.data.response}
+        emptyMessage="No orders match the current filters"
+        footer={
+          <Pagination
+            count={orders.data.total}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            setSearchParams={setSearchParams}
+          />
+        }
+      />
 
       <ModalCreateOrder />
       <ModalEditOrder filters={filters} />
       <ModalUploadFile />
-
-      <Pagination
-        count={orders.data.total}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        setSearchParams={setSearchParams}
-      />
 
       <FiltersComponent
         control={control}

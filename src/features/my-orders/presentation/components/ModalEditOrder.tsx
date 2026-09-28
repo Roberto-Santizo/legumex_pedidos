@@ -75,7 +75,7 @@ export function ModalEditOrder({ filters }: Props) {
 
     if (data) return (
         <Modal modal={show} closeModal={() => handleCloseModal()} title="Update Order">
-            <form className="form mx-auto" onSubmit={handleSubmit(onSubmit)}>
+            <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
                 <Form register={register} control={control} errors={errors} currentValues={currentValues} />
 
                 <CustomFilledButton

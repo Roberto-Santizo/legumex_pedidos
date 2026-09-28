@@ -24,9 +24,9 @@ export function DateFormField<T extends Record<string, any>>({
   max,
 }: Props<T>) {
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-1.5 w-full">
       <label
-        className="text-sm font-medium text-gray-700"
+        className="form_label"
         htmlFor={name}
       >
         {label}
@@ -38,11 +38,11 @@ export function DateFormField<T extends Record<string, any>>({
         {...register(name, validation)}
         min={min}
         max={max}
-        className={`text_form_field ${errorMessage ? "text_form_field_error" : ""}`}
+        className={errorMessage ? "text_form_field_error" : "text_form_field"}
       />
 
       {errorMessage && (
-        <p className="text-red-400 text-xs">{errorMessage}</p>
+        <p className="form_error">{errorMessage}</p>
       )}
     </div>
   );

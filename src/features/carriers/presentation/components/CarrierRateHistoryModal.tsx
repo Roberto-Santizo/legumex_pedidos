@@ -15,24 +15,24 @@ function RateRow({ rate, prev, isCurrent }: { rate: CarrierRate; prev: CarrierRa
     const diff = prev ? rate.cost - prev.cost : null;
     const pct = prev && prev.cost !== 0 ? ((diff! / prev.cost) * 100) : null;
 
-    const trendColor = diff === null ? '' : diff > 0 ? 'text-red-500' : diff < 0 ? 'text-emerald-500' : 'text-slate-400';
+    const trendColor = diff === null ? '' : diff > 0 ? 'text-red-500' : diff < 0 ? 'text-brand-500' : 'text-neutral-400';
     const trendArrow = diff === null ? null : diff > 0 ? '↑' : diff < 0 ? '↓' : '→';
-    const bgClass = isCurrent ? 'bg-[#00C853]/6 border-l-2 border-[#00C853]' : 'hover:bg-slate-50/70';
+    const bgClass = isCurrent ? 'bg-brand-500/6 border-l-2 border-brand-500' : 'hover:bg-neutral-50/70';
 
     return (
         <tr className={`transition-colors ${bgClass}`}>
             <td className="px-4 py-3">
                 <div className="flex items-center gap-2">
-                    <span className="text-sm text-slate-600">{rate.effectiveDate}</span>
+                    <span className="text-sm text-neutral-600">{rate.effectiveDate}</span>
                     {isCurrent && (
-                        <span className="text-[10px] font-bold bg-[#00C853] text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">
+                        <span className="text-[10px] font-bold bg-brand-500 text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">
                             current
                         </span>
                     )}
                 </div>
             </td>
             <td className="px-4 py-3 text-right">
-                <span className="font-semibold text-slate-800 text-sm">
+                <span className="font-semibold text-neutral-800 text-sm">
                     ${rate.cost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </span>
             </td>
@@ -48,7 +48,7 @@ function RateRow({ rate, prev, isCurrent }: { rate: CarrierRate; prev: CarrierRa
                         )}
                     </div>
                 ) : (
-                    <span className="text-xs text-slate-300">—</span>
+                    <span className="text-xs text-neutral-300">—</span>
                 )}
             </td>
         </tr>
@@ -67,21 +67,21 @@ function TrendSummary({ rates }: { rates: CarrierRate[] }) {
 
     return (
         <div className="grid grid-cols-3 gap-3 mb-5">
-            <div className="bg-slate-50 rounded-xl px-3 py-2.5 text-center">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Historical low</p>
-                <p className="text-sm font-bold text-emerald-600">
+            <div className="bg-neutral-50 rounded-xl px-3 py-2.5 text-center">
+                <p className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wide mb-0.5">Historical low</p>
+                <p className="text-sm font-bold text-brand-600">
                     ${min.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </p>
             </div>
-            <div className="bg-slate-50 rounded-xl px-3 py-2.5 text-center">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Historical high</p>
+            <div className="bg-neutral-50 rounded-xl px-3 py-2.5 text-center">
+                <p className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wide mb-0.5">Historical high</p>
                 <p className="text-sm font-bold text-red-500">
                     ${max.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </p>
             </div>
-            <div className="bg-slate-50 rounded-xl px-3 py-2.5 text-center">
-                <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">Total change</p>
-                <p className={`text-sm font-bold ${totalChange > 0 ? 'text-red-500' : totalChange < 0 ? 'text-emerald-600' : 'text-slate-500'}`}>
+            <div className="bg-neutral-50 rounded-xl px-3 py-2.5 text-center">
+                <p className="text-[10px] font-semibold text-neutral-400 uppercase tracking-wide mb-0.5">Total change</p>
+                <p className={`text-sm font-bold ${totalChange > 0 ? 'text-red-500' : totalChange < 0 ? 'text-brand-600' : 'text-neutral-500'}`}>
                     {totalChange >= 0 ? '+' : ''}${totalChange.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     <span className="text-[11px] font-medium ml-1 opacity-80">
                         ({totalPct >= 0 ? '+' : ''}{totalPct.toFixed(1)}%)
@@ -109,14 +109,14 @@ export function CarrierRateHistoryModal({ carrier, open, onClose }: Props) {
         >
             {isLoading && (
                 <div className="flex items-center justify-center py-12">
-                    <p className="text-sm text-slate-400">Loading history...</p>
+                    <p className="text-sm text-neutral-400">Loading history...</p>
                 </div>
             )}
 
             {!isLoading && rates.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12 gap-2">
-                    <p className="text-sm font-semibold text-slate-500">No rate history</p>
-                    <p className="text-xs text-slate-400">Rates are recorded automatically when a carrier is created or updated.</p>
+                    <p className="text-sm font-semibold text-neutral-500">No rate history</p>
+                    <p className="text-xs text-neutral-400">Rates are recorded automatically when a carrier is created or updated.</p>
                 </div>
             )}
 
@@ -124,16 +124,16 @@ export function CarrierRateHistoryModal({ carrier, open, onClose }: Props) {
                 <>
                     <TrendSummary rates={rates} />
 
-                    <div className="rounded-xl border border-slate-200 overflow-hidden">
+                    <div className="rounded-xl border border-neutral-200 overflow-hidden">
                         <table className="w-full text-sm">
-                            <thead className="bg-slate-50 border-b border-slate-200">
+                            <thead className="bg-neutral-50 border-b border-neutral-200">
                                 <tr>
-                                    <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">Date</th>
-                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Rate</th>
-                                    <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wide">Change</th>
+                                    <th className="px-4 py-3 text-left text-xs font-semibold text-neutral-500 uppercase tracking-wide">Date</th>
+                                    <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wide">Rate</th>
+                                    <th className="px-4 py-3 text-right text-xs font-semibold text-neutral-500 uppercase tracking-wide">Change</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100">
+                            <tbody className="divide-y divide-neutral-100">
                                 {rates.map((rate, idx) => (
                                     <RateRow
                                         key={rate.id}

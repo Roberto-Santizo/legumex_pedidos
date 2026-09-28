@@ -1,5 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, type ReactNode } from "react";
+import { BiX } from "react-icons/bi";
 
 type Props = {
   modal: boolean;
@@ -32,7 +33,7 @@ export function Modal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="fixed inset-0 bg-neutral-900/40 backdrop-blur-[2px]" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -48,22 +49,23 @@ export function Modal({
               leaveTo="opacity-0 scale-95 translate-y-2"
             >
               <Dialog.Panel
-                className={`w-full ${width} transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all`}
+                className={`w-full ${width} transform overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-neutral-200/60 transition-all`}
               >
-                <div className="flex items-center justify-between shadow-md px-6 py-4">
-                  <Dialog.Title className="text-lg font-semibold text-gray-800">
+                <div className="flex items-center justify-between border-b border-neutral-200/80 px-6 h-14">
+                  <Dialog.Title className="text-base font-semibold text-ink">
                     {title}
                   </Dialog.Title>
 
                   <button
+                    type="button"
                     onClick={closeModal}
-                    className="rounded-md p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition"
+                    className="icon_btn"
                   >
-                    ✕
+                    <BiX size={20} />
                   </button>
                 </div>
 
-                <div className="p-6 max-h-[70vh] overflow-y-auto">
+                <div className="p-6 max-h-[75vh] overflow-y-auto thin_scroll">
                   {children}
                 </div>
               </Dialog.Panel>

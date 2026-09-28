@@ -1,5 +1,5 @@
 import { clientsProvider } from '../providers/clientsRepositoryProvider';
-import { CustomFilledButton, useNotification } from '@/features/shared/shared';
+import { CustomFilledButton, PageHeader, useNotification } from '@/features/shared/shared';
 import { Form } from "../presentation";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -33,10 +33,10 @@ export function CreateClient() {
     const onSubmit = (data: CreateOrUpdateClient) => mutate({ name: data.name, code: data.code });
 
     return (
-        <div className="space-y-5">
-            <h1 className="main_title">Create Client</h1>
+        <div className="space-y-6">
+            <PageHeader title="New client" description="Register a new client." backTo="/clients" />
 
-            <form className="form mx-auto w-3/4" onSubmit={handleSubmit(onSubmit)}>
+            <form className="form max-w-3xl" onSubmit={handleSubmit(onSubmit)}>
                 <Form register={register} errors={errors} />
 
                 <CustomFilledButton

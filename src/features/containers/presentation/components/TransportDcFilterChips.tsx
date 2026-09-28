@@ -55,15 +55,15 @@ export function TransportDcFilterChips({
     ].sort();
 
     const selectClass =
-        'text-xs border border-slate-200 rounded-lg px-2.5 py-1 text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#00C853]/40 focus:border-[#00C853] transition-colors bg-white';
+        'text-xs border border-neutral-200 rounded-lg px-2.5 py-1 text-neutral-700 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-colors bg-white';
 
     return (
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-3 space-y-2.5">
+        <div className="bg-white rounded-xl border border-neutral-200 shadow-sm px-4 py-3 space-y-2.5">
             {/* Pre-filters row */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                 {warehouses.length > 1 && (
                     <div className="flex items-center gap-2">
-                        <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest shrink-0">
+                        <label className="text-[11px] font-semibold text-neutral-400 uppercase tracking-widest shrink-0">
                             Warehouse:
                         </label>
                         <select
@@ -82,7 +82,7 @@ export function TransportDcFilterChips({
 
                 {allDcs.length > 1 && (
                     <div className="flex items-center gap-2">
-                        <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest shrink-0">
+                        <label className="text-[11px] font-semibold text-neutral-400 uppercase tracking-widest shrink-0">
                             DC:
                         </label>
                         <Select
@@ -97,9 +97,9 @@ export function TransportDcFilterChips({
                                     ...base,
                                     minHeight: '30px',
                                     fontSize: '12px',
-                                    borderColor: state.isFocused ? '#00C853' : '#e2e8f0',
+                                    borderColor: state.isFocused ? '#14a88c' : '#e5e5e5',
                                     boxShadow: state.isFocused ? '0 0 0 2px rgba(0,200,83,0.2)' : 'none',
-                                    '&:hover': { borderColor: '#00C853' },
+                                    '&:hover': { borderColor: '#14a88c' },
                                     borderRadius: '8px',
                                     backgroundColor: 'white',
                                     minWidth: '180px',
@@ -111,7 +111,7 @@ export function TransportDcFilterChips({
                                 option: (base, state) => ({
                                     ...base,
                                     fontSize: '12px',
-                                    backgroundColor: state.isSelected ? '#00C853' : state.isFocused ? '#f0fdf4' : 'white',
+                                    backgroundColor: state.isSelected ? '#14a88c' : state.isFocused ? '#ecfdf8' : 'white',
                                     color: state.isSelected ? 'white' : '#374151',
                                 }),
                                 multiValue: (base) => ({ ...base, backgroundColor: '#dcfce7', borderRadius: '4px' }),
@@ -129,7 +129,7 @@ export function TransportDcFilterChips({
                 )}
 
                 <div className="flex items-center gap-2">
-                    <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest shrink-0">
+                    <label className="text-[11px] font-semibold text-neutral-400 uppercase tracking-widest shrink-0">
                         PO:
                     </label>
                     <input
@@ -142,7 +142,7 @@ export function TransportDcFilterChips({
                 </div>
             </div>
 
-            <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-widest">
+            <p className="text-[11px] text-neutral-400 font-semibold uppercase tracking-widest">
                 Transport Type
             </p>
 
@@ -163,15 +163,15 @@ export function TransportDcFilterChips({
                             className={`
                                 rounded-full px-3.5 py-1.5 text-xs font-semibold transition-all whitespace-nowrap border
                                 ${isActive
-                                    ? 'bg-[#00C853] text-white border-[#00C853] shadow-sm shadow-[#00C853]/30'
-                                    : 'bg-white text-slate-600 border-slate-200 hover:border-[#00C853] hover:text-[#00C853]'
+                                    ? 'bg-brand-500 text-white border-brand-500 shadow-sm shadow-brand-500/30'
+                                    : 'bg-white text-neutral-600 border-neutral-200 hover:border-brand-500 hover:text-brand-500'
                                 }
                             `}
                             aria-pressed={isActive}
                         >
                             {transportType}
                             {count > 0 && (
-                                <span className={`ml-1.5 text-[10px] font-medium ${isActive ? 'text-white/75' : 'text-slate-400'}`}>
+                                <span className={`ml-1.5 text-[10px] font-medium ${isActive ? 'text-white/75' : 'text-neutral-400'}`}>
                                     {count}
                                 </span>
                             )}

@@ -1,17 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+@theme {
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+    /* Brand: teal-green accent (charts, active states, highlights) */
+    --color-brand-50: #ecfdf8;
+    --color-brand-100: #d0f7ec;
+    --color-brand-200: #a3eedb;
+    --color-brand-300: #67dcc3;
+    --color-brand-400: #2fc3a6;
+    --color-brand-500: #14a88c;
+    --color-brand-600: #0b8773;
+    --color-brand-700: #0c6c5e;
+    --color-brand-800: #0e564c;
+    --color-brand-900: #0f4740;
+
+    /* Ink: near-black used for primary actions and headings */
+    --color-ink: #111214;
+    --color-canvas: #f5f6f8;
+}
+
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        @apply bg-canvas text-neutral-800 font-sans;
+    }
+
+    ::selection {
+        @apply bg-brand-100 text-brand-900;
+    }
+}
+
+/* ─── Forms ──────────────────────────────────────────────────────────────── */
+
 .text_form_field {
-    @apply w-full outline-none px-3 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 placeholder-gray-400 shadow-sm transition-all duration-150 ease-in-out focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 hover:border-gray-300;
+    @apply w-full h-10 outline-none px-3 rounded-lg border border-neutral-200 bg-white text-sm text-neutral-900 placeholder-neutral-400 transition-all duration-150 ease-in-out hover:border-neutral-300 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/15;
 }
 
 .text_form_field_error {
-    @apply w-full outline-none px-3 py-2 rounded-lg border border-red-300 bg-white text-gray-900 placeholder-red-300 shadow-sm transition-all duration-150 ease-in-out focus:ring-2 focus:ring-red-500/20 focus:border-red-500 hover:border-red-400;
+    @apply w-full h-10 outline-none px-3 rounded-lg border border-red-300 bg-white text-sm text-neutral-900 placeholder-red-300 transition-all duration-150 ease-in-out hover:border-red-400 focus:border-red-500 focus:ring-4 focus:ring-red-500/15;
 }
 
-.main_title {
-    @apply text-3xl font-bold
+input[type="file"].text_form_field,
+input[type="file"].text_form_field_error {
+    @apply h-auto py-1.5 file:mr-3 file:rounded-md file:border-0 file:bg-neutral-100 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-neutral-700 hover:file:bg-neutral-200 file:cursor-pointer;
+}
+
+.form_label {
+    @apply text-xs font-medium text-neutral-600;
+}
+
+.form_error {
+    @apply text-xs font-medium text-red-500 min-h-4;
 }
 
 .form {
-    @apply flex flex-col justify-center space-y-6 shadow-xl p-6 bg-white
+    @apply flex flex-col gap-5 rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-[0_1px_2px_rgba(16,24,40,0.04)];
+}
+
+/* ─── Typography ─────────────────────────────────────────────────────────── */
+
+.main_title {
+    @apply text-2xl font-semibold tracking-tight text-ink;
+}
+
+.section_title {
+    @apply text-sm font-semibold text-ink;
+}
+
+.muted {
+    @apply text-sm text-neutral-500;
+}
+
+/* ─── Surfaces ───────────────────────────────────────────────────────────── */
+
+.card {
+    @apply rounded-2xl border border-neutral-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)];
+}
+
+/* ─── Buttons ────────────────────────────────────────────────────────────── */
+
+.btn {
+    @apply inline-flex items-center justify-center gap-2 h-9 px-3.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-500/20;
+}
+
+.btn_primary {
+    @apply bg-ink text-white hover:bg-neutral-700;
+}
+
+.btn_brand {
+    @apply bg-brand-600 text-white hover:bg-brand-700;
+}
+
+.btn_secondary {
+    @apply bg-white text-neutral-800 border border-neutral-200 hover:bg-neutral-50 hover:border-neutral-300;
+}
+
+.btn_ghost {
+    @apply bg-transparent text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900;
+}
+
+.btn_danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+.icon_btn {
+    @apply inline-flex items-center justify-center size-8 rounded-lg text-neutral-500 transition-colors cursor-pointer hover:bg-neutral-100 hover:text-neutral-900 disabled:opacity-40 disabled:cursor-not-allowed;
+}
+
+.icon_btn_danger {
+    @apply hover:bg-red-50 hover:text-red-600;
+}
+
+/* ─── react-select ───────────────────────────────────────────────────────── */
+
+.react-select__control {
+    @apply min-h-10! rounded-lg! border-neutral-200! shadow-none! text-sm transition-all! hover:border-neutral-300!;
+}
+
+.react-select__control--is-focused {
+    @apply border-brand-500! ring-4 ring-brand-500/15;
+}
+
+.react-select__placeholder {
+    @apply text-neutral-400!;
+}
+
+.react-select__menu {
+    @apply rounded-lg! border border-neutral-200 shadow-lg! overflow-hidden text-sm z-50!;
+}
+
+.react-select__option--is-focused {
+    @apply bg-neutral-100! text-neutral-900!;
+}
+
+.react-select__option--is-selected {
+    @apply bg-brand-600! text-white!;
+}
+
+.react-select__indicator-separator {
+    @apply hidden;
+}
+
+/* ─── Scrollbars ─────────────────────────────────────────────────────────── */
+
+.thin_scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-300) transparent;
 }
