@@ -22,10 +22,9 @@ export interface WeekView {
 // In-memory draft container (not yet persisted to the DB)
 export interface DraftContainer {
     transportType: string;
-    dc: string;
     weekStart: string;
     orders: OrderSummary[];
-    totalPallets: number; 
-    totalPounds: number;  
-    persistedId: number | null; 
+    totalPallets: number;
+    totalPounds: number;
+    persistedId: number | null;
 }

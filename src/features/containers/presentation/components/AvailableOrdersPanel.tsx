@@ -8,13 +8,13 @@ const PAGE_SIZE = 50;
 
 interface Props {
     orders: OrderSummary[];
-    activeFilter: { transportType: string; dc: string } | null;
+    activeFilter: { transportType: string } | null;
     onAddOrder: (order: OrderSummary) => void;
 }
 
 /**
  * Left panel — list of orders available for assignment.
- * Filters by the active transportType+dc chip and supports client/PO search.
+ * Filters by the active transportType chip and supports client/PO search.
  * Shows PAGE_SIZE items at a time with a "Load more" button.
  */
 export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props) {
@@ -24,7 +24,6 @@ export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props
     const filtered = orders.filter((order) => {
         if (activeFilter) {
             if (order.transportType !== activeFilter.transportType) return false;
-            if (order.dc !== activeFilter.dc) return false;
         }
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
@@ -40,7 +39,7 @@ export function AvailableOrdersPanel({ orders, activeFilter, onAddOrder }: Props
     const remaining = filtered.length - visible.length;
 
     const subtitle = activeFilter
-        ? `${activeFilter.transportType} · ${activeFilter.dc} — ${filtered.length} orders`
+        ? `${activeFilter.transportType} — ${filtered.length} orders`
         : `All groups — ${filtered.length} orders`;
 
     return (

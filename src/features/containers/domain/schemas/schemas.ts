@@ -13,13 +13,6 @@ const normalizeDc = (rawValue: unknown): string | null => {
     return null;
 };
 
-// Extracts numeric id from a DC object, or passes through a plain number.
-const normalizeDcId = (rawValue: unknown): number | null => {
-    if (rawValue === null || rawValue === undefined) return null;
-    if (typeof rawValue === 'number') return rawValue;
-    if (typeof rawValue === 'object' && 'id' in rawValue) return (rawValue as { id: number }).id;
-    return null;
-};
 
 export const OrderItemSchema = z.object({
     productName: z.string().nullable().default(null),
@@ -49,7 +42,6 @@ export const ContainerDetailSchema = z.object({
     id: z.number(),
     transportType: z.string(),
     dc: z.preprocess(normalizeDc, z.string().nullable()),
-    dcId: z.preprocess(normalizeDcId, z.number().nullable()),
     weekStart: z.string(),
     weekEnd: z.string(),
     status: z.enum(['draft', 'confirmed']),

@@ -10,7 +10,7 @@ import type { DraftContainer } from '../../domain/types/types';
 
 interface Props {
     draft: DraftContainer | null;
-    activeFilter: { transportType: string; dc: string } | null;
+    activeFilter: { transportType: string } | null;
     onStartNewDraft: () => void;
     onRemoveOrder: (orderId: number) => void;
     onDiscard: () => void;
@@ -23,7 +23,7 @@ interface Props {
  * Empty state: prompt to start a new draft.
  * Active draft: capacity bars, visual grid, order list, action buttons.
  */
-export function ContainerBuilderPanel({
+export function ContainerAssignmentPanel({
     draft,
     activeFilter,
     onStartNewDraft,
@@ -59,7 +59,7 @@ export function ContainerBuilderPanel({
     // ── Empty state ────────────────────────────────────────────────────────────
     if (!draft) {
         return (
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col items-center justify-center h-full min-h-64 p-8 text-center gap-5">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm flex flex-col items-center h-full min-h-64 p-8 pt-12 text-center gap-5">
                 {/* Icon placeholder */}
                 <div className="w-14 h-14 rounded-2xl bg-[#00C853]/10 flex items-center justify-center text-2xl">
                     📦
@@ -105,7 +105,7 @@ export function ContainerBuilderPanel({
                             {draft.persistedId ? `Container #C-${draft.persistedId}` : 'New container'}
                         </p>
                         <p className="text-xs text-slate-500 mt-0.5">
-                            {draft.transportType} · {draft.dc}
+                            {draft.transportType}
                         </p>
                     </div>
                     <span className="text-[11px] bg-[#00C853] text-white font-bold rounded-full px-2.5 py-0.5 tracking-wide">
